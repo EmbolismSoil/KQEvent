@@ -1,8 +1,5 @@
-PROJECT(KQEvent)
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -std=c++11")
-SET(CMAKE_CXX_COMPILER "clang++")
-SET(CMAKE_C_COMPILER "clang")
-ADD_SUBDIRECTORY(test bin)
-ADD_SUBDIRECTORY(src bin)
-ADD_SUBDIRECTORY(includes bin)
+SET(SOURCE_LIST main.cpp)
+INCLUDE_DIRECTORIES(../includes/base ../includes/net)
+ADD_EXECUTABLE(test ${SOURCE_LIST})
+TARGET_LINK_LIBRARIES(test base net)
 

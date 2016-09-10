@@ -1,28 +1,39 @@
+#ifndef __ABSSUBJECT_H__
+#define __ABSSUBJECT_H__
+
 #include "AbsObserver.h"
 #include <memory>
 #include <hash_map>
 #include <ext/hash_map>
+#include <map>
 
-class AbsSubject : std::enable_shared_from_this<AbsSubject>{
+class AbsSubject : public std::enable_shared_from_this<AbsSubject>{
 public:
+    AbsSubject() = default;
     AbsSubject(AbsSubject const &) = delete;
     AbsSubject const &operator=(AbsSubject const&) = delete;
+    using AbsSubjectPtr = std::shared_ptr<AbsSubject>;
+
+    template <typename ..._Args>
+        static AbsSubjectPtr newInstance(_Args&& ...args){
+            return std::make_shared<AbsSubject>(std::forward<_Args>(args)...);
+        }
 
     std::shared_ptr<AbsSubject> getPtr(void){
-	return this->shared_from_this();
+		return this->shared_from_this();
     }   
 
     virtual bool attach(std::shared_ptr<AbsObserver> observer){
     	std::weak_ptr<AbsObserver> ptr = observer;
-	_observers[observer.get()] = ptr;
-	observer->onAttach();
-	return true;
+		_observers[observer.get()] = ptr;
+		observer->onAttach();
+		return true;
     }
 
     virtual bool detach(std::shared_ptr<AbsObserver> observer){
-	_observers.erase(observer.get());
-	observer->onDetach();
-	return true;
+		_observers.erase(observer.get());
+		observer->onDetach();
+		return true;
     }
     
     virtual bool notify(void){
@@ -48,5 +59,8 @@ public:
     }
 
 private:
-   __gnu_cxx::hash_map<AbsObserver*, std::weak_ptr<AbsObserver>> _observers;   
+   //__gnu_cxx::hash_map<AbsObserver*, std::weak_ptr<AbsObserver>> _observers;
+	std::map<AbsObserver*, std::weak_ptr<AbsObserver>> _observers;
 };
+
+#endif
