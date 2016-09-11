@@ -3,6 +3,7 @@
 //
 #include "AbsObserver.h"
 #include "AbsSubject.h"
+#include "IPAddress.h"
 #include <iostream>
 
 int main(void) {
@@ -10,6 +11,9 @@ int main(void) {
     auto observer = AbsObserver::newInstance(handler,std::string("test"));
     auto handle = observer->getHandle();
     handle(std::make_shared<AbsSubject>());
-
+    auto address = IPAddress::fromHostName(std::string("www.baidu.com"));
+    for (auto &item : address){
+        std::cout << item->toString() << std::endl;
+    }
     return 0;
 }
