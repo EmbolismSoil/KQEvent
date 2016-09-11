@@ -6,52 +6,56 @@
 #include <atomic>
 #include <memory>
 
-class AbsSubject;
+namespace KQEvent {
+    class AbsSubject;
 
-class AbsObserver : public std::enable_shared_from_this<AbsObserver>{
-public:
-    typedef enum{DELETE, ALIVE}Command_t;
-    using AbsObserverPtr = std::shared_ptr<AbsObserver>;
-    using Handle_t = std::function<Command_t(std::shared_ptr<AbsSubject>)>; 
+    class AbsObserver : public std::enable_shared_from_this<AbsObserver> {
+    public:
+        typedef enum {
+            DELETE, ALIVE
+        } Command_t;
+        using AbsObserverPtr = std::shared_ptr<AbsObserver>;
+        using Handle_t = std::function<Command_t(std::shared_ptr<AbsSubject>)>;
 
-    /*不推荐直接使用构造函数new对象，因为KQEvent内并不鼓励使用原生指针*/
-    AbsObserver(Handle_t const &handle, std::string const &name):
-    	_handle(handle), 
-	_name(name)
-    {
-		
-    }
+        /*不推荐直接使用构造函数new对象，因为KQEvent内并不鼓励使用原生指针*/
+        AbsObserver(Handle_t const &handle, std::string const &name) :
+                _handle(handle),
+                _name(name) {
 
-    /*推荐使用该方法new对象*/
-    template <typename ..._Args>
-        static AbsObserverPtr newInstance(_Args&& ...args){
+        }
+
+        /*推荐使用该方法new对象*/
+        template<typename ..._Args>
+        static AbsObserverPtr newInstance(_Args &&...args) {
             return std::make_shared<AbsObserver>(std::forward<_Args>(args)...);
         }
 
-    AbsObserver(AbsObserver const&) = delete;
-    AbsObserver &operator=(AbsObserver const &) = delete;
-    
-    void setHandle(Handle_t const &handle){
-	    _handle = handle;
-    }
+        AbsObserver(AbsObserver const &) = delete;
 
-    Handle_t getHandle(){return _handle;}
+        AbsObserver &operator=(AbsObserver const &) = delete;
 
-    virtual Command_t update(std::shared_ptr<AbsSubject> subject){
-	    return _handle(subject);
-    }
+        void setHandle(Handle_t const &handle) {
+            _handle = handle;
+        }
+
+        Handle_t getHandle() { return _handle; }
+
+        virtual Command_t update(std::shared_ptr<AbsSubject> subject) {
+            return _handle(subject);
+        }
 /*
     std::shared_ptr<AbsObserver> getPtr(void){
 		return this->shared_from_this();
     }
 */
-    //for log    
-    virtual void onAttach(void){}
-    virtual void onDetach(void){}
+        //for log
+        virtual void onAttach(void) {}
 
-private:
-    Handle_t _handle;
-    std::string _name;//used by log
-};
+        virtual void onDetach(void) {}
 
+    private:
+        Handle_t _handle;
+        std::string _name;//used by log
+    };
+}
 #endif

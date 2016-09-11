@@ -5,19 +5,25 @@
 #include <memory>
 #include <stdint.h>
 #include <sys/socket.h>
+#include "IPAddress.h"
 
-class Socket : public std::enable_shared_from_this<Socket>{
-public:
-    Socket(std::string const &name, std::string const &addr);
-    std::shared_ptr<Socket> getPtr(){return shared_from_this();}
+namespace KQEvent {
+    class Socket : public std::enable_shared_from_this<Socket> {
+    public:
+        using SocketPtr = std::shared_ptr<Socket>;
+        Socket() = delete;
+        //不能复制
+        Socket(Socket const &) = delete;
 
-    Socket(Socket const &) = delete;
-    Socket const &operator=(Socket const &) = delete;
+        Socket const &operator=(Socket const &) = delete;
 
-private:
-    std::string const _name;
-    struct sockaddr _sock;
-    socklen_t _sockLen;
-};
+        Socket(int domain, int type);
 
+        SocketPtr getPtr() { return shared_from_this(); }
+
+    private:
+        int _fd;
+        IPAddress::IPAddressPtr _address;
+    };
+}
 #endif

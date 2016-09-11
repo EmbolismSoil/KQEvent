@@ -6,6 +6,7 @@
 #include "IPAddress.h"
 #include <iostream>
 
+using namespace KQEvent;
 int main(void) {
     auto handler = [](AbsSubject::AbsSubjectPtr subject){return AbsObserver::DELETE;};
     auto observer = AbsObserver::newInstance(handler,std::string("test"));
