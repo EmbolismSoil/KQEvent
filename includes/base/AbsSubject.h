@@ -3,8 +3,8 @@
 
 #include "AbsObserver.h"
 #include <memory>
-#include <hash_map>
-#include <ext/hash_map>
+//#include <hash_map>
+//#include <ext/hash_map>
 #include <map>
 
 class AbsSubject : public std::enable_shared_from_this<AbsSubject>{
