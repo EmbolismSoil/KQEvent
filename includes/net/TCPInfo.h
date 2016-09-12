@@ -8,9 +8,10 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <asm/types.h>
-#include <linux/tcp.h>
 #include <string>
 #include <memory>
+#include <netinet/tcp.h>
+#include <KQEventCommonException.h>
 
 #if 0
 struct tcp_info {
@@ -60,7 +61,8 @@ namespace KQEvent {
     public:
         using TCPInfoPtr = std::shared_ptr<TCPInfo>;
 
-        static TCPInfoPtr const fromTCPSocketFd(int fd);
+        static TCPInfoPtr const fromTCPSocketFd(int fd)
+                                throw(KQEventCommonException);
 
         std::string const &toString();
 

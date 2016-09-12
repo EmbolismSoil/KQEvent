@@ -3,8 +3,6 @@
 //
 
 #include "TCPInfo.h"
-#include <netinet/tcp.h>
-#include "KQEventCommonException.h"
 #include <common.h>
 
 namespace KQEvent {

@@ -20,7 +20,7 @@ namespace KQEvent {
         int ret = ::setsockopt(_fd, IPPROTO_TCP,
                                TCP_NODELAY, &opt, sizeof(opt));
         if (ret < 0) {
-            __setErrorString(::errno);
+            __setErrorString(errno);
         }
 
         return ret;
@@ -31,7 +31,7 @@ namespace KQEvent {
         int ret = ::setsockopt(_fd, SOL_SOCKET,
                                SO_REUSEADDR, &opt, sizeof(opt));
         if (ret < 0) {
-            __setErrorString(::errno);
+            __setErrorString(errno);
         }
 
         return ret;
@@ -42,7 +42,7 @@ namespace KQEvent {
         int ret = ::setsockopt(_fd, SOL_SOCKET,
                                SO_KEEPALIVE, &opt, sizeof(opt));
         if (ret < 0){
-            __setErrorString(::errno);
+            __setErrorString(errno);
         }
 
         return ret;
@@ -56,10 +56,9 @@ namespace KQEvent {
 
     int Socket::bind(IPAddress::IPAddressPtr address) {
         auto sock = address->getSockAddr();
-        int ret = ::bind(_fd, static_cast<sockaddr*>(&sock),
-                                        address->getSocketLen());
+        int ret = ::bind(_fd, (sockaddr*)(&sock), address->getSocketLen());
         if (ret < 0){
-            __setErrorString(::errno);
+            __setErrorString(errno);
         }
         return ret;
     }
@@ -67,10 +66,10 @@ namespace KQEvent {
     int Socket::accept(IPAddress::IPAddressPtr &peerAddr) {
         ::sockaddr_in peeraddr;
         ::socklen_t len;
-        int acceptFd = ::accept(_fd, static_cast<sockaddr*>(&peeraddr), &len);
+        int acceptFd = ::accept(_fd, (sockaddr*)(&peeraddr), &len);
         peerAddr = IPAddress::fromSockAddr(peeraddr);
         if (acceptFd < 0){
-            __setErrorString(::errno);
+            __setErrorString(errno);
         }
 
         return acceptFd;

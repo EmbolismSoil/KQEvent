@@ -16,7 +16,7 @@ namespace KQEvent {
 
         }
 
-        const char *what() const override {
+        const char *what() const noexcept override {
             return _message.c_str();
         }
 

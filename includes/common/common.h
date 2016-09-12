@@ -6,6 +6,7 @@
 #define KQEVENT_COMMON_H
 
 #include <string>
+#include <string.h>
 
 namespace KQEvent{
     size_t  const __ERROR_STR_LEN = 128;
