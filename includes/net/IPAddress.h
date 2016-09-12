@@ -25,6 +25,8 @@ namespace KQEvent {
 
         static IPAddressPtr fromIPAddress(std::string const &addr);
 
+        static IPAddressPtr fromSockAddr(::sockaddr_in addr);
+
         static IPAddressPtr addrAny(in_port_t port = 0);
 
         IPAddressPtr getPtr() { return shared_from_this(); }
@@ -38,6 +40,8 @@ namespace KQEvent {
         in_addr_t getAddr32() { return _address.sin_addr.s_addr; }
 
         std::string const &toString() { return _addressStr; }
+
+        ::socklen_t getSocketLen(){return _len;}
 
     private:
         IPAddress(std::string const &address, in_port_t);

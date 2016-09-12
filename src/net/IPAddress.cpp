@@ -80,4 +80,9 @@ namespace KQEvent {
         auto aNew = new IPAddress(addr);
         return IPAddressPtr(aNew);
     }
+
+    IPAddress::IPAddressPtr IPAddress::fromSockAddr(::sockaddr_in addr) {
+        auto aNew = new IPAddress(addr);
+        return IPAddressPtr(aNew);
+    }
 }
