@@ -13,6 +13,7 @@ namespace KQEvent {
             throw KQEventCommonException(std::string(buf));
         }
         _address.reset();
+
     }
 
     int Socket::setNoDelay(bool on) {

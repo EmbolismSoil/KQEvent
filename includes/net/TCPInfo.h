@@ -11,18 +11,17 @@
 #include <string>
 #include <memory>
 #include <netinet/tcp.h>
-#include <KQEventCommonException.h>
+#include "KQEventCommonException.h"
 
 #if 0
 struct tcp_info {
-    __u8 tcpi_state; /* TCP状态 */
+__u8 tcpi_state; /* TCP状态 */
 __u8 tcpi_ca_state; /* TCP拥塞状态 */
 __u8 tcpi_retransmits; /* 超时重传的次数 */
 __u8 tcpi_probes; /* 持续定时器或保活定时器发送且未确认的段数*/
 __u8 tcpi_backoff; /* 退避指数 */
 __u8 tcpi_options; /* 时间戳选项、SACK选项、窗口扩大选项、ECN选项是否启用*/
 __u8 tcpi_snd_wscale : 4, tcpi_rcv_wscale : 4; /* 发送、接收的窗口扩大因子*/
-
 __u32 tcpi_rto; /* 超时时间，单位为微秒*/
 __u32 tcpi_ato; /* 延时确认的估值，单位为微秒*/
 __u32 tcpi_snd_mss; /* 本端的MSS */
@@ -67,7 +66,8 @@ namespace KQEvent {
         std::string const &toString();
 
     private:
-        TCPInfo() = default;
+        TCPInfo(::tcp_info const &info);
+        void __format();
         std::string _infoString;
     };
 }

@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <sys/socket.h>
 #include "IPAddress.h"
+#include <utility>
 
 namespace KQEvent {
     class Socket : public std::enable_shared_from_this<Socket> {
@@ -19,9 +20,15 @@ namespace KQEvent {
 
         Socket const &operator=(Socket const &) = delete;
 
-        Socket(int domain, int type);
+         template <typename  ..._Args>
+         static SocketPtr newInstance(_Args&& ...args){
+             auto aNew = new Socket(std::forward<_Args>(args)...);
+             return SocketPtr(aNew);
+         }
 
         SocketPtr getPtr() { return shared_from_this(); }
+
+        int getFd(){return _fd;}
 
         int setNoDelay(bool on);
 
@@ -42,6 +49,8 @@ namespace KQEvent {
         }
 
     private:
+        Socket(int domain, int type);
+
         void __setErrorString(int err);
 
         std::string _messageError;
