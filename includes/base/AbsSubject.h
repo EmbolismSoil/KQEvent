@@ -18,7 +18,8 @@ namespace KQEvent {
 
         template<typename ..._Args>
         static AbsSubjectPtr newInstance(_Args &&...args) {
-            return std::make_shared<AbsSubject>(std::forward<_Args>(args)...);
+            auto aNew = new AbsSubject();
+            return AbsSubject::AbsSubjectPTr(aNew);
         }
 
         std::shared_ptr<AbsSubject> getPtr(void) {

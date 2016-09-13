@@ -27,7 +27,8 @@ namespace KQEvent {
         /*推荐使用该方法new对象*/
         template<typename ..._Args>
         static AbsObserverPtr newInstance(_Args &&...args) {
-            return std::make_shared<AbsObserver>(std::forward<_Args>(args)...);
+            auto aNew = new AbsObserver(std::forward<_Args>(args)...);
+            return AbsObserver::AbsObserverPtr(aNew);
         }
 
         AbsObserver(AbsObserver const &) = delete;
