@@ -1,28 +1,28 @@
 #ifndef __ABSSUBJECT_H__
 #define __ABSSUBJECT_H__
 
-#include "AbsObserver.h"
+#include "Observer.h"
 #include <memory>
 #include <map>
 
 namespace KQEvent {
-    class AbsSubject : public std::enable_shared_from_this<AbsSubject> {
+    class Subject : public std::enable_shared_from_this<Subject> {
     public:
-        AbsSubject() = default;
+        Subject() = default;
 
-        AbsSubject(AbsSubject const &) = delete;
+        Subject(Subject const &) = delete;
 
-        AbsSubject const &operator=(AbsSubject const &) = delete;
+        Subject const &operator=(Subject const &) = delete;
 
-        using AbsSubjectPtr = std::shared_ptr<AbsSubject>;
+        using SubjectPtr = std::shared_ptr<Subject>;
 
         template<typename ..._Args>
-        static AbsSubjectPtr newInstance(_Args &&...args) {
-            auto aNew = new AbsSubject();
-            return AbsSubject::AbsSubjectPTr(aNew);
+        static SubjectPtr newInstance(_Args &&...args) {
+            auto aNew = new Subject();
+            return Subject::SubjectPTr(aNew);
         }
 
-        std::shared_ptr<AbsSubject> getPtr(void) {
+        std::shared_ptr<Subject> getPtr(void) {
             return this->shared_from_this();
         }
 
@@ -46,7 +46,7 @@ namespace KQEvent {
                 auto tmp = pos;
                 auto ptr = pos->second;
                 if (auto observer = ptr.lock()) {
-                    if (observer->update(shared_from_this()) == AbsObserver::DELETE) {
+                    if (observer->update(shared_from_this()) == Observer::DELETE) {
                         ++pos;
                         _observers.erase(tmp);
                     } else {
@@ -63,7 +63,7 @@ namespace KQEvent {
 
     private:
         //__gnu_cxx::hash_map<AbsObserver*, std::weak_ptr<AbsObserver>> _observers;
-        std::map<AbsObserver *, std::weak_ptr<AbsObserver>> _observers;
+        std::map<Observer *, std::weak_ptr<Observer>> _observers;
     };
 }
 #endif

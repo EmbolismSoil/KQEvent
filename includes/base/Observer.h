@@ -7,18 +7,18 @@
 #include <memory>
 
 namespace KQEvent {
-    class AbsSubject;
+    class Subject;
 
-    class AbsObserver : public std::enable_shared_from_this<AbsObserver> {
+    class Observer : public std::enable_shared_from_this<Observer> {
     public:
         typedef enum {
             DELETE, ALIVE
         } Command_t;
-        using AbsObserverPtr = std::shared_ptr<AbsObserver>;
-        using Handle_t = std::function<Command_t(std::shared_ptr<AbsSubject>)>;
+        using ObserverPtr = std::shared_ptr<Observer>;
+        using Handle_t = std::function<Command_t(std::shared_ptr<Subject>)>;
 
         /*不推荐直接使用构造函数new对象，因为KQEvent内并不鼓励使用原生指针*/
-        AbsObserver(Handle_t const &handle, std::string const &name) :
+        Observer(Handle_t const &handle, std::string const &name) :
                 _handle(handle),
                 _name(name) {
 
@@ -26,14 +26,14 @@ namespace KQEvent {
 
         /*推荐使用该方法new对象*/
         template<typename ..._Args>
-        static AbsObserverPtr newInstance(_Args &&...args) {
-            auto aNew = new AbsObserver(std::forward<_Args>(args)...);
-            return AbsObserver::AbsObserverPtr(aNew);
+        static ObserverPtr newInstance(_Args &&...args) {
+            auto aNew = new Observer(std::forward<_Args>(args)...);
+            return Observer::ObserverPtr(aNew);
         }
 
-        AbsObserver(AbsObserver const &) = delete;
+        Observer(Observer const &) = delete;
 
-        AbsObserver &operator=(AbsObserver const &) = delete;
+        Observer &operator=(Observer const &) = delete;
 
         void setHandle(Handle_t const &handle) {
             _handle = handle;
@@ -41,7 +41,7 @@ namespace KQEvent {
 
         Handle_t getHandle() { return _handle; }
 
-        virtual Command_t update(std::shared_ptr<AbsSubject> subject) {
+        virtual Command_t update(std::shared_ptr<Subject> subject) {
             return _handle(subject);
         }
 /*
@@ -55,7 +55,7 @@ namespace KQEvent {
         virtual void onDetach(void) {}
 
     private:
-    	AbsObserver() = default;
+    	Observer() = default;
         Handle_t _handle;
         std::string _name;//used by log
     };
