@@ -55,6 +55,7 @@ namespace KQEvent {
         virtual void onDetach(void) {}
 
     private:
+    	AbsObserver() = default;
         Handle_t _handle;
         std::string _name;//used by log
     };
