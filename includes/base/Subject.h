@@ -26,15 +26,15 @@ namespace KQEvent {
             return this->shared_from_this();
         }
 
-        virtual bool attach(std::shared_ptr<AbsObserver> observer) {
-            std::weak_ptr<AbsObserver> ptr = observer;
+        virtual bool attach(std::shared_ptr<Observer> observer) {
+            std::weak_ptr<Observer> ptr = observer;
             _observers[observer.get()] = ptr;
             auto handle = observer->getOnAttachHandle();
             handle(getPtr());
             return true;
         }
 
-        virtual bool detach(std::shared_ptr<AbsObserver> observer) {
+        virtual bool detach(std::shared_ptr<Observer> observer) {
             _observers.erase(observer.get());
             auto handle = observer->getOnDetachHandle();
             handle(getPtr());

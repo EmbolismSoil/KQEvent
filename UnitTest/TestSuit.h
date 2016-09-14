@@ -5,8 +5,7 @@
 #ifndef KQEVENT_TESTSUIT_H
 #define KQEVENT_TESTSUIT_H
 
-#include <cxxtest/TestSuite.h>
-
+#include "cxxtest/TestSuite.h"
 #include "IPAddress.h"
 #include <iostream>
 #include <chrono>
@@ -26,9 +25,6 @@ public:
         }
     }
 
-    void testTimePoint(void){
-
-    }
 };
 
 #endif //KQEVENT_TESTSUIT_H
