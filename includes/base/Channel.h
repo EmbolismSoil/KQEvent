@@ -5,13 +5,14 @@
 #ifndef KQEVENT_CHANNEL_H
 #define KQEVENT_CHANNEL_H
 
+#include <functional>
+
 namespace KQEvent{
     class Channel {
     public:
-
-
+        using Handle_t = std::function<void()>;
     private:
-
+        int _fd;
     };
 }
 

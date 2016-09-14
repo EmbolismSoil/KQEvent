@@ -6,7 +6,9 @@
 #define KQEVENT_EVENTLOOP_H
 
 #include <thread>
+#include <map>
 #include "Subject.h"
+#include "KQEventCommonException.h"
 
 namespace KQEvent {
     class EventLoop {
@@ -18,9 +20,18 @@ namespace KQEvent {
 
         EventLoop const &operator=(EventLoop const &) = delete;
 
+        void registerSubject(Subject::SubjectPtr);
+
+        Subject::SubjectPtr  unregisterSubject(int fd);
+        Subject::SubjectPtr  unregisterSubject(Subject::SubjectPtr subject);
+
+        virtual void loop();
+
     private:
+        void assertOwner() throw(KQEventCommonException);
         bool _looping;
-        std::thread::id _tid;
+        long _tid;
+        std::map<int, Subject::SubjectPtr> _subjects;
     };
 }
 

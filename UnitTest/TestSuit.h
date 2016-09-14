@@ -11,6 +11,9 @@
 #include <chrono>
 #include "Socket.h"
 #include "TCPInfo.h"
+#include "Observer.h"
+#include "Subject.h"
+
 using namespace KQEvent;
 class KQEventTest : public CxxTest::TestSuite{
 public:
@@ -23,6 +26,11 @@ public:
         for (auto &item : address){
             std::cout << item->toString() << std::endl;
         }
+    }
+
+    void testObserver(void){
+        auto subject = Subject::newInstance(12);
+        auto observer = Observer::newInstance();
     }
 
 };

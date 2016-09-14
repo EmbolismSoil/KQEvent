@@ -8,7 +8,6 @@
 
 namespace KQEvent {
     class Subject;
-
     class Observer : public std::enable_shared_from_this<Observer> {
     public:
         typedef enum {
@@ -21,7 +20,6 @@ namespace KQEvent {
         Observer(Handle_t const &handle, std::string const &name) :
                 _handle(handle),
                 _name(name) {
-
         }
 
         /*推荐使用该方法new对象*/
@@ -41,14 +39,14 @@ namespace KQEvent {
 
         Handle_t getHandle() { return _handle; }
 
-        virtual Command_t update(std::shared_ptr<Subject> subject) {
-            return _handle(subject);
+        virtual Command_t update(std::shared_ptr<Subject>&& subject) {
+            return _handle(std::move(subject));
         }
-/*
-    std::shared_ptr<AbsObserver> getPtr(void){
-		return this->shared_from_this();
-    }
-*/
+
+        ObserverPtr getPtr(void){
+            return this->shared_from_this();
+        }
+
         //for log
         //virtual void onAttach(void) {}
         //virtual void onDetach(void) {}
@@ -63,7 +61,7 @@ namespace KQEvent {
 
     private:
     	Observer(){
-            auto handle = [](Subject::SubjectPtr){return ALIVE;};
+            auto handle = [](std::shared_ptr<Subject>){return ALIVE;};
             _onAttach = handle;
             _onDetach = handle;
         }
