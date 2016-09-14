@@ -1,0 +1,12 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/lee/github/KQEvent/src/base/AbsObserver.cpp
+
+/home/lee/github/KQEvent/src/base/AbsSubject.cpp
+

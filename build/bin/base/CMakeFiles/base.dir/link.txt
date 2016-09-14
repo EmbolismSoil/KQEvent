@@ -1,0 +1,2 @@
+/usr/bin/ar qc libbase.a  CMakeFiles/base.dir/AbsObserver.o CMakeFiles/base.dir/AbsSubject.o
+/usr/bin/ranlib libbase.a

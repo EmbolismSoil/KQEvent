@@ -1,0 +1,1 @@
+clang++    -g -std=c++11     -o test -rdynamic base/libbase.a net/libnet.a 

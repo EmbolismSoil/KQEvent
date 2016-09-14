@@ -3,6 +3,8 @@
 #include <string.h>
 #include <linux/tcp.h>
 #include "common.h"
+#include <fcntl.h>
+#include <chrono>
 
 namespace KQEvent {
     Socket::Socket(int domain, int type) {
@@ -12,6 +14,8 @@ namespace KQEvent {
             strerror_r(errno, buf, sizeof(buf));
             throw KQEventCommonException(std::string(buf));
         }
+        int flag = fcntl(_fd, F_GETFL, 0);
+        fcntl(_fd, F_SETFL, flag | O_NONBLOCK);
         _address.reset();
 
     }
