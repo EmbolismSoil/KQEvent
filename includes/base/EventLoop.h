@@ -9,12 +9,17 @@
 #include <map>
 #include "Subject.h"
 #include "KQEventCommonException.h"
+#include "Poller.h"
 
 namespace KQEvent {
     class EventLoop {
     public:
-
-        EventLoop();
+        using EventLoopPtr = std::shared_ptr<EventLoop>;
+        template <typename ..._Args>
+            static EventLoopPtr newInstance(_Args &&...args){
+            auto aNew = new EventLoop(std::forward<_Args>(args)...);
+            return EventLoopPtr(aNew);
+        }
 
         EventLoop(EventLoop const &) = delete;
 
@@ -22,16 +27,16 @@ namespace KQEvent {
 
         void registerSubject(Subject::SubjectPtr);
 
-        Subject::SubjectPtr  unregisterSubject(int fd);
-        Subject::SubjectPtr  unregisterSubject(Subject::SubjectPtr subject);
+        void  unregisterSubject(int fd);
 
         virtual void loop();
 
     private:
+        EventLoop();
         void assertOwner() throw(KQEventCommonException);
+        Poller::PollerPtr _poller;
         bool _looping;
         long _tid;
-        std::map<int, Subject::SubjectPtr> _subjects;
     };
 }
 

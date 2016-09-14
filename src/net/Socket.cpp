@@ -11,11 +11,11 @@ namespace KQEvent {
         _fd = socket(domain, type, 0);
         if (_fd < 0) {
             char buf[512] = {0};
-            strerror_r(errno, buf, sizeof(buf));
+            ::strerror_r(errno, buf, sizeof(buf));
             throw KQEventCommonException(std::string(buf));
         }
-        int flag = fcntl(_fd, F_GETFL, 0);
-        fcntl(_fd, F_SETFL, flag | O_NONBLOCK);
+        int flag = ::fcntl(_fd, F_GETFL, 0);
+        ::fcntl(_fd, F_SETFL, flag | O_NONBLOCK);
         _address.reset();
 
     }

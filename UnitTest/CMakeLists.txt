@@ -1,6 +1,7 @@
-set(RUNNER "runner.cpp")
-add_custom_command(OUTPUT ${RUNNER}
-        COMMAND cxxtestgen --error-printer -o runner.cpp ~/github/KQEvent/UnitTest/TestSuit.h
+SET(RUNNER ${PROJECT_SOURCE_DIR}/UnitTest/runner.cpp)
+SET(TEST_SUIT ${PROJECT_SOURCE_DIR}/UnitTest/TestSuit.h)
+ADD_CUSTOM_COMMAND(OUTPUT ${RUNNER}
+        COMMAND cxxtestgen --error-printer -o ${RUNNER} ${TEST_SUIT}
         )
 
 SET(SOURCE_LIST ${RUNNER} ../includes/common/KQEventCommonException.cpp ../includes/common/KQEventCommonException.h ../includes/common/common.h TestSuit.h ../src/base/Channel.cpp ../includes/base/Channel.h)

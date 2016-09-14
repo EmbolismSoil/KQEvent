@@ -7,6 +7,7 @@
 #include <sys/socket.h>
 #include "IPAddress.h"
 #include <utility>
+#include <unistd.h>
 
 namespace KQEvent {
     class Socket : public std::enable_shared_from_this<Socket> {
@@ -19,6 +20,10 @@ namespace KQEvent {
         Socket(Socket const &) = delete;
 
         Socket const &operator=(Socket const &) = delete;
+
+        virtual ~Socket(){
+            ::close(_fd);
+        }
 
          template <typename  ..._Args>
          static SocketPtr newInstance(_Args&& ...args){

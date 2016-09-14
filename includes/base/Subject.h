@@ -9,13 +9,12 @@
 namespace KQEvent {
     class Subject : public std::enable_shared_from_this<Subject> {
     public:
+        using ObserverList_t =  std::vector<Observer::ObserverPtr>;
         struct EventType {
             bool READ = true;
             bool WRITE = true;
             bool EXCEPT = true;
         };
-
-        Subject(int fd) : _fd(fd){}
 
         Subject(Subject const &) = delete;
 
@@ -23,8 +22,8 @@ namespace KQEvent {
 
         using SubjectPtr = std::shared_ptr<Subject>;
 
-        template <class ..._Arg>
-        static SubjectPtr newInstance(_Arg ...args){
+        template<class ..._Arg>
+        static SubjectPtr newInstance(_Arg ...args) {
             auto aNew = new Subject(std::forward<_Arg>(args)...);
             return SubjectPtr(aNew);
         }
@@ -33,93 +32,40 @@ namespace KQEvent {
             return shared_from_this();
         }
 
-        virtual void notifyReadObserver() {
-            for (auto pos = _readObserver.begin();
-                        pos != _readObserver.end();) {
-                auto tmp = pos;
-                auto observer = *pos;
-                auto handler = observer->getHandle();
-                ++pos;
-                if (handler(getPtr()) == Observer::DELETE)
-                    _readObserver.erase(tmp);
-            }
-        }
+        virtual void notifyReadObserver();
 
-        virtual void notifyWriteObserver() {
-            for (auto pos = _writeObserver.begin();
-                    pos != _writeObserver.end(); ++pos){
-                auto tmp = pos;
-                auto observer = *pos;
-                auto handler = observer->getHandle();
-                ++pos;
-                if (handler(getPtr()) == Observer::DELETE){
-                    _writeObserver.erase(tmp);
-                }
-            }
-        }
+        virtual void notifyWriteObserver();
 
-        virtual void notifyExceptObserver(){
-            for (auto pos = _exceptObserver.begin();
-                        pos != _exceptObserver.end();){
-                auto tmp = pos;
-                auto observer = *pos;
-                auto handler = observer->getHandle();
-                ++pos;
-                if (handler(getPtr()) == Observer::DELETE){
-                    _exceptObserver.erase(tmp);
-                }
-            }
-        }
+        virtual void notifyExceptObserver();
 
-        void attachReadObserver(Observer::ObserverPtr observer){
-            auto handle = observer->getOnAttachHandle();
-            handle(getPtr());
-            _readObserver.push_back(observer);
-        }
+        void attachReadObserver(Observer::ObserverPtr observer);
 
-        void attachWriteObserver(Observer::ObserverPtr observer){
-            auto handle = observer->getOnAttachHandle();
-            handle(getPtr());
-            _writeObserver.push_back(observer);
-        }
+        void attachWriteObserver(Observer::ObserverPtr observer);
 
-        void attachExceptObserver(Observer::ObserverPtr observer){
-            auto handle = observer->getOnAttachHandle();
-            handle(getPtr());
-            _exceptObserver.push_back(observer);
-        }
+        void attachExceptObserver(Observer::ObserverPtr observer);
 
         Observer::ObserverPtr
-        detachReadObserver(Observer::ObserverPtr observer){
-            auto pos = std::find(_readObserver.begin(),
-                                 _readObserver.end(), observer);
-            auto tmp = *pos;
-            auto handle = tmp->getOnDetachHandle();
-            handle(getPtr());
-            return tmp;
-        }
+        detachReadObserver(Observer::ObserverPtr observer);
 
         Observer::ObserverPtr
-        detachWriteObserver(Observer::ObserverPtr observer){
-            auto pos = std::find(_writeObserver.begin(),
-                                 _writeObserver.end(), observer);
-            auto tmp = *pos;
-            auto handle = tmp->getOnDetachHandle();
-            handle(getPtr());
-            return tmp;
-        }
+        detachWriteObserver(Observer::ObserverPtr observer);
 
         Observer::ObserverPtr
-        detachExceptObserver(Observer::ObserverPtr observer){
-            auto pos = std::find(_exceptObserver.begin(),
-                                 _exceptObserver.end(), observer);
-            auto tmp = *pos;
-            auto handle = tmp->getOnDetachHandle();
-            handle(getPtr());
-            return tmp;
+        detachExceptObserver(Observer::ObserverPtr observer);
+
+        bool isFocusOnRead(){
+            return !_readObserver.empty();
         }
 
-        struct EventType getEventNow() {
+        bool isFocusOnWrite() {
+            return !_writeObserver.empty();
+        }
+
+        bool isFocusOnExcept() {
+            return !_exceptObserver.empty();
+        }
+
+        struct EventType getEventMask() {
             return _eventMask;
         }
 
@@ -135,12 +81,16 @@ namespace KQEvent {
             _eventMask.EXCEPT = on;
         }
 
-        int getFd(){return _fd;}
-        void setFd(int fd){_fd = fd;}
+        int getFd() { return _fd; }
+
+        void setFd(int fd) { _fd = fd; }
+
     private:
-        std::vector<Observer::ObserverPtr> _readObserver;
-        std::vector<Observer::ObserverPtr> _writeObserver;
-        std::vector<Observer::ObserverPtr> _exceptObserver;
+        Subject(int fd) : _fd(fd) {}
+
+        ObserverList_t _readObserver;
+        ObserverList_t _writeObserver;
+        ObserverList_t _exceptObserver;
         EventType _eventMask;
         int _fd;
     };

@@ -5,46 +5,35 @@
 #include "EventLoop.h"
 #include <sys/syscall.h>
 #include <unistd.h>
+#include <poll.h>
 
 namespace KQEvent {
 
     void EventLoop::registerSubject(Subject::SubjectPtr subject) {
         assertOwner();
-        _subjects[subject->getFd()] = subject;
+        _poller->addToPoll(subject);
     }
 
-    Subject::SubjectPtr EventLoop::unregisterSubject(int fd) {
+    void EventLoop::unregisterSubject(int fd) {
         assertOwner();
-        Subject::SubjectPtr ptr = _subjects[fd];
-        _subjects.erase(fd);
-        return ptr;
+        _poller->removeFromPoll(fd);
     }
 
     void EventLoop::loop() {
-
+        assertOwner();
+        _looping = true;
+        _poller->poll();
     }
 
     EventLoop::EventLoop() :
             _tid(syscall(SYS_gettid)),
-            _looping(false) {
-
+            _looping(false)
+    {
+        _poller = Poller::newInstance([](Poller::PollerPtr p){});
     }
 
-    Subject::SubjectPtr
-    EventLoop::unregisterSubject(Subject::SubjectPtr subject) {
-        assertOwner();
-        auto pos = _subjects.begin();
-        while(pos != _subjects.end()){
-            if (subject == pos->second)
-                break;
-        }
-        auto tmp = pos->second;
-        _subjects.erase(pos);
-        return tmp;
-    }
 
     void EventLoop::assertOwner() throw(KQEventCommonException){
-        assertOwner();
         if ( _tid != syscall(SYS_gettid)){
             throw KQEventCommonException(
                     "Loop can just running in "
