@@ -50,13 +50,27 @@ namespace KQEvent {
     }
 */
         //for log
-        virtual void onAttach(void) {}
-
-        virtual void onDetach(void) {}
+        //virtual void onAttach(void) {}
+        //virtual void onDetach(void) {}
+        void setOnAttachHandle(Handle_t handle){
+            _onAttach = handle;
+        }
+        void setOnDetachHandle(Handle_t handle){
+            _onDetach = handle;
+        }
+        Handle_t getOnAttachHandle(void){return _onAttach;}
+        Handle_t getOnDetachHandle(void){return _onDetach;}
 
     private:
-    	Observer() = default;
+    	Observer(){
+            auto handle = [](Subject::SubjectPtr){return ALIVE;};
+            _onAttach = handle;
+            _onDetach = handle;
+        }
+
         Handle_t _handle;
+        Handle_t _onAttach;
+        Handle_t _onDetach;
         std::string _name;//used by log
     };
 }

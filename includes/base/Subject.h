@@ -29,13 +29,15 @@ namespace KQEvent {
         virtual bool attach(std::shared_ptr<AbsObserver> observer) {
             std::weak_ptr<AbsObserver> ptr = observer;
             _observers[observer.get()] = ptr;
-            observer->onAttach();
+            auto handle = observer->getOnAttachHandle();
+            handle(getPtr());
             return true;
         }
 
         virtual bool detach(std::shared_ptr<AbsObserver> observer) {
             _observers.erase(observer.get());
-            observer->onDetach();
+            auto handle = observer->getOnDetachHandle();
+            handle(getPtr());
             return true;
         }
 
@@ -46,7 +48,7 @@ namespace KQEvent {
                 auto tmp = pos;
                 auto ptr = pos->second;
                 if (auto observer = ptr.lock()) {
-                    if (observer->update(shared_from_this()) == Observer::DELETE) {
+                    if (observer->update(getPtr()) == Observer::DELETE) {
                         ++pos;
                         _observers.erase(tmp);
                     } else {
