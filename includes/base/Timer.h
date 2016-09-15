@@ -12,12 +12,7 @@
 namespace KQEvent{
     class Timer {
         /*
-         *  利用std::map构建红黑树，每次定时器超时后更新时，从红黑树中取出顶点，
-         *  重新设置定时器超时时间即可。除此之外，还可以设置超时周期，但是不能
-         *  设置多个超时周期，每次设置不同的超时周期，只会更新超时周期，而不会有
-         *  多个超时周期。
-         *
-         *  TODO: 关于时区和获取系统时间需要对STL进行包装
+         *  @ 当定时器周期为0时表示该定时器只触发一次
          * */
     public:
         Timer(Timer &const) = delete;
@@ -25,6 +20,7 @@ namespace KQEvent{
         Timer const &operator=(Timer const &) = delete;
 
         using TimerPtr = std::shared_ptr<Timer>;
+        using Handle_t = std::function<void()>;
 
         template<typename ..._Args>
         TimerPtr newInstance(_Args &&...args) {
@@ -32,18 +28,20 @@ namespace KQEvent{
             return TimerPtr(aNew);
         }
 
-        virtual void addTimoutAt(std::chrono::time_point timePoint);
+        virtual void setTimoutAt(std::chrono::time_point timePoint);
 
-        virtual void addTimeoutAfter(std::chrono::milliseconds ms);
+        virtual void setTimeoutAfter(std::chrono::milliseconds ms);
 
         virtual void updatePeriod(std::chrono::milliseconds ms);
 
+        virtual void handle();
+
     private:
-        Timer();
-        int _fd;
-        typedef bool __fakeType;
-        bool const __fakeValue = false;
-        std::map<std::chrono::time_point, __fakeType> _times;
+        Timer(std::chrono::time_point timeout,
+              std::chrono::milliseconds period, Handle_t handle);
+        std::chrono::time_point _timeout;
+        std::chrono::milliseconds _period;
+        Handle_t _handle;
     };
 }
 

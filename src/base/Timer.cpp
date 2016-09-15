@@ -6,20 +6,31 @@
 
 namespace KQEvent{
 
-    void Timer::addTimoutAt(std::chrono::time_point timePoint) {
-        _times[timePoint] = __fakeValue;
+    void Timer::handle() {
+        _handle();
     }
 
-    void Timer::addTimeoutAfter(std::chrono::milliseconds ms) {
+
+    Timer::Timer(std::chrono::time_point timeout,
+                    std::chrono::milliseconds period,
+                                Timer::Handle_t handle):
+        _timeout(timeout),
+        _period(period),
+        _handle(handle)
+    {
+
+    }
+
+    void Timer::setTimoutAt(std::chrono::time_point timePoint) {
+        _timeout = timePoint;
+    }
+
+    void Timer::setTimeoutAfter(std::chrono::milliseconds ms) {
         auto timePoint = std::chrono::high_resolution_clock::now() + ms;
-        addTimoutAt(timePoint);
+        setTimoutAt(timePoint);
     }
 
     void Timer::updatePeriod(std::chrono::milliseconds ms) {
-
-    }
-
-    Timer::Timer() {
-
+        _period = ms;
     }
 }
