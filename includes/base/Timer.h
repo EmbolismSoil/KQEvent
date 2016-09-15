@@ -7,7 +7,7 @@
 
 #include <memory>
 #include <map>
-#include <thread>
+#include <chrono>
 
 namespace KQEvent{
     class Timer {
