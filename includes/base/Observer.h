@@ -14,6 +14,7 @@ namespace KQEvent {
             DELETE, ALIVE
         } Command_t;
         using ObserverPtr = std::shared_ptr<Observer>;
+        //为了应对多线程的情况，这里要求Handle_t的实现必须是线程安全的。
         using Handle_t = std::function<Command_t(std::shared_ptr<Subject>)>;
 
         /*不推荐直接使用构造函数new对象，因为KQEvent内并不鼓励使用原生指针*/
