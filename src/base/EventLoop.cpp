@@ -5,7 +5,6 @@
 #include "EventLoop.h"
 #include <sys/syscall.h>
 #include <unistd.h>
-#include <poll.h>
 
 namespace KQEvent {
 

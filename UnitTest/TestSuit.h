@@ -41,6 +41,7 @@ public:
         std::cout << buf << std::endl;
         return Observer::ALIVE;
     }
+
     void testEventLoop(void){
         auto eventLoop = EventLoop::newInstance();
         int fd = ::open("/home/lee/test", O_RDONLY);
