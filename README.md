@@ -1,10 +1,36 @@
-# KQEvent
-一个非阻塞网络库,使用C++11开发
+#KQEvent
 
-## TODO
-1. TIMER实现
-2. 内存池
-3. work steal线程池
+KQEvent是一个异步非阻塞网络库,使用`C++11`实现。意图展示一个基本的异步非阻塞网络库的实现，最终会在此基础上实现一个`Http Server`和一个`RPC`框架。
+KQEvent的设计目标是：**方便使用**
 
-## CSP
-所有线程没有竞争，只有消息。所以每个线程都有自己的一个状态机
+###示例:  
+```cpp
+auto ip = IPAddress("locahost:80");
+auto Server = TCPServer::newInstance(IPaddress);
+Server->setReadHandler([](){
+                            auto buffer = MemPoll::alloc(512);
+                            TCPServer::read(_fd, buffer);
+                            //your code
+                            return ALIVE;
+                        })
+Server.run();
+```
+
+###将会实现的特性
+- 用户可以从内存池中分配内存，内存池跟踪内存的使用情况，跟踪内存生命周期，提供丰富的调试信息，必要时自动回收。降低用户内存管理的难度。
+- 实现性能统计，可以在调试模式自动导出统计数据的图表形式。
+- 基于无锁结构设计的高性能线程池
+
+### 下载安装
+``` shell
+mkdir build && cd build && cmake && make
+```
+
+###正在进行的工作
+- 细化connection的结构，跟踪连接的生命周期，处理连接异常
+- 精确定时器，时区转换
+- 线程池
+- Acceptor
+
+## License
+GPLv2
