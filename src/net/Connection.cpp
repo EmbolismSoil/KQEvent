@@ -78,5 +78,7 @@ namespace KQEvent{
         return cnt;
     }
 
+    Connection::~Connection() {
 
+    }
 }

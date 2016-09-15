@@ -15,7 +15,7 @@ namespace KQEvent{
          *  @ 当定时器周期为0时表示该定时器只触发一次
          * */
     public:
-        Timer(Timer &const) = delete;
+        Timer(Timer const &) = delete;
 
         Timer const &operator=(Timer const &) = delete;
 
@@ -28,7 +28,7 @@ namespace KQEvent{
             return TimerPtr(aNew);
         }
 
-        virtual void setTimoutAt(std::chrono::time_point timePoint);
+        virtual void setTimoutAt(std::chrono::high_resolution_clock::time_point timePoint);
 
         virtual void setTimeoutAfter(std::chrono::milliseconds ms);
 
@@ -37,9 +37,9 @@ namespace KQEvent{
         virtual void handle();
 
     private:
-        Timer(std::chrono::time_point timeout,
+        Timer(std::chrono::high_resolution_clock::time_point timeout,
               std::chrono::milliseconds period, Handle_t handle);
-        std::chrono::time_point _timeout;
+        std::chrono::high_resolution_clock::time_point _timeout;
         std::chrono::milliseconds _period;
         Handle_t _handle;
     };

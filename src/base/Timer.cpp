@@ -11,7 +11,7 @@ namespace KQEvent{
     }
 
 
-    Timer::Timer(std::chrono::time_point timeout,
+    Timer::Timer(std::chrono::high_resolution_clock::time_point timeout,
                     std::chrono::milliseconds period,
                                 Timer::Handle_t handle):
         _timeout(timeout),
@@ -21,7 +21,7 @@ namespace KQEvent{
 
     }
 
-    void Timer::setTimoutAt(std::chrono::time_point timePoint) {
+    void Timer::setTimoutAt(std::chrono::high_resolution_clock::time_point timePoint) {
         _timeout = timePoint;
     }
 
