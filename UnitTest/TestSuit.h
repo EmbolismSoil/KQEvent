@@ -21,20 +21,21 @@
 #include "Connection.h"
 
 using namespace KQEvent;
-class KQEventTest : public CxxTest::TestSuite{
+
+class KQEventTest : public CxxTest::TestSuite {
 public:
-    void testComponent(void){
+    void testComponent(void) {
         auto address = IPAddress::fromHostName(std::string("www.baidu.com"));
         auto sock = Socket::newInstance(AF_INET, SOCK_STREAM);
         auto tcpInfo = TCPInfo::fromTCPSocketFd(sock->getFd());
 
         std::cout << tcpInfo->toString() << std::endl;
-        for (auto &item : address){
+        for (auto &item : address) {
             std::cout << item->toString() << std::endl;
         }
     }
 
-    static Observer::Command_t func(Subject::SubjectPtr subject){
+    static Observer::Command_t func(Subject::SubjectPtr subject) {
         char buf[512];
         int ret = ::read(subject->getFd(), buf, sizeof(buf));
         if (ret == 0)
@@ -43,14 +44,15 @@ public:
         return Observer::ALIVE;
     }
 
-    void testConnect(void){
+    void testConnect(void) {
+
         int fd = ::open("/home/lee/test.cpp", O_APPEND | O_RDWR);
         auto conn = Connection::newInstance(fd);
-        conn->attachReadHandler([](Connection::ConnectionPtr c){
+        conn->attachReadHandler([](Connection::ConnectionPtr c) {
             char buf[128];
             int fd = c->getFd();
             int n = 0;
-            while( (n = ::read(fd, buf, sizeof(buf))) > 0);
+            while ((n = ::read(fd, buf, sizeof(buf))) > 0);
             std::cout << buf << std::endl;
             return Observer::ALIVE;
         });
@@ -61,6 +63,7 @@ public:
         loop->registerSubject(conn->getSubject());
         loop->loop();
     }
+
 
 };
 
