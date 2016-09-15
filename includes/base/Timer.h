@@ -9,7 +9,7 @@
 #include <map>
 #include <thread>
 
-namespace {
+namespace KQEvent{
     class Timer {
         /*
          *  利用std::map构建红黑树，每次定时器超时后更新时，从红黑树中取出顶点，
@@ -32,15 +32,14 @@ namespace {
             return TimerPtr(aNew);
         }
 
-        void addTimoutAt(std::chrono::time_point timePoint);
+        virtual void addTimoutAt(std::chrono::time_point timePoint);
 
-        void addTimeoutAfter(std::chrono::milliseconds ms);
+        virtual void addTimeoutAfter(std::chrono::milliseconds ms);
 
-        void updatePeriod(std::chrono::milliseconds ms);
+        virtual void updatePeriod(std::chrono::milliseconds ms);
 
     private:
         Timer();
-
         int _fd;
         typedef bool __fakeType;
         bool const __fakeValue = false;
