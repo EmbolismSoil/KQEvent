@@ -17,4 +17,8 @@ namespace KQEvent{
     void Timer::updatePeriod(std::chrono::milliseconds ms) {
 
     }
+
+    Timer::Timer() {
+
+    }
 }
