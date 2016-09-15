@@ -27,7 +27,7 @@ namespace KQEvent {
 
         Poller const &operator=(Poller const &) = delete;
 
-        virtual void addToPoll(Subject::SubjectPtr subject);
+        virtual void addToPoll(Subject::SubjectPtr const &subject);
 
         virtual void removeFromPoll(int fd);
 

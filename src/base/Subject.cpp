@@ -1,6 +1,12 @@
 #include "Subject.h"
 
 namespace KQEvent{
+    Subject::Subject(int fd)
+            : _fd(fd)
+    {
+
+    }
+
      void Subject::notifyReadObserver() {
          if (_readObserver.empty())
              return;
@@ -22,13 +28,14 @@ namespace KQEvent{
              return;
 
         for (auto pos = _writeObserver.begin();
-             pos != _writeObserver.end(); ++pos){
+             pos != _writeObserver.end();){
             auto tmp = pos;
             auto observer = *pos;
             auto handler = observer->getHandle();
-            ++pos;
             if (handler(getPtr()) == Observer::DELETE){
-                _writeObserver.erase(tmp);
+                pos = _writeObserver.erase(tmp);
+            }else{
+                ++pos;
             }
         }
     }
@@ -41,9 +48,10 @@ namespace KQEvent{
             auto tmp = pos;
             auto observer = *pos;
             auto handler = observer->getHandle();
-            ++pos;
             if (handler(getPtr()) == Observer::DELETE){
-                _exceptObserver.erase(tmp);
+                pos = _exceptObserver.erase(tmp);
+            }else{
+                ++pos;
             }
         }
     }

@@ -8,7 +8,7 @@
 
 namespace KQEvent {
 
-    void EventLoop::registerSubject(Subject::SubjectPtr subject) {
+    void EventLoop::registerSubject(Subject::SubjectPtr const& subject) {
         assertOwner();
         _poller->addToPoll(subject);
     }

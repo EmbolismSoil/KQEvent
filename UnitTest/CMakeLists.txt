@@ -4,8 +4,9 @@ ADD_CUSTOM_COMMAND(OUTPUT ${RUNNER}
         COMMAND cxxtestgen --error-printer -o ${RUNNER} ${TEST_SUIT}
         )
 
-SET(SOURCE_LIST ${RUNNER} ../includes/common/KQEventCommonException.cpp ../includes/common/KQEventCommonException.h ../includes/common/common.h TestSuit.h ../src/base/Channel.cpp ../includes/base/Channel.h)
+SET(SOURCE_LIST ${RUNNER} ../src/common/KQEventCommonException.cpp ../includes/common/KQEventCommonException.h
+        ../includes/common/common.h TestSuit.h ../src/base/Channel.cpp ../includes/base/Channel.h ../includes/net/Connection.h)
 INCLUDE_DIRECTORIES(../includes/base ../includes/net ../includes/common /home/lee/github/cxxtest)
 ADD_EXECUTABLE(KQEventTestSuit ${SOURCE_LIST})
-TARGET_LINK_LIBRARIES(KQEventTestSuit base net)
+TARGET_LINK_LIBRARIES(KQEventTestSuit net base)
 

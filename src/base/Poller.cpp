@@ -7,21 +7,21 @@
 
 namespace KQEvent{
 
-    void Poller::addToPoll(Subject::SubjectPtr subject) {
+    void Poller::addToPoll(Subject::SubjectPtr const & subject) {
         _subjects[subject->getFd()] = subject;
         ::pollfd fd;
         fd.fd = 0;
         fd.events = 0;
         fd.revents = 0;
-        if (subject->isFocusOnRead()){
+        if (subject->getEventMask().READ){
             fd.events |= (POLLIN | POLLRDBAND | POLLRDNORM | POLLPRI);
         }
 
-        if (subject->isFocusOnWrite()){
+        if (subject->getEventMask().WRITE){
             fd.events |= (POLLOUT | POLLWRBAND | POLLWRNORM);
         }
 
-        if (subject->isFocusOnExcept()){
+        if (subject->getEventMask().EXCEPT){
             fd.events |= (POLLERR | POLLHUP | POLLNVAL);
         }
         fd.fd = subject->getFd();
@@ -56,25 +56,39 @@ namespace KQEvent{
                 for (auto &item : _pollfds){
                     if (cnt == 0)
                         break;
-
-                    if ((item.revents & (POLLIN | POLLRDBAND | POLLRDNORM | POLLPRI | POLLHUP)) &&
-                        _subjects[item.fd]->getEventMask().READ)
+                    auto subject = _subjects[item.fd];
+                    if ((item.revents & (POLLIN | POLLRDBAND | POLLRDNORM | POLLPRI | POLLHUP)))
                     {
-                        _subjects[item.fd]->notifyReadObserver();
+                        subject->notifyReadObserver();
                     }
 
-                    if ((item.revents & (POLLOUT | POLLWRBAND | POLLWRNORM)) &&
-                         _subjects[item.fd]->getEventMask().WRITE)
+                    if ((item.revents & (POLLOUT | POLLWRBAND | POLLWRNORM)))
                     {
-                        _subjects[item.fd]->notifyWriteObserver();
+                        subject->notifyWriteObserver();
                     }
 
-                    if ((item.revents & (POLLERR | POLLNVAL)) &&
-                        _subjects[item.fd]->getEventMask().EXCEPT)
+                    if ((item.revents & (POLLERR | POLLNVAL)))
                     {
-                        _subjects[item.fd]->notifyExceptObserver();
+                        subject->notifyExceptObserver();
                     }
 
+                    if (!subject->getEventMask().READ){
+                        item.events &= ~(POLLIN | POLLRDBAND | POLLRDNORM | POLLPRI | POLLHUP);
+                    }else{
+                        item.events |= (POLLIN | POLLRDBAND | POLLRDNORM | POLLPRI | POLLHUP);
+                    }
+
+                    if (!subject->getEventMask().WRITE){
+                        item.events &= ~(POLLOUT | POLLWRBAND | POLLWRNORM);
+                    }else{
+                        item.events |= (POLLOUT | POLLWRBAND | POLLWRNORM);
+                    }
+
+                    if (!subject->getEventMask().EXCEPT){
+                        item.events &= ~((POLLERR | POLLNVAL));
+                    }else{
+                        item.events |= ((POLLERR | POLLNVAL));
+                    }
                     --cnt;
                 }
             }

@@ -25,7 +25,7 @@ namespace KQEvent {
 
         EventLoop const &operator=(EventLoop const &) = delete;
 
-        void registerSubject(Subject::SubjectPtr);
+        void registerSubject(Subject::SubjectPtr const &);
 
         void  unregisterSubject(int fd);
 

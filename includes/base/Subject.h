@@ -53,18 +53,6 @@ namespace KQEvent {
         Observer::ObserverPtr
         detachExceptObserver(Observer::ObserverPtr observer);
 
-        bool isFocusOnRead(){
-            return !_readObserver.empty();
-        }
-
-        bool isFocusOnWrite() {
-            return !_writeObserver.empty();
-        }
-
-        bool isFocusOnExcept() {
-            return !_exceptObserver.empty();
-        }
-
         struct EventType getEventMask() {
             return _eventMask;
         }
@@ -86,7 +74,7 @@ namespace KQEvent {
         void setFd(int fd) { _fd = fd; }
 
     private:
-        Subject(int fd) : _fd(fd) {}
+        Subject(int fd);
 
         ObserverList_t _readObserver;
         ObserverList_t _writeObserver;

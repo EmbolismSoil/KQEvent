@@ -5,6 +5,7 @@
 #include <string>
 #include <atomic>
 #include <memory>
+#include <thread>
 
 namespace KQEvent {
     class Subject;
@@ -38,7 +39,7 @@ namespace KQEvent {
             _handle = handle;
         }
 
-        Handle_t getHandle() { return _handle; }
+        Handle_t const &getHandle() { return _handle; }
 
         virtual Command_t update(std::shared_ptr<Subject>&& subject) {
             return _handle(std::move(subject));
@@ -57,8 +58,8 @@ namespace KQEvent {
         void setOnDetachHandle(Handle_t handle){
             _onDetach = handle;
         }
-        Handle_t getOnAttachHandle(void){return _onAttach;}
-        Handle_t getOnDetachHandle(void){return _onDetach;}
+        Handle_t const &getOnAttachHandle(void){return _onAttach;}
+        Handle_t const &getOnDetachHandle(void){return _onDetach;}
 
     private:
     	Observer(){
@@ -67,9 +68,10 @@ namespace KQEvent {
             _onDetach = handle;
         }
 
-        Handle_t _handle;
-        Handle_t _onAttach;
-        Handle_t _onDetach;
+        Handle_t _handle; //fixme : atomic
+        Handle_t _onAttach; // fixme : atomic
+        Handle_t _onDetach; //fixme : atomic
+        //std::mutex _mtxLock;
         std::string _name;//used by log
     };
 }

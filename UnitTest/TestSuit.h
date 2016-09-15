@@ -18,6 +18,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include "Connection.h"
 
 using namespace KQEvent;
 class KQEventTest : public CxxTest::TestSuite{
@@ -42,17 +43,23 @@ public:
         return Observer::ALIVE;
     }
 
-    void testEventLoop(void){
-        auto eventLoop = EventLoop::newInstance();
-        int fd = ::open("/home/lee/test", O_RDONLY);
-        int flags = ::fcntl(fd, F_GETFL, 0);
-        ::fcntl(fd, F_SETFL, flags | O_NONBLOCK);
-        auto subject = Subject::newInstance(fd);
-        auto observer = Observer::newInstance();
-        observer->setHandle(func);
-        subject->attachReadObserver(observer);
-        eventLoop->registerSubject(subject);
-        eventLoop->loop();
+    void testConnect(void){
+        int fd = ::open("/home/lee/test.cpp", O_APPEND | O_RDWR);
+        auto conn = Connection::newInstance(fd);
+        conn->attachReadHandler([](Connection::ConnectionPtr c){
+            char buf[128];
+            int fd = c->getFd();
+            int n = 0;
+            while( (n = ::read(fd, buf, sizeof(buf))) > 0);
+            std::cout << buf << std::endl;
+            return Observer::ALIVE;
+        });
+
+        char buf[] = "\nfrom test suit\n";
+        conn->sendMessage(buf, sizeof(buf));
+        auto loop = EventLoop::newInstance();
+        loop->registerSubject(conn->getSubject());
+        loop->loop();
     }
 
 };
