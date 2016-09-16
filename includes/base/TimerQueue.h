@@ -10,6 +10,8 @@
 #include <sys/timerfd.h>
 #include <time.h>
 #include "KQEventCommonException.h"
+#include "Subject.h"
+#include "Observer.h"
 
 namespace KQEvent{
     class TimerQueue {
@@ -28,6 +30,7 @@ namespace KQEvent{
         template <typename ..._Args>
         static TimerQueuePtr newInstance(_Args&& ...args){
             auto aNew = new TimerQueue(std::forward<_Args>(args)...);
+            return TimerQueuePtr(aNew);
         }
 
         void addTimer(Timer::TimerPtr timer);
@@ -37,6 +40,10 @@ namespace KQEvent{
         void handleTimeout();
 
         int const getTimerfd();
+
+        Subject::SubjectPtr const &getSubject(){
+            return _subject;
+        }
 
     private:
         using __fakeType = bool;
@@ -51,6 +58,8 @@ namespace KQEvent{
         TimerQueue() throw(KQEventCommonException);
         void _updateTimeoutPoint();
 
+        Subject::SubjectPtr _subject;
+        Observer::ObserverPtr _observer;
         int _timefd;
         ::timespec _time;
         std::map<Timer::TimerPtr, __fakeType, _cmpTimer> _timers;

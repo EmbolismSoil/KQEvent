@@ -25,7 +25,7 @@ namespace KQEvent{
         using Handle_t = std::function<void()>;
 
         template<typename ..._Args>
-        TimerPtr newInstance(_Args &&...args) {
+        static TimerPtr newInstance(_Args &&...args) {
             auto aNew = new Timer(std::forward<_Args>(args)...);
             return TimerPtr(aNew);
         }
@@ -43,6 +43,7 @@ namespace KQEvent{
 
     private:
         Timer(TimePoint timeout, Milliseconds period, Handle_t handle);
+        Timer(Handle_t handle);
         TimePoint _timeout;
         Milliseconds _period;
         Handle_t _handle;

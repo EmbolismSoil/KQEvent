@@ -20,6 +20,11 @@ namespace KQEvent {
 
     }
 
+    Timer::Timer(Timer::Handle_t handle) :
+            Timer(Timer::Clock::now(), Timer::Milliseconds(0), handle){
+
+    }
+
     void Timer::setTimoutAt(Timer::TimePoint timePoint) {
         _timeout = timePoint;
     }
@@ -40,4 +45,5 @@ namespace KQEvent {
     const Timer::TimePoint &Timer::getTimeoutPoint() {
         return _timeout;
     }
+
 }

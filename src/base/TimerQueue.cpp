@@ -19,6 +19,12 @@ namespace KQEvent{
     }
 
     void TimerQueue::handleTimeout() {
+        if(_timers.empty()){
+            uint64_t exp;
+            ssize_t s = read(_timefd, &exp, sizeof(uint64_t));
+            return;
+        }
+
         auto now = Timer::Clock::now();
         auto pos = _timers.begin();
         std::vector<Timer::TimerPtr> ret;
@@ -44,7 +50,8 @@ namespace KQEvent{
                 _timers[item] = __fakeValue;
             }
         }
-
+        uint64_t exp;
+        ssize_t s = read(_timefd, &exp, sizeof(uint64_t));
         _updateTimeoutPoint();
     }
 
@@ -52,6 +59,15 @@ namespace KQEvent{
         _timefd = timerfd_create(CLOCK_REALTIME, 0);
         if (_timefd < 0)
             throw KQEventCommonException("failed in  TimerQueue::TimerQueue()");
+
+        _subject = Subject::newInstance(_timefd);
+        _observer = Observer::newInstance();
+        _observer->setHandle([this](Subject::SubjectPtr subject){
+            handleTimeout();
+            return Observer::ALIVE;
+        });
+        _subject->attachReadObserver(_observer);
+        _subject->setReadEvent(true);
     }
 
     int const TimerQueue::getTimerfd() {
@@ -59,7 +75,7 @@ namespace KQEvent{
     }
 
     void TimerQueue::_updateTimeoutPoint() {
-        if (!_timers.empty())
+        if (_timers.empty())
             return;
 
         auto timer = _timers.begin()->first;
