@@ -7,7 +7,7 @@ KQEvent的设计目标是：**方便使用**
 ```cpp
 auto ip = IPAddress("localhost:80");
 auto Server = TCPServer::newInstance(IPaddress);
-Server->setReadHandler([](){
+Server->setReadHandler([](ConnectionPtr con){
                             auto buffer = MemPoll::alloc(512);
                             TCPServer::read(_fd, buffer);
                             //your code
@@ -23,7 +23,7 @@ Server.run();
 
 ### 下载安装
 ``` shell
-mkdir build && cd build && cmake && make
+mkdir build && cd build && cmake .. && make
 ```
 
 ###正在进行的工作
