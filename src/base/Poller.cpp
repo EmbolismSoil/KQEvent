@@ -43,7 +43,7 @@ namespace KQEvent{
     void Poller::poll() {
         _exit = false;
         while(!_exit){
-            if (!_pollfds.empty()){
+            //if (!_pollfds.empty()){ //fixme
                 _retValue = ::poll(&*_pollfds.begin(), _pollfds.size(), _timeout);
 
                 if (_retValue <= 0){//timeout or error
@@ -51,7 +51,7 @@ namespace KQEvent{
                     continue;
                 }
 
-                decltype(_pollfds.size()) cnt = _retValue;
+                auto cnt = _retValue;
 
                 for (auto pos = _pollfds.begin(); pos != _pollfds.end();){
                 //for (auto &item : _pollfds){ //fixme
@@ -100,7 +100,7 @@ namespace KQEvent{
                     --cnt;
                     ++pos;
                 }
-            }
+            //}
         }
     }
 

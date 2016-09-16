@@ -33,17 +33,20 @@ namespace KQEvent{
             return TimerQueuePtr(aNew);
         }
 
-        void addTimer(Timer::TimerPtr timer);
+        virtual void addTimer(Timer::TimerPtr timer);
 
-        void delTimer(Timer::TimerPtr timer);
+        virtual void delTimer(Timer::TimerPtr timer);
 
-        void handleTimeout();
+        virtual void handleTimeout();
 
         int const getTimerfd();
 
         Subject::SubjectPtr const &getSubject(){
             return _subject;
         }
+
+    protected:
+        TimerQueue() throw(KQEventCommonException);
 
     private:
         using __fakeType = bool;
@@ -55,7 +58,6 @@ namespace KQEvent{
             }
         };
 
-        TimerQueue() throw(KQEventCommonException);
         void _updateTimeoutPoint();
 
         Subject::SubjectPtr _subject;

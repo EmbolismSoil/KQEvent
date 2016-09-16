@@ -31,6 +31,7 @@ namespace KQEvent {
 
         virtual void loop();
 
+        void exit(){_poller->exit();}
     private:
         EventLoop();
         void assertOwner() throw(KQEventCommonException);
