@@ -17,8 +17,7 @@ namespace KQEvent {
         using ConnectionPtr = std::shared_ptr<Connection>;
         using Command_t = Observer::Command_t;
         using Handle_t = std::function<Command_t(ConnectionPtr)>;
-
-
+        
         Connection(Connection const &) = delete;
 
         Connection const &operator=(Connection const &) = delete;
