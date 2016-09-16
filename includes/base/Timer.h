@@ -18,7 +18,9 @@ namespace KQEvent{
         Timer(Timer const &) = delete;
 
         Timer const &operator=(Timer const &) = delete;
-
+        using Clock = std::chrono::high_resolution_clock;
+        using TimePoint = Clock::time_point;
+        using Milliseconds = std::chrono::milliseconds;
         using TimerPtr = std::shared_ptr<Timer>;
         using Handle_t = std::function<void()>;
 
@@ -36,11 +38,13 @@ namespace KQEvent{
 
         virtual void handle();
 
+        Milliseconds const& getPeriod();
+        TimePoint const& getTimeoutPoint();
+
     private:
-        Timer(std::chrono::high_resolution_clock::time_point timeout,
-              std::chrono::milliseconds period, Handle_t handle);
-        std::chrono::high_resolution_clock::time_point _timeout;
-        std::chrono::milliseconds _period;
+        Timer(TimePoint timeout, Milliseconds period, Handle_t handle);
+        TimePoint _timeout;
+        Milliseconds _period;
         Handle_t _handle;
     };
 }

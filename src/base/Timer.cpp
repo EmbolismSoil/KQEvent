@@ -4,33 +4,40 @@
 
 #include "Timer.h"
 
-namespace KQEvent{
+namespace KQEvent {
 
     void Timer::handle() {
         _handle();
     }
 
 
-    Timer::Timer(std::chrono::high_resolution_clock::time_point timeout,
-                    std::chrono::milliseconds period,
-                                Timer::Handle_t handle):
-        _timeout(timeout),
-        _period(period),
-        _handle(handle)
-    {
+    Timer::Timer(Timer::TimePoint timeout,
+                 Timer::Milliseconds period,
+                 Timer::Handle_t handle) :
+            _timeout(timeout),
+            _period(period),
+            _handle(handle) {
 
     }
 
-    void Timer::setTimoutAt(std::chrono::high_resolution_clock::time_point timePoint) {
+    void Timer::setTimoutAt(Timer::TimePoint timePoint) {
         _timeout = timePoint;
     }
 
-    void Timer::setTimeoutAfter(std::chrono::milliseconds ms) {
+    void Timer::setTimeoutAfter(Timer::Milliseconds ms) {
         auto timePoint = std::chrono::high_resolution_clock::now() + ms;
         setTimoutAt(timePoint);
     }
 
-    void Timer::updatePeriod(std::chrono::milliseconds ms) {
+    void Timer::updatePeriod(Timer::Milliseconds ms) {
         _period = ms;
+    }
+
+    const Timer::Milliseconds &Timer::getPeriod() {
+        return _period;
+    }
+
+    const Timer::TimePoint &Timer::getTimeoutPoint() {
+        return _timeout;
     }
 }
