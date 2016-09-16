@@ -38,9 +38,10 @@ namespace KQEvent{
         _timers.erase(_timers.begin(), pos);
         /*
          * 这里要分开为两次迭代操作，防止handle执行时间太长造成定时不准
+         * 这里要从定时器先超时的开始执行
          * */
-        for (auto &item : ret){
-            item->handle();
+        for (auto pos = ret.rbegin(); pos != ret.rend(); ++pos){
+            (*pos)->handle();
         }
 
         for (auto &item : ret){

@@ -7,6 +7,7 @@
 
 #include "TimerQueue.h"
 #include "Subject.h"
+#include "EventLoop.h"
 
 namespace KQEvent {
     class TimerTaskQueue {
@@ -37,8 +38,10 @@ namespace KQEvent {
 
         Subject::SubjectPtr const &getTimerQueueSubect();
         Subject::SubjectPtr const &getEventfdSubject();
+
     protected:
         TimerTaskQueue();
+        TimerTaskQueue(EventLoop::EventLoopPtr loop);
 
     private:
         Subject::SubjectPtr _eventTaskSubject;

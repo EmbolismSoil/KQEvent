@@ -29,7 +29,8 @@ namespace KQEvent {
 
     }
 
-    void TimerTaskQueue::runTask(const TimerTaskQueue::Task &task) {
+    void TimerTaskQueue::runTask(const TimerTaskQueue::Task &task)
+    {
         _taskList.push_back(task);
         uint64_t tmp = 0;
         ::write(_eventfd, &tmp, sizeof(tmp));
@@ -57,14 +58,22 @@ namespace KQEvent {
         _timerQueue->addTimer(timer);
     }
 
-    Subject::SubjectPtr const &TimerTaskQueue::getTimerQueueSubect() {
+    Subject::SubjectPtr const &TimerTaskQueue::getTimerQueueSubect()
+    {
         return _timerQueue->getSubject();
     }
 
-    Subject::SubjectPtr const &TimerTaskQueue::getEventfdSubject() {
+    Subject::SubjectPtr const &TimerTaskQueue::getEventfdSubject()
+    {
         return _eventTaskSubject;
     }
 
+    TimerTaskQueue::TimerTaskQueue(EventLoop::EventLoopPtr loop):
+        TimerTaskQueue()
+    {
+        loop->registerSubject(_timerQueue->getSubject());
+        loop->registerSubject(_eventTaskSubject);
+    }
 
 }
 

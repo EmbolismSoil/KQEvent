@@ -46,5 +46,18 @@ public:
  void runTest() { suite_TestConnection.testConnect(); }
 } testDescription_suite_TestConnection_testConnect;
 
+#include "/home/lee/github/KQEvent/UnitTest/TestTimerTaskQueue.h"
+
+static TestTimerTaskQueue suite_TestTimerTaskQueue;
+
+static CxxTest::List Tests_TestTimerTaskQueue = { 0, 0 };
+CxxTest::StaticSuiteDescription suiteDescription_TestTimerTaskQueue( "/home/lee/github/KQEvent/UnitTest/TestTimerTaskQueue.h", 14, "TestTimerTaskQueue", suite_TestTimerTaskQueue, Tests_TestTimerTaskQueue );
+
+static class TestDescription_suite_TestTimerTaskQueue_testTimerTaskQueue : public CxxTest::RealTestDescription {
+public:
+ TestDescription_suite_TestTimerTaskQueue_testTimerTaskQueue() : CxxTest::RealTestDescription( Tests_TestTimerTaskQueue, suiteDescription_TestTimerTaskQueue, 16, "testTimerTaskQueue" ) {}
+ void runTest() { suite_TestTimerTaskQueue.testTimerTaskQueue(); }
+} testDescription_suite_TestTimerTaskQueue_testTimerTaskQueue;
+
 #include <cxxtest/Root.cpp>
 const char* CxxTest::RealWorldDescription::_worldName = "cxxtest";
