@@ -45,7 +45,7 @@ namespace KQEvent {
         bool _exit;
         int _timeout;
         std::vector<::pollfd> _pollfds;
-        std::map<int, Subject::SubjectPtr> _subjects;
+        std::map<int, Subject::SubjectWeakPtr> _subjects;
         int _retValue;
         Handle_t _handle; //处理非正常poll返回
     };

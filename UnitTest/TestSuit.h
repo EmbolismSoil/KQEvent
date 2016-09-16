@@ -29,7 +29,7 @@ public:
         auto tq = TimerQueue::newInstance();
         auto period = Timer::Milliseconds(1000);
         auto timout = Timer::Clock::now() + period;
-        auto handle =  [](){std::cout << std::endl << "test timer";};
+        auto handle =  [](){std::cout << std::endl << "test timer" << std::endl;};
         tq->addTimer(Timer::newInstance(timout + period, Timer::Milliseconds(0), handle));
         tq->addTimer(Timer::newInstance(timout + 5*period, Timer::Milliseconds(0), handle));
         tq->addTimer(Timer::newInstance(timout + 10*period, Timer::Milliseconds(1000), handle));

@@ -11,9 +11,9 @@ namespace KQEvent {
     public:
         using ObserverList_t =  std::vector<Observer::ObserverPtr>;
         struct EventType {
-            bool READ = true;
-            bool WRITE = true;
-            bool EXCEPT = true;
+            bool READ = false;
+            bool WRITE = false;
+            bool EXCEPT = false;
         };
 
         Subject(Subject const &) = delete;
@@ -21,6 +21,7 @@ namespace KQEvent {
         Subject const &operator=(Subject const &) = delete;
 
         using SubjectPtr = std::shared_ptr<Subject>;
+        using SubjectWeakPtr = std::weak_ptr<Subject>;
 
         template<class ..._Arg>
         static SubjectPtr newInstance(_Arg ...args) {

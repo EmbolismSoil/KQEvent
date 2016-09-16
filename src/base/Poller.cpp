@@ -53,43 +53,52 @@ namespace KQEvent{
 
                 decltype(_pollfds.size()) cnt = _retValue;
 
-                for (auto &item : _pollfds){
+                for (auto pos = _pollfds.begin(); pos != _pollfds.end();){
+                //for (auto &item : _pollfds){ //fixme
                     if (cnt == 0)
                         break;
-                    auto subject = _subjects[item.fd];
-                    if ((item.revents & (POLLIN | POLLRDBAND | POLLRDNORM | POLLPRI | POLLHUP)))
+
+                    Subject::SubjectPtr subject = _subjects[pos->fd].lock();
+                    if(!subject){
+                        _subjects.erase(pos->fd);
+                        pos = _pollfds.erase(pos);
+                        continue;
+                    }
+
+                    if ((pos->revents & (POLLIN | POLLRDBAND | POLLRDNORM | POLLPRI | POLLHUP)))
                     {
                         subject->notifyReadObserver();
                     }
 
-                    if ((item.revents & (POLLOUT | POLLWRBAND | POLLWRNORM)))
+                    if ((pos->revents & (POLLOUT | POLLWRBAND | POLLWRNORM)))
                     {
                         subject->notifyWriteObserver();
                     }
 
-                    if ((item.revents & (POLLERR | POLLNVAL)))
+                    if ((pos->revents & (POLLERR | POLLNVAL)))
                     {
                         subject->notifyExceptObserver();
                     }
 
                     if (!subject->getEventMask().READ){
-                        item.events &= ~(POLLIN | POLLRDBAND | POLLRDNORM | POLLPRI | POLLHUP);
+                        pos->events &= ~(POLLIN | POLLRDBAND | POLLRDNORM | POLLPRI | POLLHUP);
                     }else{
-                        item.events |= (POLLIN | POLLRDBAND | POLLRDNORM | POLLPRI | POLLHUP);
+                        pos->events |= (POLLIN | POLLRDBAND | POLLRDNORM | POLLPRI | POLLHUP);
                     }
 
                     if (!subject->getEventMask().WRITE){
-                        item.events &= ~(POLLOUT | POLLWRBAND | POLLWRNORM);
+                        pos->events &= ~(POLLOUT | POLLWRBAND | POLLWRNORM);
                     }else{
-                        item.events |= (POLLOUT | POLLWRBAND | POLLWRNORM);
+                        pos->events |= (POLLOUT | POLLWRBAND | POLLWRNORM);
                     }
 
                     if (!subject->getEventMask().EXCEPT){
-                        item.events &= ~((POLLERR | POLLNVAL));
+                        pos->events &= ~((POLLERR | POLLNVAL));
                     }else{
-                        item.events |= ((POLLERR | POLLNVAL));
+                        pos->events |= ((POLLERR | POLLNVAL));
                     }
                     --cnt;
+                    ++pos;
                 }
             }
         }
