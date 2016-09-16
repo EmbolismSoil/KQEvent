@@ -28,6 +28,8 @@ mkdir build && cd build && cmake .. && make
 
 ###正在进行的工作
 - 细化connection的结构，跟踪连接的生命周期，处理连接异常
+ - connection关闭连接的时候提供强制关闭接口，让用户决定是否立即关闭
+ - connection可以在析构的时候关闭连接
 - 精确定时器，时区转换
 - 线程池
 - Acceptor
