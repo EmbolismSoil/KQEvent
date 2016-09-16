@@ -5,7 +5,7 @@ KQEvent的设计目标是：**方便使用**
 
 ###示例:  
 ```cpp
-auto ip = IPAddress("locahost:80");
+auto ip = IPAddress("localhost:80");
 auto Server = TCPServer::newInstance(IPaddress);
 Server->setReadHandler([](){
                             auto buffer = MemPoll::alloc(512);
