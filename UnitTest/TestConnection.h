@@ -35,25 +35,7 @@ public:
 
     void testConnect(void) {
         return;
-        int fd = ::open("/home/lee/test.cpp", O_APPEND | O_RDWR);
-        auto conn = Connection::newInstance(fd);
-        conn->attachReadHandler([](Connection::ConnectionPtr c) {
-            char buf[128];
-            int fd = c->getFd();
-            int n = 0;
-            while ((n = ::read(fd, buf, sizeof(buf))) > 0);
-            std::cout << buf << std::endl;
-            return Observer::ALIVE;
-        });
-
-        char buf[] = "\nfrom test suit\n";
-        conn->sendMessage(buf, sizeof(buf));
-        auto loop = EventLoop::newInstance();
-        loop->registerSubject(conn->getSubject());
-        loop->loop();
     }
 };
-
-
 
 #endif //KQEVENT_TESTCONNECTION_H

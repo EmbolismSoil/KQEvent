@@ -7,8 +7,9 @@
 
 namespace KQEvent{
 
-    Connection::Connection(int fd, void *contex) :
+    Connection::Connection(int fd, IPAddress::IPAddressPtr peer, void *contex) :
         _sockfd(fd),
+        _peerAddress(peer),
         _subject(Subject::newInstance(fd)),
         _info(TCPInfo::fromTCPSocketFd(fd)),
         _bufSize(0),
@@ -18,6 +19,10 @@ namespace KQEvent{
         auto observer = Observer::newInstance();
         observer->setHandle(wrap(writeHandler));
         _subject->attachWriteObserver(observer);
+        _state = Connecting;
+        _socket = Socket::newInstance(fd);
+        _info = TCPInfo::fromTCPSocketFd(fd);
+        _hostAddress = _socket->getIPAddress();
     }
 
     Observer::Handle_t Connection::wrap(Connection::Handle_t handle) {
@@ -80,5 +85,21 @@ namespace KQEvent{
 
     Connection::~Connection() {
 
+    }
+
+    void Connection::setConnected() {
+        _state = Connected;
+    }
+
+    void Connection::setConnecting() {
+        _state = Connecting;
+    }
+
+    void Connection::setDisconnected() {
+        _state = Disconnected;
+    }
+
+    void Connection::setDisconnecting() {
+        _state = Disconnecting;
     }
 }

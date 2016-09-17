@@ -18,6 +18,11 @@ namespace KQEvent {
         using ConnectionPtr = std::shared_ptr<Connection>;
         using Command_t = Observer::Command_t;
         using Handle_t = std::function<Command_t(ConnectionPtr)>;
+        /*当Acceptor新建一个连接的时候，设置为connecting状态。而后Acceptor会将该连接对象
+         *交给TCPServer,当TCPServer设置好connection的状态之后(例如设置上下文，设置回调等等)
+         *就可以开始将connection放入事件循环中使用，但在此之前需要将connection的状态设置为connected
+         * */
+        typedef enum{Connecting, Connected, Disconnecting, Disconnected}StateE;
 
         Connection(Connection const &) = delete;
 
@@ -46,6 +51,14 @@ namespace KQEvent {
             return _subject;
         }
 
+        void setConnected();
+
+        void setConnecting();
+
+        void setDisconnected();
+
+        void setDisconnecting();
+
         int getFd() { return _sockfd; }
 
         size_t getBufferSize() { return _bufSize; }
@@ -57,7 +70,7 @@ namespace KQEvent {
         void setContext(void *context){_context = context;}
 
     private:
-        Connection(int fd, void *context = nullptr);
+        Connection(int fd, IPAddress::IPAddressPtr peer, void *context = nullptr);
 
         static Command_t writeHandler(ConnectionPtr);
 
@@ -75,6 +88,8 @@ namespace KQEvent {
         Observer::Handle_t wrap(Handle_t handle);
 
         Command_t _handleWrapper(Handle_t handle, Subject::SubjectPtr subject);
+
+        StateE _state;
 
         char *_buf;      //fixme : Buffer class;
 

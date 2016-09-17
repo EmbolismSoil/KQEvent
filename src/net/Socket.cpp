@@ -16,7 +16,11 @@ namespace KQEvent {
         }
         int flag = ::fcntl(_fd, F_GETFL, 0);
         ::fcntl(_fd, F_SETFL, flag | O_NONBLOCK);
-        _address.reset();
+    }
+
+    Socket::Socket(int fd) :
+            _fd(fd)
+    {
 
     }
 
@@ -78,5 +82,12 @@ namespace KQEvent {
         }
 
         return acceptFd;
+    }
+
+    IPAddress::IPAddressPtr Socket::getIPAddress(void){
+        ::sockaddr_in sockAddress;
+        ::socklen_t len;
+        ::getsockname(_fd, (sockaddr*)(&sockAddress), &len);
+        return IPAddress::fromSockAddr(sockAddress);
     }
 }

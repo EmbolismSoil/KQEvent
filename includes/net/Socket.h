@@ -35,6 +35,8 @@ namespace KQEvent {
 
         int getFd(){return _fd;}
 
+        IPAddress::IPAddressPtr getIPAddress();
+
         int setNoDelay(bool on);
 
         int setReuseAddr(bool on);
@@ -55,12 +57,13 @@ namespace KQEvent {
 
     private:
         Socket(int domain, int type);
+        Socket(int fd);
 
         void __setErrorString(int err);
 
         std::string _messageError;
         int _fd;
-        IPAddress::IPAddressPtr _address;
+        //IPAddress::IPAddressPtr _address;
     };
 }
 #endif

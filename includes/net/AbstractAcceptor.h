@@ -7,6 +7,7 @@
 
 #include "Socket.h"
 #include "Connection.h"
+#include "Subject.h"
 
 namespace KQEvent {
     /**
@@ -16,17 +17,23 @@ namespace KQEvent {
     */
     class AbstractAcceptor {
     public:
-        virtual Connection::ConnectionPtr acceptHandle() = 0;
+        using Handle_t = std::function<void(Connection::ConnectionPtr)>;
         virtual ~AbstractAcceptor(){};
+
         //禁止拷贝
         AbstractAcceptor(AbstractAcceptor const&) = delete;
         AbstractAcceptor const&operator=(AbstractAcceptor const&) = delete;
+
+        void setOnConnectHandle(Handle_t const &);
 
     protected:
         AbstractAcceptor(Socket::SocketPtr socket);
 
     private:
+        void handleReadEvent();
         Socket::SocketPtr _socket;
+        Subject::SubjectPtr _subject;
+        Handle_t _onConnect;
     };
 }
 
