@@ -23,8 +23,8 @@ namespace KQEvent {
     
     private:
         Acceptor(Socket::SocketPtr socket, IPAddressPtr address);
-        Socket::SocketPtr socket;
-        IPAddressPtr address;
+        Socket::SocketPtr _socket;
+        IPAddressPtr _address;
     };
 }
 

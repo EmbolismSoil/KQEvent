@@ -5,14 +5,14 @@
 #include <fcntl.h>
 
 namespace KQEvent {
-    Acceptor::Acceptor(Socket::SocketPtr sock, IPAddressPtr addr)
-    : AbstractAcceptor(sock), socket(sock), address(addr)
+    Acceptor::Acceptor(Socket::SocketPtr socket, IPAddressPtr addrress)
+    : AbstractAcceptor(socket), socket(_socket), address(_address)
     {
         bool on = true;
-        socket->setReuseAddr(on);
-        socket->bind(address);
-        socket->listen(LISTENQ);   // LISTENQ isn't defined
-   }
+        _socket->setReuseAddr(on);
+        _socket->bind(address);
+        _socket->listen(LISTENQ);   // LISTENQ isn't defined
+    }
 
     Connection::ConnectionPtr Acceptor::acceptHandle() {
         int acceptFd = socket->accept(nullptr);
