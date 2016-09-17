@@ -1,2 +1,0 @@
-/usr/bin/ar qc libnet.a  CMakeFiles/net.dir/Socket.cpp.o CMakeFiles/net.dir/IPAddress.cpp.o CMakeFiles/net.dir/TCPInfo.cpp.o CMakeFiles/net.dir/Connection.cpp.o
-/usr/bin/ranlib libnet.a
