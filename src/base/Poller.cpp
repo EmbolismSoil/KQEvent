@@ -68,16 +68,19 @@ namespace KQEvent{
                     if ((pos->revents & (POLLIN | POLLRDBAND | POLLRDNORM | POLLPRI | POLLHUP)))
                     {
                         subject->notifyReadObserver();
+                        --cnt;
                     }
 
                     if ((pos->revents & (POLLOUT | POLLWRBAND | POLLWRNORM)))
                     {
                         subject->notifyWriteObserver();
+                        --cnt;
                     }
 
                     if ((pos->revents & (POLLERR | POLLNVAL)))
                     {
                         subject->notifyExceptObserver();
+                        --cnt;
                     }
 
                     if (!subject->getEventMask().READ){
@@ -97,7 +100,7 @@ namespace KQEvent{
                     }else{
                         pos->events |= ((POLLERR | POLLNVAL));
                     }
-                    --cnt;
+                    //--cnt;
                     ++pos;
                 }
             //}
