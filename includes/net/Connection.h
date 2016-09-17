@@ -10,6 +10,7 @@
 #include "../base/Subject.h"
 #include "TCPInfo.h"
 #include "../base/Observer.h"
+#include "Socket.h"
 
 namespace KQEvent {
     class Connection : public std::enable_shared_from_this<Connection> {
@@ -17,7 +18,6 @@ namespace KQEvent {
         using ConnectionPtr = std::shared_ptr<Connection>;
         using Command_t = Observer::Command_t;
         using Handle_t = std::function<Command_t(ConnectionPtr)>;
-
 
         Connection(Connection const &) = delete;
 
@@ -30,6 +30,7 @@ namespace KQEvent {
             auto aNew = new Connection(std::forward<_Args>(args)...);
             return ConnectionPtr(aNew);
         }
+
 
         ConnectionPtr getPtr(void) {
             return shared_from_this();
@@ -61,6 +62,7 @@ namespace KQEvent {
         static Command_t writeHandler(ConnectionPtr);
 
         int _sockfd;
+        Socket::SocketPtr _socket;
 
         IPAddress::IPAddressPtr _hostAddress;
 
