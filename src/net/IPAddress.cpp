@@ -21,18 +21,18 @@ namespace KQEvent {
 
     IPAddress::IPAddressPtr
     IPAddress::fromIPAddress(std::string const &addr, in_port_t port) {
-        auto aNew = new IPAddress(addr, port);
-        return aNew->getPtr();
+        auto aNew = IPAddressPtr(new IPAddress(addr, port));
+        return aNew;
     }
 
     IPAddress::IPAddressPtr
     IPAddress::fromIPAddress(std::string const &addr) {
-        auto pos = addr.find('c');
+        auto pos = addr.find(':');
         auto address = addr.substr(0, pos);
         auto port = addr.substr(pos + 1);
         in_port_t port16 = static_cast<in_port_t >(atoi(port.c_str()));
-        auto aNew = new IPAddress(address, port16);
-        return aNew->getPtr();
+        auto aNew = IPAddressPtr(new IPAddress(address, port16));
+        return aNew;
     }
 
     std::vector<IPAddress::IPAddressPtr>

@@ -45,7 +45,7 @@ namespace KQEvent {
 
         void attachExceptHandler(Handle_t handle);
 
-        size_t sendMessage(char *buf, size_t len);
+        size_t sendMessage(char const *buf, size_t len);
 
         Subject::SubjectPtr const &getSubject() {
             return _subject;

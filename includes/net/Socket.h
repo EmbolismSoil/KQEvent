@@ -13,9 +13,6 @@ namespace KQEvent {
     class Socket : public std::enable_shared_from_this<Socket> {
     public:
         using SocketPtr = std::shared_ptr<Socket>;
-
-        Socket() = delete;
-
         //不能复制
         Socket(Socket const &) = delete;
 
@@ -47,9 +44,11 @@ namespace KQEvent {
 
         int bind(IPAddress::IPAddressPtr);
 
-        int listen(int backlog);
+        int listen(int backlog = 65535);
 
         int accept(IPAddress::IPAddressPtr &peerAddr);
+
+        int connect(IPAddress::IPAddressPtr const &serverAddr);
 
         std::string getError2String() {
             return _messageError;
@@ -58,6 +57,7 @@ namespace KQEvent {
     private:
         Socket(int domain, int type);
         Socket(int fd);
+        Socket();
 
         void __setErrorString(int err);
 

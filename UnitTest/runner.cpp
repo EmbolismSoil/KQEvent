@@ -59,5 +59,24 @@ public:
  void runTest() { suite_TestTimerTaskQueue.testTimerTaskQueue(); }
 } testDescription_suite_TestTimerTaskQueue_testTimerTaskQueue;
 
+#include "/home/lee/github/KQEvent/UnitTest/TestAcceptor.h"
+
+static TestAcceptor suite_TestAcceptor;
+
+static CxxTest::List Tests_TestAcceptor = { 0, 0 };
+CxxTest::StaticSuiteDescription suiteDescription_TestAcceptor( "/home/lee/github/KQEvent/UnitTest/TestAcceptor.h", 21, "TestAcceptor", suite_TestAcceptor, Tests_TestAcceptor );
+
+static class TestDescription_suite_TestAcceptor_TestServer : public CxxTest::RealTestDescription {
+public:
+ TestDescription_suite_TestAcceptor_TestServer() : CxxTest::RealTestDescription( Tests_TestAcceptor, suiteDescription_TestAcceptor, 23, "TestServer" ) {}
+ void runTest() { suite_TestAcceptor.TestServer(); }
+} testDescription_suite_TestAcceptor_TestServer;
+
+static class TestDescription_suite_TestAcceptor_TestClient : public CxxTest::RealTestDescription {
+public:
+ TestDescription_suite_TestAcceptor_TestClient() : CxxTest::RealTestDescription( Tests_TestAcceptor, suiteDescription_TestAcceptor, 46, "TestClient" ) {}
+ void runTest() { suite_TestAcceptor.TestClient(); }
+} testDescription_suite_TestAcceptor_TestClient;
+
 #include <cxxtest/Root.cpp>
 const char* CxxTest::RealWorldDescription::_worldName = "cxxtest";

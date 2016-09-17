@@ -14,15 +14,15 @@ namespace KQEvent{
              return;
          }
 
-        for (auto pos = _readObserver.begin();
-             pos != _readObserver.end();) {
-            auto tmp = pos;
-            auto observer = *pos;
+        for (auto Opos = _readObserver.begin();
+             Opos != _readObserver.end();) {
+            auto tmp = Opos;
+            auto observer = *Opos;
             auto handler = observer->getHandle();
             if (handler(getPtr()) == Observer::DELETE)
-                pos = _readObserver.erase(tmp);
+                Opos = _readObserver.erase(tmp);
             else
-                ++pos;
+                ++Opos;
         }
     }
 

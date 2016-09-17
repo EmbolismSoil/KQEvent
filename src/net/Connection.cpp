@@ -71,7 +71,7 @@ namespace KQEvent{
         return Observer::ALIVE;
     }
 
-    size_t Connection::sendMessage(char *buf, size_t len) {
+    size_t Connection::sendMessage(char const *buf, size_t len) {
         if (_bufSize > 32760)
             return 0;
         int size = 32760 - _bufSize;

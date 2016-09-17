@@ -37,5 +37,4 @@ public:
         return;
     }
 };
-
 #endif //KQEVENT_TESTCONNECTION_H

@@ -19,6 +19,9 @@ namespace KQEvent{
             handleReadEvent();
             return Observer::ALIVE;
         });
+
+        _subject->attachReadObserver(observer);
+        _socket->listen();
     }
 
     void AbstractAcceptor::handleReadEvent() {
@@ -29,5 +32,9 @@ namespace KQEvent{
             return;
         auto connection = Connection::newInstance(connfd, peerAddr);
         _onConnect(connection);
+    }
+
+    Subject::SubjectPtr const&AbstractAcceptor::getSubject() {
+        return _subject;
     }
 }

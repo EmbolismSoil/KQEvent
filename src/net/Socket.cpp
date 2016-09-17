@@ -18,6 +18,12 @@ namespace KQEvent {
         ::fcntl(_fd, F_SETFL, flag | O_NONBLOCK);
     }
 
+    Socket::Socket() : Socket(AF_INET, SOCK_STREAM)
+
+    {
+
+    }
+
     Socket::Socket(int fd) :
             _fd(fd)
     {
@@ -72,6 +78,15 @@ namespace KQEvent {
         return ret;
     }
 
+    int Socket::connect(IPAddress::IPAddressPtr const &serverAddr){
+        auto sock = serverAddr->getSockAddr();
+        int ret = ::connect(_fd, (sockaddr*)(&sock), serverAddr->getSocketLen());
+        if (ret < 0){
+            __setErrorString(errno);
+        }
+        return ret;
+    }
+
     int Socket::accept(IPAddress::IPAddressPtr &peerAddr) {
         ::sockaddr_in peeraddr;
         ::socklen_t len;
@@ -89,5 +104,9 @@ namespace KQEvent {
         ::socklen_t len;
         ::getsockname(_fd, (sockaddr*)(&sockAddress), &len);
         return IPAddress::fromSockAddr(sockAddress);
+    }
+
+    int Socket::listen(int backlog) {
+        return ::listen(_fd, backlog);
     }
 }
