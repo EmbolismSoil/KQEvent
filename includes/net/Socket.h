@@ -48,6 +48,8 @@ namespace KQEvent {
 
         int accept(IPAddress::IPAddressPtr &peerAddr);
 
+        int accept4(IPAddress::IPAddressPtr &peerAddr);
+
         int connect(IPAddress::IPAddressPtr const &serverAddr);
 
         std::string getError2String() {

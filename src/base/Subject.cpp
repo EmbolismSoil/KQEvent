@@ -77,7 +77,7 @@ namespace KQEvent{
         auto handle = observer->getOnAttachHandle();
         handle(getPtr());
         if (!getEventMask().WRITE)
-            setReadEvent(true);
+            setWriteEvent(true);
         _writeObserver.push_back(observer);
     }
 
@@ -85,7 +85,7 @@ namespace KQEvent{
         auto handle = observer->getOnAttachHandle();
         handle(getPtr());
         if (!getEventMask().EXCEPT)
-            setReadEvent(true);
+            setExceptEvent(true);
         _exceptObserver.push_back(observer);
     }
 

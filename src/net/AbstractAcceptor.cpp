@@ -3,6 +3,7 @@
 //
 
 #include "AbstractAcceptor.h"
+#include <iostream>
 
 namespace KQEvent{
 
@@ -27,9 +28,10 @@ namespace KQEvent{
     void AbstractAcceptor::handleReadEvent() {
         auto peerAddr = IPAddress::IPAddressPtr();
         peerAddr.reset();
-        auto connfd = _socket->accept(peerAddr);
+        auto connfd = _socket->accept4(peerAddr);
         if (connfd < 0)
             return;
+
         auto connection = Connection::newInstance(connfd, peerAddr);
         _onConnect(connection);
     }

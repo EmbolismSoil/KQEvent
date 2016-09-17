@@ -8,7 +8,7 @@
 
 namespace KQEvent {
     TimerTaskQueue::TimerTaskQueue() {
-        _eventfd = eventfd(0, EFD_NONBLOCK);
+        _eventfd = eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
         _eventTaskSubject = Subject::newInstance(_eventfd);
         _timerQueue = TimerQueue::newInstance();
         _eventObserver = Observer::newInstance();
@@ -32,7 +32,7 @@ namespace KQEvent {
     void TimerTaskQueue::runTask(const TimerTaskQueue::Task &task)
     {
         _taskList.push_back(task);
-        uint64_t tmp = 0;
+        uint64_t tmp = 10;
         ::write(_eventfd, &tmp, sizeof(tmp));
     }
 
@@ -68,13 +68,14 @@ namespace KQEvent {
         return _eventTaskSubject;
     }
 
+#if 0
     TimerTaskQueue::TimerTaskQueue(EventLoop::EventLoopPtr loop):
         TimerTaskQueue()
     {
         loop->registerSubject(_timerQueue->getSubject());
         loop->registerSubject(_eventTaskSubject);
     }
-
+#endif
 }
 
 

@@ -65,6 +65,9 @@ namespace KQEvent{
             size -= n;
             cnt += n;
         }
+
+        conn->setBufferSize(size);
+
         if (size <= 0){//已经发送完成，不对写事件感兴趣了。
             conn->_subject->setWriteEvent(false);
         }
@@ -80,6 +83,8 @@ namespace KQEvent{
         for (; cnt < size; ++cnt)
             _buf[_bufSize + cnt] = buf[cnt];
         _bufSize += cnt;
+        if (_bufSize > 0)
+            _subject->setWriteEvent(true);
         return cnt;
     }
 

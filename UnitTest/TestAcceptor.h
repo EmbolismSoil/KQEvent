@@ -24,7 +24,7 @@ public:
     void TestServer(void){
         Connection::ConnectionPtr  keepAlive;
         auto sock = Socket::newInstance();
-        sock->bind(IPAddress::fromIPAddress("127.0.0.1:15300"));
+        sock->bind(IPAddress::fromIPAddress("127.0.0.1:10000"));
         sock->listen(135);
         auto acceptor = AbstractAcceptor::newInstance(sock);
         auto loop = EventLoop::newInstance();
@@ -39,6 +39,8 @@ public:
             });
             conn->setConnected();
             keepAlive = conn;
+            std::cout << "new connecion from " << conn->getPeerAddr()->toString()
+                      << " to " << conn->getHostAddr()->toString() << std::endl;
             loop->registerSubject(conn->getSubject());
         });
 
@@ -48,15 +50,21 @@ public:
 
     void TestClient(void){
         auto sock = Socket::newInstance();
-        auto serverAddr = IPAddress::fromIPAddress("127.0.0.1:15300");
+        sock->bind(IPAddress::fromIPAddress("127.0.0.1:31456"));
+        auto serverAddr = IPAddress::fromIPAddress("127.0.0.1:13000");
         int sockfd = sock->getFd();
         int flag = ::fcntl(sockfd, F_GETFL, 0);
         flag &=~ O_NONBLOCK;
         ::fcntl(sockfd, F_SETFL, flag );
         int fd = sock->connect(serverAddr);
+        if (fd < 0){
+            std::cout << "failed in connect" << std::endl;
+            return;
+        }
         char buf[] = "hello server\n";
         char rbuf[1024];
         for (;;){
+            ::sleep(1);
             ::write(fd, buf, sizeof(buf));
             ::read(fd, rbuf, sizeof(rbuf));
             std::cout << rbuf << std::endl;

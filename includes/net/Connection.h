@@ -62,12 +62,17 @@ namespace KQEvent {
         int getFd() { return _sockfd; }
 
         size_t getBufferSize() { return _bufSize; }
+        void setBufferSize(size_t size){_bufSize = size;}
 
         char const *getBuffer() { return _buf; }
 
         void *getContext(){return _context;}
 
         void setContext(void *context){_context = context;}
+
+        IPAddress::IPAddressPtr getHostAddr(){return _hostAddress;}
+
+        IPAddress::IPAddressPtr getPeerAddr(){return _peerAddress;}
 
     private:
         Connection(int fd, IPAddress::IPAddressPtr peer, void *context = nullptr);

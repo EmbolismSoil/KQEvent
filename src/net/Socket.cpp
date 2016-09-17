@@ -89,8 +89,21 @@ namespace KQEvent {
 
     int Socket::accept(IPAddress::IPAddressPtr &peerAddr) {
         ::sockaddr_in peeraddr;
-        ::socklen_t len;
+        ::socklen_t len = sizeof(peeraddr);
         int acceptFd = ::accept(_fd, (sockaddr*)(&peeraddr), &len);
+        peerAddr = IPAddress::fromSockAddr(peeraddr);
+        if (acceptFd < 0){
+            __setErrorString(errno);
+        }
+
+        return acceptFd;
+    }
+
+    int Socket::accept4(IPAddress::IPAddressPtr &peerAddr) {
+        ::sockaddr_in peeraddr;
+        ::socklen_t len = sizeof(peeraddr);
+        int acceptFd = ::accept4(_fd, (sockaddr*)(&peeraddr), &len,
+                                 SOCK_CLOEXEC | SOCK_NONBLOCK);
         peerAddr = IPAddress::fromSockAddr(peeraddr);
         if (acceptFd < 0){
             __setErrorString(errno);

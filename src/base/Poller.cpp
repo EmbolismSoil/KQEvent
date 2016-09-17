@@ -25,7 +25,10 @@ namespace KQEvent{
             fd.events |= (POLLERR | POLLHUP | POLLNVAL);
         }
         fd.fd = subject->getFd();
-        _pollfds.push_back(fd);
+        if (_inHandle)
+            _pollfdsHelper.push_back(fd);
+        else
+            _pollfds.push_back(fd);
     }
 
     void Poller::removeFromPoll(int fd){
@@ -43,7 +46,7 @@ namespace KQEvent{
     void Poller::poll() {
         _exit = false;
         while(!_exit){
-            //if (!_pollfds.empty()){ //fixme
+                checkNewSubject();
                 _retValue = ::poll(&*_pollfds.begin(), _pollfds.size(), _timeout);
 
                 if (_retValue <= 0){//timeout or error
@@ -52,9 +55,8 @@ namespace KQEvent{
                 }
 
                 auto cnt = _retValue;
-
+                _inHandle = true;
                 for (auto pos = _pollfds.begin(); pos != _pollfds.end();){
-                //for (auto &item : _pollfds){ //fixme
                     if (cnt == 0)
                         break;
 
@@ -100,9 +102,9 @@ namespace KQEvent{
                     }else{
                         pos->events |= ((POLLERR | POLLNVAL));
                     }
-                    //--cnt;
                     ++pos;
                 }
+                _inHandle = false;
             //}
         }
     }
@@ -123,12 +125,24 @@ namespace KQEvent{
 
     Poller::Poller(Poller::Handle_t handle, int timeout) :
         _exit(true),
+        _inHandle(false),
         _timeout(timeout),
         _pollfds(),
         _retValue(0),
         _handle(handle)
     {
 
+    }
+
+    void Poller::checkNewSubject() {
+        if (_pollfdsHelper.empty())
+            return;
+
+        for (auto &item : _pollfdsHelper){
+            _pollfds.push_back(item);
+        }
+
+        _pollfdsHelper.clear();
     }
 
 }

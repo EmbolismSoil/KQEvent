@@ -26,22 +26,7 @@ using namespace KQEvent;
 class KQEventTest : public CxxTest::TestSuite{
 public:
     void testTimerQueue(void){
-        auto tq = TimerQueue::newInstance();
-        auto period = Timer::Milliseconds(1000);
-        auto timout = Timer::Clock::now() + period;
-        auto loop = EventLoop::newInstance();
 
-        auto handle =  [](){std::cout << std::endl << "test timer" << std::endl;};
-        auto exithandle = [loop](){
-            std::cout << "exit " << std::endl;
-            loop->exit();
-        };
-        tq->addTimer(Timer::newInstance(timout + period, Timer::Milliseconds(0), handle));
-        tq->addTimer(Timer::newInstance(timout + 5*period, Timer::Milliseconds(0), handle));
-        tq->addTimer(Timer::newInstance(timout + 10*period, Timer::Milliseconds(0), exithandle));
-
-        loop->registerSubject(tq->getSubject());
-        loop->loop();
     }
 };
 

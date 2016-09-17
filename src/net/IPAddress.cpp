@@ -14,9 +14,13 @@ namespace KQEvent {
         this->_address.sin_port = htons(port);
         this->_address.sin_family = AF_INET;
         char buf[50];
-        auto ret = inet_ntop(AF_INET, (const void *) (&_address), buf, sizeof(buf));
-        if (ret != NULL)
+        auto ret = inet_ntop(AF_INET, (const void *) (&_address.sin_addr), buf, sizeof(buf));
+        if (ret != NULL){
             this->_addressStr = std::string(ret);
+            buf[0] = ':';
+            sprintf(buf + 1, "%u", port);
+            this->_addressStr += buf;
+        }
     }
 
     IPAddress::IPAddressPtr
@@ -61,11 +65,11 @@ namespace KQEvent {
             _address(address) {
 
         char buf[50];
-        auto ret = inet_ntop(AF_INET, (void *) (&_address), buf, sizeof(buf));
+        auto ret = inet_ntop(AF_INET, (void *) (&_address.sin_addr), buf, sizeof(buf));
         if (ret != NULL) {
             this->_addressStr = std::string(ret);
             buf[0] = ':';
-            sprintf(buf + 1, "%u", _address.sin_port);
+            sprintf(buf + 1, "%u", ntohs(_address.sin_port));
             this->_addressStr += buf;
         }
     }

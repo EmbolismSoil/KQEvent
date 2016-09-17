@@ -41,10 +41,13 @@ namespace KQEvent {
 
     private:
         Poller(Handle_t hanle, int timeout = 60000);
+        void checkNewSubject();
 
         bool _exit;
+        bool _inHandle;
         int _timeout;
         std::vector<::pollfd> _pollfds;
+        std::vector<::pollfd> _pollfdsHelper;
         std::map<int, Subject::SubjectWeakPtr> _subjects;
         int _retValue;
         Handle_t _handle; //处理非正常poll返回

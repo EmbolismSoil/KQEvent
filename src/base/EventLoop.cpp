@@ -29,6 +29,9 @@ namespace KQEvent {
             _looping(false)
     {
         _poller = Poller::newInstance([](Poller::PollerPtr p){});
+        _timerTaskQueue = TimerTaskQueue::newInstance();
+        registerSubject(_timerTaskQueue->getTimerQueueSubect());
+        registerSubject(_timerTaskQueue->getEventfdSubject());
     }
 
 
