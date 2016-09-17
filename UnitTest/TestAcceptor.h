@@ -12,6 +12,7 @@
 #include <sys/types.h>          /* See NOTES */
 #include <sys/socket.h>
 #include "Connection.h"
+#include "../includes/net/Connection.h"
 #include <unistd.h>
 #include <Observer.h>
 #include <fcntl.h>
@@ -21,12 +22,13 @@ using namespace KQEvent;
 class TestAcceptor : public CxxTest::TestSuite{
 public:
     void TestServer(void){
+        Connection::ConnectionPtr  keepAlive;
         auto sock = Socket::newInstance();
-        sock->bind(IPAddress::fromIPAddress("127.0.0.1:12300"));
+        sock->bind(IPAddress::fromIPAddress("127.0.0.1:15300"));
         sock->listen(135);
         auto acceptor = AbstractAcceptor::newInstance(sock);
         auto loop = EventLoop::newInstance();
-        acceptor->setOnConnectHandle([loop](Connection::ConnectionPtr conn){
+        acceptor->setOnConnectHandle([loop, &keepAlive](Connection::ConnectionPtr conn){
             conn->attachReadHandler([loop](Connection::ConnectionPtr c){
                 char buf[1024];
                 ::read(c->getFd(), buf, sizeof(buf));
@@ -36,6 +38,7 @@ public:
                 return Observer::ALIVE;
             });
             conn->setConnected();
+            keepAlive = conn;
             loop->registerSubject(conn->getSubject());
         });
 
@@ -45,7 +48,7 @@ public:
 
     void TestClient(void){
         auto sock = Socket::newInstance();
-        auto serverAddr = IPAddress::fromIPAddress("127.0.0.1:12300");
+        auto serverAddr = IPAddress::fromIPAddress("127.0.0.1:15300");
         int sockfd = sock->getFd();
         int flag = ::fcntl(sockfd, F_GETFL, 0);
         flag &=~ O_NONBLOCK;
