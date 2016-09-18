@@ -1,3 +1,4 @@
+![](doc/KQLogo.svg)
 #KQEvent
 ![](https://img.shields.io/badge/version-v1.0-blue.svg) ![](https://img.shields.io/badge/build-passing-brightgreen.svg) ![https://github.com/EmbolismSoil/KQEvent/archive/master.zip](https://img.shields.io/badge/dowload-32k-brightgreen.svg)
 
