@@ -17,7 +17,13 @@ namespace KQEvent{
         for (auto Opos = _readObserver.begin();
              Opos != _readObserver.end();) {
             auto tmp = Opos;
-            auto observer = *Opos;
+            auto observer = Opos->lock();
+
+            if (!observer){//观察者对象生命周期结束
+                Opos = _readObserver.erase(Opos);
+                continue;
+            }
+
             auto handler = observer->getHandle();
             if (handler(getPtr()) == Observer::DELETE)
                 Opos = _readObserver.erase(tmp);
@@ -36,7 +42,13 @@ namespace KQEvent{
         for (auto pos = _writeObserver.begin();
              pos != _writeObserver.end();){
             auto tmp = pos;
-            auto observer = *pos;
+            auto observer = pos->lock();
+
+            if (!observer){
+                pos = _writeObserver.erase(pos);
+                continue;
+            }
+
             auto handler = observer->getHandle();
             if (handler(getPtr()) == Observer::DELETE){
                 pos = _writeObserver.erase(tmp);
@@ -55,7 +67,11 @@ namespace KQEvent{
         for (auto pos = _exceptObserver.begin();
              pos != _exceptObserver.end();){
             auto tmp = pos;
-            auto observer = *pos;
+            auto observer = pos->lock();
+            if (!observer){
+                pos = _exceptObserver.erase(pos);
+                continue;
+            }
             auto handler = observer->getHandle();
             if (handler(getPtr()) == Observer::DELETE){
                 pos = _exceptObserver.erase(tmp);
@@ -65,58 +81,104 @@ namespace KQEvent{
         }
     }
 
-    void Subject::attachReadObserver(Observer::ObserverPtr observer){
-        auto handle = observer->getOnAttachHandle();
+    void Subject::attachReadObserver(Observer::ObserverWeakPtr observer){
+        auto obj = observer.lock();
+        if (!obj)
+            return;
+
+        auto handle = obj->getOnAttachHandle();
         handle(getPtr());
         if (!getEventMask().READ)
             setReadEvent(true);
-        _readObserver.push_back(observer);
+        _readObserver.push_back(obj);
     }
 
-    void Subject::attachWriteObserver(Observer::ObserverPtr observer){
-        auto handle = observer->getOnAttachHandle();
+    void Subject::attachWriteObserver(Observer::ObserverWeakPtr observer){
+        auto obj = observer.lock();
+
+        if (!obj)
+            return;
+
+        auto handle = obj->getOnAttachHandle();
         handle(getPtr());
         if (!getEventMask().WRITE)
             setWriteEvent(true);
-        _writeObserver.push_back(observer);
+        _writeObserver.push_back(obj);
     }
 
-    void Subject::attachExceptObserver(Observer::ObserverPtr observer){
-        auto handle = observer->getOnAttachHandle();
+    void Subject::attachExceptObserver(Observer::ObserverWeakPtr observer){
+        auto obj = observer.lock();
+        if (!obj){
+            return;
+        }
+
+        auto handle = obj->getOnAttachHandle();
         handle(getPtr());
         if (!getEventMask().EXCEPT)
             setExceptEvent(true);
-        _exceptObserver.push_back(observer);
+        _exceptObserver.push_back(obj);
     }
 
-    Observer::ObserverPtr
-    Subject::detachReadObserver(Observer::ObserverPtr observer){
-        auto pos = std::find(_readObserver.begin(),
-                             _readObserver.end(), observer);
-        auto tmp = *pos;
-        auto handle = tmp->getOnDetachHandle();
-        handle(getPtr());
-        return tmp;
+#if 1
+    void Subject::detachReadObserver(Observer::ObserverWeakPtr observer){
+        //如果该对象已经不存在，subject会在notify的时候清除它
+        auto target = observer.lock();
+        if (!target)
+            return;
+
+        for (auto pos = _readObserver.begin();
+                            pos != _readObserver.end();){
+            auto obj = pos->lock();
+            if (obj == target){
+                auto handle = obj->getHandle();
+                handle(getPtr());
+                pos = _readObserver.erase(pos);
+                continue;
+            }else{
+                ++pos;
+            }
+        }
     }
 
-    Observer::ObserverPtr
-    Subject::detachWriteObserver(Observer::ObserverPtr observer){
-        auto pos = std::find(_writeObserver.begin(),
-                             _writeObserver.end(), observer);
-        auto tmp = *pos;
-        auto handle = tmp->getOnDetachHandle();
-        handle(getPtr());
-        return tmp;
+    void Subject::detachWriteObserver(Observer::ObserverWeakPtr observer){
+        auto target = observer.lock();
+        if (!target)
+            return;
+
+        for (auto pos = _writeObserver.begin();
+                            pos != _writeObserver.end();){
+            auto obj = pos->lock();
+            if (obj == target){
+                auto handle = obj->getHandle();
+                handle(getPtr());
+                pos = _writeObserver.erase(pos);
+                continue;
+            }else{
+                ++pos;
+            }
+        }
     }
 
-    Observer::ObserverPtr
-    Subject::detachExceptObserver(Observer::ObserverPtr observer){
-        auto pos = std::find(_exceptObserver.begin(),
-                             _exceptObserver.end(), observer);
-        auto tmp = *pos;
-        auto handle = tmp->getOnDetachHandle();
-        handle(getPtr());
-        return tmp;
+    void Subject::detachExceptObserver(Observer::ObserverWeakPtr observer){
+        auto target = observer.lock();
+        if (!target)
+            return;
+
+        for (auto pos = _exceptObserver.begin();
+                        pos != _exceptObserver.end();){
+            auto obj = pos->lock();
+            if (obj == target){
+                auto handle = obj->getHandle();
+                handle(getPtr());
+                pos = _exceptObserver.erase(pos);
+                continue;
+            }else{
+                ++pos;
+            }
+        }
+
+        return;
     }
+#endif
 
 }

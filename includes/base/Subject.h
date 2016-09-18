@@ -9,7 +9,7 @@
 namespace KQEvent {
     class Subject : public std::enable_shared_from_this<Subject> {
     public:
-        using ObserverList_t =  std::vector<Observer::ObserverPtr>;
+        using ObserverList_t =  std::vector<Observer::ObserverWeakPtr >;
         struct EventType {
             bool READ = false;
             bool WRITE = false;
@@ -39,20 +39,17 @@ namespace KQEvent {
 
         virtual void notifyExceptObserver();
 
-        void attachReadObserver(Observer::ObserverPtr observer);
+        void attachReadObserver(Observer::ObserverWeakPtr observer);
 
-        void attachWriteObserver(Observer::ObserverPtr observer);
+        void attachWriteObserver(Observer::ObserverWeakPtr observer);
 
-        void attachExceptObserver(Observer::ObserverPtr observer);
+        void attachExceptObserver(Observer::ObserverWeakPtr observer);
 
-        Observer::ObserverPtr
-        detachReadObserver(Observer::ObserverPtr observer);
+        void detachReadObserver(Observer::ObserverWeakPtr observer);
 
-        Observer::ObserverPtr
-        detachWriteObserver(Observer::ObserverPtr observer);
+        void detachWriteObserver(Observer::ObserverWeakPtr observer);
 
-        Observer::ObserverPtr
-        detachExceptObserver(Observer::ObserverPtr observer);
+        void detachExceptObserver(Observer::ObserverWeakPtr observer);
 
         struct EventType getEventMask() {
             return _eventMask;
