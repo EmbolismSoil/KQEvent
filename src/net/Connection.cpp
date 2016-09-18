@@ -12,6 +12,8 @@ namespace KQEvent{
         _peerAddress(peer),
         _subject(Subject::newInstance(fd)),
         _info(TCPInfo::fromTCPSocketFd(fd)),
+        _state(Connection::Disconnected),
+        _softClose(false),
         _bufSize(0),
         _context(contex)
     {
@@ -72,6 +74,11 @@ namespace KQEvent{
 
         if (size <= 0){//已经发送完成，不对写事件感兴趣了。
             conn->_subject->setWriteEvent(false);
+            if (conn->_softClose){ //是否需要关闭？
+                conn->setDisconnected();
+                conn->_socket.reset();//socket生命周期结束
+                conn->_softCloseCallBack(conn);//这里已经不能再发送网络消息了
+            }
         }
         return Observer::ALIVE;
     }
@@ -91,7 +98,8 @@ namespace KQEvent{
     }
 
     Connection::~Connection() {
-
+        delete[] _buf;
+        //这里不用关闭fd,而是由socket作为一个RAII类关闭连接
     }
 
     void Connection::setConnected() {
@@ -112,5 +120,10 @@ namespace KQEvent{
 
     Connection::StateE Connection::getStatus() {
         return _state;
+    }
+
+    void Connection::softClose(std::function<void(Connection::ConnectionPtr)> cb) {
+        _softClose = true;
+        _softCloseCallBack = cb;
     }
 }

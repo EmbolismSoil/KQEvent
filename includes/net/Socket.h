@@ -19,6 +19,7 @@ namespace KQEvent {
         Socket const &operator=(Socket const &) = delete;
 
         virtual ~Socket(){
+           // if(!_isClose)
             ::close(_fd);
         }
 
@@ -52,6 +53,11 @@ namespace KQEvent {
 
         int connect(IPAddress::IPAddressPtr const &serverAddr);
 
+       // void forceClose(){
+       //     _isClose = true;
+       //     ::close(_fd);
+       // }
+
         std::string getError2String() {
             return _messageError;
         }
@@ -60,6 +66,8 @@ namespace KQEvent {
         Socket(int domain, int type);
         Socket(int fd);
         Socket();
+
+        //bool _isClose;
 
         void __setErrorString(int err);
 

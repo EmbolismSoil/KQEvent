@@ -24,8 +24,11 @@ public:
         });
 
         server->setConnectionReadHandler([](ConnectionPtr conn, char *buf, size_t len){
-            std::cout << "Client : " << buf << std::endl;
+           // std::cout << "Client : " << buf << std::endl;
             //char msg[] = "Server : git it !\n";
+			//static int cnt = 0;
+    		//if (++cnt >= 10000)
+				//exit(0);
             char msg[] =
                     "HTTP/1.1 200 OK\n"
                     "Date: Sat, 31 Dec 2005 23:59:59 GMT\n"

@@ -51,10 +51,14 @@ namespace  KQEvent{
             return Observer::ALIVE;
         }
         _connReadHandler(conn, buf, n);
+
         if (conn->getStatus() ==
                 Connection::Disconnecting){
-            conn->setDisconnected();
-            _closeConnection(conn);
+            //conn->setDisconnected();
+           // _closeConnection(conn);
+            conn->softClose([this](TCPServer::ConnectionPtr c){
+                _closeConnection(c);
+            });
         }
         return Observer::ALIVE;
     }

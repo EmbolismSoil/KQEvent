@@ -22,6 +22,14 @@ namespace KQEvent {
          *交给TCPServer,当TCPServer设置好connection的状态之后(例如设置上下文，设置回调等等)
          *就可以开始将connection放入事件循环中使用，但在此之前需要将connection的状态设置为connected
          * */
+
+        /*connection的断开连接有三种方式方式：
+         * 1. 调用softClose, 等待缓冲区内数据发送完毕之后关闭连接。
+         * 2. 调用forceClose, 立即关闭连接。
+         * 3. connection生命周期结束，立即关闭连接。
+         * 注意： 关闭连接不意味着connection的生命周期结束，至于connection生命周期何时结束，资源何时
+         * 被回收，取决于connection的持有者 -- 如TCPServer
+         * */
         typedef enum{Connecting, Connected, Disconnecting, Disconnected}StateE;
 
         Connection(Connection const &) = delete;
@@ -76,6 +84,9 @@ namespace KQEvent {
 
         IPAddress::IPAddressPtr getPeerAddr(){return _peerAddress;}
 
+        //等待缓冲区内数据发送完毕再关闭连接
+        void softClose(std::function<void(ConnectionPtr)> cb);
+
     private:
         Connection(int fd, IPAddress::IPAddressPtr peer, void *context = nullptr);
 
@@ -101,6 +112,10 @@ namespace KQEvent {
         Command_t _handleWrapper(Handle_t handle, Subject::SubjectPtr subject);
 
         StateE _state;
+
+        bool _softClose;
+
+        std::function<void(ConnectionPtr)> _softCloseCallBack;
 
         char *_buf;      //fixme : Buffer class;
 
