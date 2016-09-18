@@ -22,19 +22,28 @@ using namespace KQEvent;
 class TestAcceptor : public CxxTest::TestSuite{
 public:
     void TestServer(void){
+		int ffd = ::open("/home/lee/pic.png", O_RDWR);
+		if (ffd < 0){
+			std::cout << "failed in open file" << std::endl;
+			exit(0);
+		}
+
         Connection::ConnectionPtr  keepAlive;
         auto sock = Socket::newInstance();
-        sock->bind(IPAddress::fromIPAddress("127.0.0.1:10000"));
+        sock->bind(IPAddress::fromIPAddress("10.42.0.1:10000"));
         sock->listen(135);
         auto acceptor = AbstractAcceptor::newInstance(sock);
         auto loop = EventLoop::newInstance();
-        acceptor->setOnConnectHandle([loop, &keepAlive](Connection::ConnectionPtr conn){
-            conn->attachReadHandler([loop](Connection::ConnectionPtr c){
+        acceptor->setOnConnectHandle([loop,ffd, &keepAlive](Connection::ConnectionPtr conn){
+            conn->attachReadHandler([loop, ffd](Connection::ConnectionPtr c){
                 char buf[1024];
-                ::read(c->getFd(), buf, sizeof(buf));
-                std::cout << "Client : " << buf << std::endl;
-                char msg[] = "Server : This is KQEvent\n";
-                c->sendMessage(msg, sizeof(msg));
+                int n = ::read(c->getFd(), buf, sizeof(buf));
+				int s = ::write(ffd, buf, n);
+				std::cout << "write size : " << s << std::endl;
+				if (n == 0)
+					exit(0);
+				if (n < 0)							
+					return Observer::ALIVE;
                 return Observer::ALIVE;
             });
             conn->setConnected();
