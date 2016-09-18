@@ -74,9 +74,35 @@ public:
 
 static class TestDescription_suite_TestAcceptor_TestClient : public CxxTest::RealTestDescription {
 public:
- TestDescription_suite_TestAcceptor_TestClient() : CxxTest::RealTestDescription( Tests_TestAcceptor, suiteDescription_TestAcceptor, 60, "TestClient" ) {}
+ TestDescription_suite_TestAcceptor_TestClient() : CxxTest::RealTestDescription( Tests_TestAcceptor, suiteDescription_TestAcceptor, 62, "TestClient" ) {}
  void runTest() { suite_TestAcceptor.TestClient(); }
 } testDescription_suite_TestAcceptor_TestClient;
+
+#include "/home/lee/github/KQEvent/UnitTest/TestTCPServer.h"
+
+static TestTCPServer suite_TestTCPServer;
+
+static CxxTest::List Tests_TestTCPServer = { 0, 0 };
+CxxTest::StaticSuiteDescription suiteDescription_TestTCPServer( "/home/lee/github/KQEvent/UnitTest/TestTCPServer.h", 14, "TestTCPServer", suite_TestTCPServer, Tests_TestTCPServer );
+
+static class TestDescription_suite_TestTCPServer_TestServer : public CxxTest::RealTestDescription {
+public:
+ TestDescription_suite_TestTCPServer_TestServer() : CxxTest::RealTestDescription( Tests_TestTCPServer, suiteDescription_TestTCPServer, 16, "TestServer" ) {}
+ void runTest() { suite_TestTCPServer.TestServer(); }
+} testDescription_suite_TestTCPServer_TestServer;
+
+#include "/home/lee/github/KQEvent/UnitTest/TestWeb.h"
+
+static TestWeb suite_TestWeb;
+
+static CxxTest::List Tests_TestWeb = { 0, 0 };
+CxxTest::StaticSuiteDescription suiteDescription_TestWeb( "/home/lee/github/KQEvent/UnitTest/TestWeb.h", 15, "TestWeb", suite_TestWeb, Tests_TestWeb );
+
+static class TestDescription_suite_TestWeb_TestServer : public CxxTest::RealTestDescription {
+public:
+ TestDescription_suite_TestWeb_TestServer() : CxxTest::RealTestDescription( Tests_TestWeb, suiteDescription_TestWeb, 17, "TestServer" ) {}
+ void runTest() { suite_TestWeb.TestServer(); }
+} testDescription_suite_TestWeb_TestServer;
 
 #include <cxxtest/Root.cpp>
 const char* CxxTest::RealWorldDescription::_worldName = "cxxtest";

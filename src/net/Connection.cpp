@@ -109,4 +109,8 @@ namespace KQEvent{
     void Connection::setDisconnecting() {
         _state = Disconnecting;
     }
+
+    Connection::StateE Connection::getStatus() {
+        return _state;
+    }
 }

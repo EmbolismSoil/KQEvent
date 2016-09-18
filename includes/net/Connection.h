@@ -59,6 +59,8 @@ namespace KQEvent {
 
         void setDisconnecting();
 
+        StateE getStatus();
+
         int getFd() { return _sockfd; }
 
         size_t getBufferSize() { return _bufSize; }
