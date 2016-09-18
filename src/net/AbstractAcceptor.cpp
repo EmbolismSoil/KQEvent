@@ -15,13 +15,13 @@ namespace KQEvent{
         _socket(socket)
     {
         _subject = Subject::newInstance(_socket->getFd());
-        auto observer = Observer::newInstance();
-        observer->setHandle([this](Subject::SubjectPtr unused){
+        _observer = Observer::newInstance();
+        _observer->setHandle([this](Subject::SubjectPtr unused){
             handleReadEvent();
             return Observer::ALIVE;
         });
 
-        _subject->attachReadObserver(observer);
+        _subject->attachReadObserver(_observer);
         _socket->listen();
     }
 

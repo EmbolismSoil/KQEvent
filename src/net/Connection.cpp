@@ -16,9 +16,9 @@ namespace KQEvent{
         _context(contex)
     {
         _buf = new char[32768];
-        auto observer = Observer::newInstance();
-        observer->setHandle(wrap(writeHandler));
-        _subject->attachWriteObserver(observer);
+        _writeObserver = Observer::newInstance();
+        _writeObserver->setHandle(wrap(writeHandler));
+        _subject->attachWriteObserver(_writeObserver);
         _state = Connecting;
         _socket = Socket::newInstance(fd);
         _info = TCPInfo::fromTCPSocketFd(fd);
@@ -39,6 +39,7 @@ namespace KQEvent{
 
     void Connection::attachReadHandler(Connection::Handle_t handle) {
         auto observer = Observer::newInstance();
+        _readObservers.push_back(observer);
         observer->setHandle(wrap(handle));
         _subject->attachReadObserver(observer);
         if (!_subject->getEventMask().READ){
@@ -48,6 +49,7 @@ namespace KQEvent{
 
     void Connection::attachExceptHandler(Connection::Handle_t handle) {
         auto observer = Observer::newInstance();
+        _exceptObservers.push_back(observer);
         observer->setHandle(wrap(handle));
         _subject->attachExceptObserver(observer);
         if (!_subject->getEventMask().WRITE){

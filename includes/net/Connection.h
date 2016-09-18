@@ -88,6 +88,10 @@ namespace KQEvent {
 
         Subject::SubjectPtr _subject;
 
+        Observer::ObserverPtr _writeObserver;
+        std::vector<Observer::ObserverPtr> _readObservers;
+        std::vector<Observer::ObserverPtr> _exceptObservers;
+
         TCPInfo::TCPInfoPtr _info;
 
         Observer::Handle_t wrap(Handle_t handle);

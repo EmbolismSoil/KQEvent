@@ -25,7 +25,7 @@ namespace KQEvent{
             }
 
             auto handler = observer->getHandle();
-            if (handler(getPtr()) == Observer::DELETE)
+            if (handler(getPtr()) == Observer::DELETE)//debug
                 Opos = _readObserver.erase(tmp);
             else
                 ++Opos;

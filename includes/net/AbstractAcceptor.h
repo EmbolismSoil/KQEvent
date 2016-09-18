@@ -42,6 +42,7 @@ namespace KQEvent {
         Socket::SocketPtr _socket;
         Subject::SubjectPtr _subject;
         Handle_t _onConnect;
+        Observer::ObserverPtr _observer;
     };
 }
 

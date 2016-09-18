@@ -22,7 +22,7 @@ using namespace KQEvent;
 class TestAcceptor : public CxxTest::TestSuite{
 public:
     void TestServer(void){
-		int ffd = ::open("/home/lee/pic.png", O_RDWR);
+		int ffd = ::open("/home/lee/pic1.png", O_RDWR);
 		if (ffd < 0){
 			std::cout << "failed in open file" << std::endl;
 			exit(0);
@@ -36,6 +36,7 @@ public:
         auto loop = EventLoop::newInstance();
         acceptor->setOnConnectHandle([loop,ffd, &keepAlive](Connection::ConnectionPtr conn){
             conn->attachReadHandler([loop, ffd](Connection::ConnectionPtr c){
+                auto *peek = c.get();
                 char buf[1024];
                 int n = ::read(c->getFd(), buf, sizeof(buf));
 				int s = ::write(ffd, buf, n);
@@ -46,6 +47,7 @@ public:
 					return Observer::ALIVE;
                 return Observer::ALIVE;
             });
+            auto *peek = conn.get();
             conn->setConnected();
             keepAlive = conn;
             std::cout << "new connecion from " << conn->getPeerAddr()->toString()

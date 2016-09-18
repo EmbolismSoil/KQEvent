@@ -67,8 +67,10 @@ namespace KQEvent{
                         continue;
                     }
 
+                    auto *peek = subject.get();
                     if ((pos->revents & (POLLIN | POLLRDBAND | POLLRDNORM | POLLPRI | POLLHUP)))
                     {
+
                         subject->notifyReadObserver();
                         --cnt;
                     }
