@@ -56,7 +56,7 @@ public:
     void TestClient(void){
         Connection::ConnectionPtr keep;
         auto loop = EventLoop::newInstance();
-        auto connector = Connector::newInstance("10.12.12.12:18000");
+        auto connector = Connector::newInstance("127.0.0.1:10000");
         connector->setSucessHandler([&loop, &keep](Connection::ConnectionPtr conn){
             keep = conn;
             char msg[] = "this is KQEventClient\n";
