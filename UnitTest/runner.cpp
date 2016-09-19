@@ -64,17 +64,17 @@ public:
 static TestWeb suite_TestWeb;
 
 static CxxTest::List Tests_TestWeb = { 0, 0 };
-CxxTest::StaticSuiteDescription suiteDescription_TestWeb( "/home/lee/github/KQEvent/UnitTest/TestWeb.h", 16, "TestWeb", suite_TestWeb, Tests_TestWeb );
+CxxTest::StaticSuiteDescription suiteDescription_TestWeb( "/home/lee/github/KQEvent/UnitTest/TestWeb.h", 19, "TestWeb", suite_TestWeb, Tests_TestWeb );
 
 static class TestDescription_suite_TestWeb_TestServer : public CxxTest::RealTestDescription {
 public:
- TestDescription_suite_TestWeb_TestServer() : CxxTest::RealTestDescription( Tests_TestWeb, suiteDescription_TestWeb, 18, "TestServer" ) {}
+ TestDescription_suite_TestWeb_TestServer() : CxxTest::RealTestDescription( Tests_TestWeb, suiteDescription_TestWeb, 21, "TestServer" ) {}
  void runTest() { suite_TestWeb.TestServer(); }
 } testDescription_suite_TestWeb_TestServer;
 
 static class TestDescription_suite_TestWeb_TestClient : public CxxTest::RealTestDescription {
 public:
- TestDescription_suite_TestWeb_TestClient() : CxxTest::RealTestDescription( Tests_TestWeb, suiteDescription_TestWeb, 56, "TestClient" ) {}
+ TestDescription_suite_TestWeb_TestClient() : CxxTest::RealTestDescription( Tests_TestWeb, suiteDescription_TestWeb, 59, "TestClient" ) {}
  void runTest() { suite_TestWeb.TestClient(); }
 } testDescription_suite_TestWeb_TestClient;
 

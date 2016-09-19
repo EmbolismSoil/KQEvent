@@ -11,6 +11,7 @@
 #include "TCPServer.h"
 #include "Connector.h"
 #include "../includes/net/Connector.h"
+#include "TCPClient.h"
 
 using namespace KQEvent;
 using ConnectionPtr = TCPServer::ConnectionPtr;
@@ -55,38 +56,28 @@ public:
     }
 
     void TestClient(void){
-        Connection::ConnectionPtr keep;
-        auto loop = EventLoop::newInstance();
-        auto contor = Connector::newInstance(loop, "127.0.0.1:12000");
-        contor->setSucessHandler([&loop, &keep](Connection::ConnectionPtr conn){
-            keep = conn;
-            conn->setConnected();
-            std::cout << "\nconnect to " << conn->getPeerAddr()->toString() << "..Ok" << std::endl;
-            conn->attachReadHandler([](Connection::ConnectionPtr c, char *buf, int n){
-                buf[n] = '\0';
-                std::cout << buf << std::endl;
-                char msg[] = "from Client\n";
-                c->sendMessage(msg, sizeof(msg));
-            });
-            conn->attachCloseHandler([&keep](Connection::ConnectionPtr c){
-                std::cout << "disconnect from " << c->getHostAddr()->toString()
-                          << " to " << c->getPeerAddr()->toString() << std::endl;
-                keep.reset();
-            });
-
-            loop->registerSubject(conn->getSubject());
+        auto client = TCPClient::newInstance("127.0.0.1:12000");
+        client->onConnected([](TCPClient::ConnectionPtr conn){
+            std::cout << "connect from " << conn->getHostAddr()->toString()
+                      << " to " << conn->getPeerAddr()->toString()
+                      << "...OK" << std::endl;
         });
 
-        contor->setErrorHandler([&loop, &contor](Socket::SocketPtr socket, int err){
-           perror("Connector : ");
-            static int retryCount = 0;
-            if (++retryCount == 3){
-                std::cout << "connect to server failed \n eixt now\n" << std::endl;
-                exit(0);
-            }
-            return Connector::RETRY;
+        client->onRead([&client](char *buf, size_t n){
+            buf[n] = '\0';
+            std::cout << buf << std::endl;
+            char msg[] = "message from Client\n";
+            client->sendMsg(msg, sizeof(msg));
         });
-        loop->loop();
+
+        client->onClose([](TCPClient::ConnectionPtr conn){
+            std::cout << "disconnect from " << conn->getHostAddr()->toString()
+                      << " to " << conn->getPeerAddr()->toString()
+                      << "...OK" << std::endl;
+            ::exit(0);
+        });
+
+        client->run();
     }
 };
 

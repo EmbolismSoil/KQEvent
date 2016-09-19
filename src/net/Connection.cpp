@@ -19,14 +19,23 @@ namespace KQEvent{
         _buf = new char[32768];
         _writeObserver = Observer::newInstance();
         _readObserver = Observer::newInstance();
+        _exceptObserver = Observer::newInstance();
+
         auto readHandler = std::bind(&Connection::_readHandler,
                                      this, std::placeholders::_1);
         auto writeHandler = std::bind(&Connection::_writeHandler,
                                       this, std::placeholders::_1);
+        auto exceptHandler = std::bind(&Connection::_exceptHandler,
+                                       this, std::placeholders::_1);
+
         _readObserver->setHandle(readHandler);
         _writeObserver->setHandle(writeHandler);
+        _exceptObserver->setHandle(exceptHandler);
+
         _subject->attachWriteObserver(_writeObserver);
         _subject->attachReadObserver(_readObserver);
+        _subject->attachExceptObserver(_exceptObserver);
+
         _state = Connecting;
         _socket = socket;
         _info = TCPInfo::fromTCPSocketFd(socket->getFd());
@@ -49,14 +58,8 @@ namespace KQEvent{
         _readHandlerCallback = handle;
     }
 
-    void Connection::attachExceptHandler(Connection::Handle_t handle) {
-        auto observer = Observer::newInstance();
-        _exceptObservers.push_back(observer);
-        observer->setHandle(wrap(handle));
-        _subject->attachExceptObserver(observer);
-        if (!_subject->getEventMask().WRITE){
-            _subject->setReadEvent(true);
-        }
+    void Connection::attachExceptHandler(ExceptHandle_t handle) {
+        _exceptCallback = handle;
     }
 
     Observer::Command_t Connection::_writeHandler(Subject::SubjectPtr subject){
@@ -136,5 +139,11 @@ namespace KQEvent{
         }
 
         return Observer::ALIVE; //出现错误
+    }
+
+    Connection::Command_t
+    Connection::_exceptHandler(Subject::SubjectPtr) {
+        _exceptCallback(getPtr());
+        return Observer::ALIVE;
     }
 }

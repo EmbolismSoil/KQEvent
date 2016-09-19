@@ -8,12 +8,22 @@
 #include <memory>
 #include "Connection.h"
 #include "Socket.h"
+#include "Connector.h"
 
 namespace KQEvent{
     class TCPClient {
     public:
         using TCPClientPtr = std::shared_ptr<TCPClient>;
         using ConnectionPtr = Connection::ConnectionPtr ;
+        using ConnectorPtr = Connector::ConnectorPtr;
+        using IPAddressPtr = IPAddress::IPAddressPtr;
+        using EventLoopPtr = EventLoop::EventLoopPtr ;
+        using SocketPtr = Socket::SocketPtr ;
+        using Handle_t = Connector::SuccessHandle_t;
+        using ReadHandle_t = std::function<void(char*, size_t)>;
+        using CloseHandle_t = Connection::CloseHandle_t;
+        using ErrorHandle_t = std::function<Connector::optionE(SocketPtr, int)>;
+        using ExceptHandle_t = Connection::ExceptHandle_t ;
 
         TCPClient(TCPClient const&) = delete;
         TCPClient const &operator=(TCPClient const&) = delete;
@@ -25,11 +35,59 @@ namespace KQEvent{
             return TCPClientPtr(aNew);
         }
 
+        void onConnected(Handle_t handle){
+            _onConnectedCallback = handle;
+        }
 
+        void onRead(ReadHandle_t handle){
+            _onReadCallback = handle;
+        }
+
+        void onClose(CloseHandle_t handle){
+            _onCloseCallback = handle;
+        }
+
+        void onExcept(ExceptHandle_t handle){
+            _onExceptCallback = handle;
+        }
+
+        void onError(ErrorHandle_t handle){
+            _onConnectErrorCallBack = handle;
+        }
+
+        void setMaxRetry(int n){
+            _maxRetry = n;
+        }
+
+        void onConnectError(ErrorHandle_t handle){
+            _onConnectErrorCallBack = handle;
+        }
+
+        bool sendMsg(char *msg, size_t len);
+
+        void run(void){
+            _loop->loop();
+        }
     private:
-        explicit TCPClient() = default;
+        explicit TCPClient(std::string const& serverAddr,
+                           std::string const& localAddr = std::string());
+
+        void __onConnected(ConnectionPtr conn);
+        void __onClose(ConnectionPtr conn);
+        Connector::optionE __onError(SocketPtr socket, int err);
+        void __onExcept(ConnectionPtr conn);
+        void __onRead(ConnectionPtr, char *, size_t);
+
+        int _maxRetry;
+        EventLoopPtr _loop;
         ConnectionPtr _connection;
-        Socket::SocketPtr _socket;
+        ConnectorPtr _connector;
+
+        Handle_t _onConnectedCallback;
+        ErrorHandle_t _onConnectErrorCallBack;
+        ReadHandle_t _onReadCallback;
+        CloseHandle_t _onCloseCallback;
+        ExceptHandle_t _onExceptCallback;
     };
 };
 

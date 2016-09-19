@@ -20,6 +20,7 @@ namespace KQEvent {
         using Handle_t = std::function<Command_t(ConnectionPtr)>;
         using ReadHandle_t = std::function<void(ConnectionPtr, char *, size_t)>;
         using CloseHandle_t = std::function<void(ConnectionPtr)>;
+        using ExceptHandle_t = CloseHandle_t ;
         /*当Acceptor新建一个连接的时候，设置为connecting状态。而后Acceptor会将该连接对象
          *交给TCPServer,当TCPServer设置好connection的状态之后(例如设置上下文，设置回调等等)
          *就可以开始将connection放入事件循环中使用，但在此之前需要将connection的状态设置为connected
@@ -54,7 +55,7 @@ namespace KQEvent {
 
         void attachReadHandler(ReadHandle_t);
 
-        void attachExceptHandler(Handle_t handle);
+        void attachExceptHandler(ExceptHandle_t handle);
 
         void attachCloseHandler(CloseHandle_t handler){
             _closeHandlerCallback = handler;
@@ -99,6 +100,7 @@ namespace KQEvent {
 
         Command_t _writeHandler(Subject::SubjectPtr);
         Command_t _readHandler(Subject::SubjectPtr);
+        Command_t _exceptHandler(Subject::SubjectPtr);
 
         int _sockfd;
         Socket::SocketPtr _socket;
@@ -110,9 +112,11 @@ namespace KQEvent {
 
         Observer::ObserverPtr _writeObserver;
         Observer::ObserverPtr _readObserver;
-        std::vector<Observer::ObserverPtr> _exceptObservers;
+        Observer::ObserverPtr _exceptObserver;
+
         ReadHandle_t _readHandlerCallback;
         CloseHandle_t _closeHandlerCallback;
+        ExceptHandle_t _exceptCallback;
 
         TCPInfo::TCPInfoPtr _info;
 
@@ -129,6 +133,7 @@ namespace KQEvent {
         size_t _bufSize;
 
         void *_context; //fixme : Context class;
+
     };
 }
 
