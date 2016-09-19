@@ -8,7 +8,6 @@
 #include <memory>
 #include "Connection.h"
 #include "Socket.h"
-#include "Subject.h"
 
 namespace KQEvent{
     class TCPClient {
@@ -17,7 +16,7 @@ namespace KQEvent{
         using ConnectionPtr = Connection::ConnectionPtr ;
 
         TCPClient(TCPClient const&) = delete;
-        TCPClient const &operator=() = delete;
+        TCPClient const &operator=(TCPClient const&) = delete;
 
         template <typename  ..._Args>
         static TCPClientPtr  newInstance(_Args ...args)

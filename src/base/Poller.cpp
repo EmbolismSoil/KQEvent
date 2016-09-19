@@ -8,7 +8,6 @@
 namespace KQEvent{
 
     void Poller::addToPoll(Subject::SubjectPtr const & subject) {
-        _subjects[subject->getFd()] = subject;
         ::pollfd fd;
         fd.fd = 0;
         fd.events = 0;
@@ -24,11 +23,26 @@ namespace KQEvent{
         if (subject->getEventMask().EXCEPT){
             fd.events |= (POLLERR | POLLHUP | POLLNVAL);
         }
+
         fd.fd = subject->getFd();
+        auto pos = _subjects.find(subject->getFd());
+        //如果插入的文件描述符已经被监听，那么就覆盖掉
+        if (pos != _subjects.end()){
+            for (auto pos = _pollfds.begin(); pos != _pollfds.end(); ++pos){
+                if (pos->fd == fd.fd){
+                    _pollfds.erase(pos);
+                    break;
+                }
+            }
+        }
+
         if (_inHandle)
             _pollfdsHelper.push_back(fd);
         else
             _pollfds.push_back(fd);
+
+        _subjects[subject->getFd()] = subject;
+
     }
 
     void Poller::removeFromPoll(int fd){

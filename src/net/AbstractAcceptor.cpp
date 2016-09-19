@@ -31,8 +31,8 @@ namespace KQEvent{
         auto connfd = _socket->accept4(peerAddr);
         if (connfd < 0)
             return;
-
-        auto connection = Connection::newInstance(connfd, peerAddr);
+        auto socket = Socket::newInstance(connfd);
+        auto connection = Connection::newInstance(socket, peerAddr);
         _onConnect(connection);
     }
 

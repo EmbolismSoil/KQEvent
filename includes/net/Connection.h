@@ -88,7 +88,7 @@ namespace KQEvent {
         void softClose(std::function<void(ConnectionPtr)> cb);
 
     private:
-        Connection(int fd, IPAddress::IPAddressPtr peer, void *context = nullptr);
+        Connection(Socket::SocketPtr socket, IPAddress::IPAddressPtr peer, void *context = nullptr);
 
         static Command_t writeHandler(ConnectionPtr);
 

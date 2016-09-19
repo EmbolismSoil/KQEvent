@@ -7,27 +7,59 @@
 
 #include <memory>
 #include "Socket.h"
-#include ""
+#include "../base/Subject.h"
+#include "Connection.h"
 
 namespace KQEvent{
     class Connector {
     public:
+        /*
+         *  关于socket的生命周期：
+         *      当socket打开，但是建立尚未成功时，由其生命周期由connector管理，
+         *      当建立成功后，socket的管理权将转移到Connection。
+         * */
         using ConnectorPtr = std::shared_ptr<Connector>;
+        using ConnectionPtr = Connection::ConnectionPtr;
         using SocketPtr = Socket::SocketPtr ;
+        using SubjectPtr = Subject::SubjectPtr;
+        using ObserverPtr = Observer::ObserverPtr;
+        using SuccessHandle_t = std::function<void(ConnectionPtr)>;
+        using ErrorHandle_t = std::function<void(SocketPtr, int)>;
+
 
         Connector(Connector const&) = delete;
         Connector const &operator=(Connector const&) = delete;
 
-        template <typename _Args>
+        template <typename ..._Args>
         static  ConnectorPtr newInstance(_Args&& ...args){
             auto aNew = new Connector(std::forward<_Args>(args)...);
             return ConnectorPtr(aNew);
         }
 
-    private:
-        Connector(SocketPtr socket);
-        SocketPtr _socket;
+        SubjectPtr getSubject(){return _writeSubject;}
+        void setSucessHandler(SuccessHandle_t);
+        void setErrorHandler(ErrorHandle_t);
 
+        void setSocket(SocketPtr sock){
+            _socket = sock;
+        }
+
+        void setServerAddr(IPAddress::IPAddressPtr addr){
+            _serverAddr = addr;
+        }
+
+        void connect();
+    private:
+        Connector(std::string const& serverAddr);
+
+        Observer::Command_t _handleWrite(SubjectPtr sub);
+
+        SocketPtr _socket;
+        SubjectPtr _writeSubject;
+        ObserverPtr _writeObserver;
+        SuccessHandle_t _onConnectedHanle;
+        ErrorHandle_t _onError;
+        IPAddress::IPAddressPtr _serverAddr;
     };
 }
 

@@ -27,7 +27,8 @@ namespace KQEvent {
     Socket::Socket(int fd) :
             _fd(fd)
     {
-
+        int flag = ::fcntl(_fd, F_GETFL, 0);
+        ::fcntl(_fd, F_SETFL, flag | O_NONBLOCK);
     }
 
     int Socket::setNoDelay(bool on) {
@@ -121,5 +122,23 @@ namespace KQEvent {
 
     int Socket::listen(int backlog) {
         return ::listen(_fd, backlog);
+    }
+
+    int Socket::getSocketError(void){
+        int ret;
+        socklen_t len = static_cast<socklen_t>(sizeof ret);
+        int err = ::getsockopt(_fd, SOL_SOCKET, SO_ERROR, &ret, &len);
+        if(err < 0){
+            return errno;
+        }else{
+            return ret;
+        }
+    }
+
+    IPAddress::IPAddressPtr Socket::getPeerAddr() {
+        ::sockaddr_in peer;
+        ::socklen_t len = sizeof(peer);
+        ::getsockname(_fd, (::sockaddr*)(&peer), &len);
+        return IPAddress::fromSockAddr(peer);
     }
 }

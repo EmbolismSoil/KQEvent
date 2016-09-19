@@ -53,6 +53,9 @@ namespace KQEvent {
 
         int connect(IPAddress::IPAddressPtr const &serverAddr);
 
+        int getSocketError();
+
+        IPAddress::IPAddressPtr getPeerAddr();
        // void forceClose(){
        //     _isClose = true;
        //     ::close(_fd);

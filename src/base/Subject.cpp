@@ -157,6 +157,7 @@ namespace KQEvent{
                 ++pos;
             }
         }
+
     }
 
     void Subject::detachExceptObserver(Observer::ObserverWeakPtr observer){
