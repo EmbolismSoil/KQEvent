@@ -15,7 +15,7 @@ using ConnectionPtr = TCPServer::ConnectionPtr;
 class TestWeb : public CxxTest::TestSuite{
 public:
     void TestServer(void){
-        auto server = TCPServer::newInstance("127.0.0.1:10000");
+        auto server = TCPServer::newInstance("127.0.0.1:12000");
         server->setConnectionNewHandler([](ConnectionPtr conn){
             std::cout << "new connection from "
                       << conn->getPeerAddr()->toString()
@@ -24,24 +24,20 @@ public:
         });
 
         server->setConnectionReadHandler([](ConnectionPtr conn, char *buf, size_t len){
-           // std::cout << "Client : " << buf << std::endl;
-            //char msg[] = "Server : git it !\n";
-			//static int cnt = 0;
-    		//if (++cnt >= 10000)
-				//exit(0);
             char msg[] =
                     "HTTP/1.1 200 OK\n"
-                    "Date: Sat, 31 Dec 2005 23:59:59 GMT\n"
-                    "Content-Type: text/html;charset=utf8\n"
+                    "Server: GitHub.com\n"
+                    "Date: Mon, 19 Sep 2016 05:06:46 GMT\n"
+                    "Content-Type: text/html; charset=utf-8\n"
                     "\n"
-                    "＜html＞\n"
-                    "＜head＞\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n"
-                    "＜title＞Wrox Homepage＜/title＞\n"
-                    "＜/head＞\n"
-                    "＜body＞\n"
-                    "＜!-- body goes here --＞\n"
-                    "＜/body＞\n"
-                    "＜/html＞";
+                    "<html>\n"
+                            "<body>\n"
+                            "\n"
+                            "<a href=\"http://github.com/EmbolismSoil/KQEvent\">\n"
+                            "View source</a>\n"
+                            "\n"
+                            "</body>\n"
+                            "</html>";
             conn->sendMessage(msg, sizeof(msg));
             conn->setDisconnecting();
         });
