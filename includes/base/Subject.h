@@ -72,7 +72,7 @@ namespace KQEvent {
         void setFd(int fd) { _fd = fd; }
 
     private:
-        Subject(int fd);
+        explicit Subject(int fd);
 
         ObserverList_t _readObserver;
         ObserverList_t _writeObserver;

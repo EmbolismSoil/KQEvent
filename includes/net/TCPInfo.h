@@ -66,7 +66,7 @@ namespace KQEvent {
         std::string const &toString();
 
     private:
-        TCPInfo(::tcp_info const &info);
+        explicit TCPInfo(::tcp_info const &info);
         void __format();
         std::string _infoString;
     };

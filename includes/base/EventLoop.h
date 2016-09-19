@@ -40,7 +40,7 @@ namespace KQEvent {
         TimerTaskQueuePtr getTimerTaskQueue(){return _timerTaskQueue;}
 
     private:
-        EventLoop();
+        explicit EventLoop();
         void assertOwner() throw(KQEventCommonException);
         Poller::PollerPtr _poller;
         bool _looping;

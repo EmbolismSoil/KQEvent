@@ -69,7 +69,8 @@ namespace KQEvent{
         SocketPtr  _socket;
         AcceptorPtr _acceptor;
         EventLoopPtr _loop;
-        TCPServer(std::string const &ip, int backlog = 65535);
+
+        explicit TCPServer(std::string const &ip, int backlog = 65535);
 
         void _closeConnection(TCPServer::ConnectionPtr conn);
     };

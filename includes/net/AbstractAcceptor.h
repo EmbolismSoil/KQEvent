@@ -35,7 +35,7 @@ namespace KQEvent {
         }
 
     protected:
-        AbstractAcceptor(Socket::SocketPtr socket);
+        explicit AbstractAcceptor(Socket::SocketPtr socket);
 
     private:
         void handleReadEvent();

@@ -50,7 +50,7 @@ namespace KQEvent{
 
         void connect();
     private:
-        Connector(std::string const& serverAddr);
+        explicit Connector(std::string const& serverAddr);
 
         Observer::Command_t _handleWrite(SubjectPtr sub);
 

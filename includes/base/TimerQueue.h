@@ -46,7 +46,7 @@ namespace KQEvent{
         }
 
     protected:
-        TimerQueue() throw(KQEventCommonException);
+        explicit TimerQueue() throw(KQEventCommonException);
 
     private:
         using __fakeType = bool;

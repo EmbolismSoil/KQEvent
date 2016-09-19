@@ -64,7 +64,7 @@ namespace KQEvent {
         Handle_t const &getOnDetachHandle(void){return _onDetach;}
 
     private:
-    	Observer(){
+        explicit Observer(){
             auto handle = [](std::shared_ptr<Subject>){return ALIVE;};
             _onAttach = handle;
             _onDetach = handle;

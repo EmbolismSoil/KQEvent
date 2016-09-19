@@ -27,7 +27,7 @@ namespace KQEvent{
 
 
     private:
-        TCPClient() = default;
+        explicit TCPClient() = default;
         ConnectionPtr _connection;
         Socket::SocketPtr _socket;
     };

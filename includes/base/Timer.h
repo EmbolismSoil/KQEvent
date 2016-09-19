@@ -42,8 +42,8 @@ namespace KQEvent{
         TimePoint const& getTimeoutPoint();
 
     private:
-        Timer(TimePoint timeout, Milliseconds period, Handle_t handle);
-        Timer(Handle_t handle);
+        explicit Timer(TimePoint timeout, Milliseconds period, Handle_t handle);
+        explicit Timer(Handle_t handle);
         TimePoint _timeout;
         Milliseconds _period;
         Handle_t _handle;

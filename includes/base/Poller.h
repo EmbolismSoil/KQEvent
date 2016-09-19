@@ -40,7 +40,7 @@ namespace KQEvent {
         void setTimeout(int timeout);
 
     private:
-        Poller(Handle_t hanle, int timeout = 60000);
+        explicit Poller(Handle_t hanle, int timeout = 60000);
         void checkNewSubject();
 
         bool _exit;

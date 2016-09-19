@@ -40,7 +40,7 @@ public:
                             "</body>\n"
                             "</html>";
             conn->sendMessage(msg, sizeof(msg));
-            //conn->setDisconnecting();
+            conn->setDisconnecting();
         });
 
         server->setConnectionCloseHandler([](ConnectionPtr conn){

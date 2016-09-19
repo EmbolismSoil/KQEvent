@@ -66,9 +66,9 @@ namespace KQEvent {
         }
 
     private:
-        Socket(int domain, int type);
-        Socket(int fd);
-        Socket();
+        explicit Socket(int domain, int type);
+        explicit Socket(int fd);
+        explicit Socket();
 
         //bool _isClose;
 

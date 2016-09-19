@@ -44,9 +44,9 @@ namespace KQEvent {
         ::socklen_t getSocketLen(){return _len;}
 
     private:
-        IPAddress(std::string const &address, in_port_t);
+        explicit IPAddress(std::string const &address, in_port_t);
 
-        IPAddress(struct sockaddr_in address);
+        explicit IPAddress(struct sockaddr_in address);
 
         struct sockaddr_in _address;
         socklen_t _len;

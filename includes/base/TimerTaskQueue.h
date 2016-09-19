@@ -39,7 +39,7 @@ namespace KQEvent {
         Subject::SubjectPtr const &getEventfdSubject();
 
     protected:
-        TimerTaskQueue();
+        explicit TimerTaskQueue();
        // TimerTaskQueue(EventLoop::EventLoopPtr loop);
 
     private:
