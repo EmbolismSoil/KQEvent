@@ -18,6 +18,8 @@ namespace KQEvent {
         using ConnectionPtr = std::shared_ptr<Connection>;
         using Command_t = Observer::Command_t;
         using Handle_t = std::function<Command_t(ConnectionPtr)>;
+        using ReadHandle_t = std::function<void(ConnectionPtr, char *, size_t)>;
+        using CloseHandle_t = std::function<void(ConnectionPtr)>;
         /*当Acceptor新建一个连接的时候，设置为connecting状态。而后Acceptor会将该连接对象
          *交给TCPServer,当TCPServer设置好connection的状态之后(例如设置上下文，设置回调等等)
          *就可以开始将connection放入事件循环中使用，但在此之前需要将connection的状态设置为connected
@@ -25,8 +27,9 @@ namespace KQEvent {
 
         /*connection的断开连接有三种方式方式：
          * 1. 调用softClose, 等待缓冲区内数据发送完毕之后关闭连接。
-         * 2. 调用forceClose, 立即关闭连接。
+         * 2. 调用forceClose, 立即关闭连接。  //目前尚未实现forceClose,因为方式3可以替代之
          * 3. connection生命周期结束，立即关闭连接。
+         * 对端关闭时，connection会回调_closeHandlerCallback，这里是用户回收connection的好时机
          * 注意： 关闭连接不意味着connection的生命周期结束，至于connection生命周期何时结束，资源何时
          * 被回收，取决于connection的持有者 -- 如TCPServer
          * */
@@ -49,9 +52,13 @@ namespace KQEvent {
             return shared_from_this();
         }
 
-        void attachReadHandler(Handle_t handle);
+        void attachReadHandler(ReadHandle_t);
 
         void attachExceptHandler(Handle_t handle);
+
+        void attachCloseHandler(CloseHandle_t handler){
+            _closeHandlerCallback = handler;
+        }
 
         size_t sendMessage(char const *buf, size_t len);
 
@@ -85,12 +92,13 @@ namespace KQEvent {
         IPAddress::IPAddressPtr getPeerAddr(){return _peerAddress;}
 
         //等待缓冲区内数据发送完毕再关闭连接
-        void softClose(std::function<void(ConnectionPtr)> cb);
+        void softClose();
 
     private:
         explicit Connection(Socket::SocketPtr socket, IPAddress::IPAddressPtr peer, void *context = nullptr);
 
-        static Command_t writeHandler(ConnectionPtr);
+        Command_t _writeHandler(Subject::SubjectPtr);
+        Command_t _readHandler(Subject::SubjectPtr);
 
         int _sockfd;
         Socket::SocketPtr _socket;
@@ -98,12 +106,13 @@ namespace KQEvent {
         IPAddress::IPAddressPtr _hostAddress;
 
         IPAddress::IPAddressPtr _peerAddress;
-
         Subject::SubjectPtr _subject;
 
         Observer::ObserverPtr _writeObserver;
-        std::vector<Observer::ObserverPtr> _readObservers;
+        Observer::ObserverPtr _readObserver;
         std::vector<Observer::ObserverPtr> _exceptObservers;
+        ReadHandle_t _readHandlerCallback;
+        CloseHandle_t _closeHandlerCallback;
 
         TCPInfo::TCPInfoPtr _info;
 
@@ -114,8 +123,6 @@ namespace KQEvent {
         StateE _state;
 
         bool _softClose;
-
-        std::function<void(ConnectionPtr)> _softCloseCallBack;
 
         char *_buf;      //fixme : Buffer class;
 

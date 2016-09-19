@@ -8,7 +8,7 @@
 
 namespace KQEvent {
     Socket::Socket(int domain, int type) {
-        _fd = ::socket(domain, type, 0);
+        _fd = ::socket(domain, type | SOCK_CLOEXEC, 0);
         if (_fd < 0) {
             char buf[512] = {0};
             ::strerror_r(errno, buf, sizeof(buf));
@@ -19,7 +19,6 @@ namespace KQEvent {
     }
 
     Socket::Socket() : Socket(AF_INET, SOCK_STREAM)
-
     {
 
     }
@@ -138,7 +137,7 @@ namespace KQEvent {
     IPAddress::IPAddressPtr Socket::getPeerAddr() {
         ::sockaddr_in peer;
         ::socklen_t len = sizeof(peer);
-        ::getsockname(_fd, (::sockaddr*)(&peer), &len);
+        ::getpeername(_fd, (::sockaddr*)(&peer), &len);
         return IPAddress::fromSockAddr(peer);
     }
 }

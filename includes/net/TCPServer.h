@@ -53,9 +53,12 @@ namespace KQEvent{
         void run(){
             _loop->loop();
         }
+
+        void softClose();
     private:
         void onNewConnection(ConnectionPtr conn);
-        Observer::Command_t onReadHandler(ConnectionPtr conn);
+        void connCloseHandler(ConnectionPtr conn);
+        void onReadHandler(ConnectionPtr conn, char *buf, size_t n);
 
         Connection::Handle_t _connHandlerWrap(Handle_t handle);
 

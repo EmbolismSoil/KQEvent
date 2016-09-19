@@ -18,8 +18,15 @@ namespace KQEvent{
     {
         _buf = new char[32768];
         _writeObserver = Observer::newInstance();
-        _writeObserver->setHandle(wrap(writeHandler));
+        _readObserver = Observer::newInstance();
+        auto readHandler = std::bind(&Connection::_readHandler,
+                                     this, std::placeholders::_1);
+        auto writeHandler = std::bind(&Connection::_writeHandler,
+                                      this, std::placeholders::_1);
+        _readObserver->setHandle(readHandler);
+        _writeObserver->setHandle(writeHandler);
         _subject->attachWriteObserver(_writeObserver);
+        _subject->attachReadObserver(_readObserver);
         _state = Connecting;
         _socket = socket;
         _info = TCPInfo::fromTCPSocketFd(socket->getFd());
@@ -38,14 +45,8 @@ namespace KQEvent{
         return handle(getPtr());
     }
 
-    void Connection::attachReadHandler(Connection::Handle_t handle) {
-        auto observer = Observer::newInstance();
-        _readObservers.push_back(observer);
-        observer->setHandle(wrap(handle));
-        _subject->attachReadObserver(observer);
-        if (!_subject->getEventMask().READ){
-            _subject->setReadEvent(true);
-        }
+    void Connection::attachReadHandler(Connection::ReadHandle_t handle) {
+        _readHandlerCallback = handle;
     }
 
     void Connection::attachExceptHandler(Connection::Handle_t handle) {
@@ -58,25 +59,25 @@ namespace KQEvent{
         }
     }
 
-    Observer::Command_t Connection::writeHandler(Connection::ConnectionPtr conn){
+    Observer::Command_t Connection::_writeHandler(Subject::SubjectPtr subject){
         int n = 0;
         auto cnt = 0;
-        auto buf = conn->getBuffer();
-        auto size = conn->getBufferSize();
+        auto buf = getBuffer();
+        auto size = getBufferSize();
 
-        while(size && (n = ::write(conn->getFd(), &buf[cnt], size)) > 0){
+        while(size && (n = ::write(getFd(), &buf[cnt], size)) > 0){
             size -= n;
             cnt += n;
         }
 
-        conn->setBufferSize(size);
+        setBufferSize(size);
 
         if (size <= 0){//已经发送完成，不对写事件感兴趣了。
-            conn->_subject->setWriteEvent(false);
-            if (conn->_softClose){ //是否需要关闭？
-                conn->setDisconnected();
-                conn->_socket.reset();//socket生命周期结束
-                conn->_softCloseCallBack(conn);//这里已经不能再发送网络消息了
+            _subject->setWriteEvent(false);
+            if (_softClose){ //是否需要关闭？
+                setDisconnected();
+                _socket.reset();//socket生命周期结束
+                _closeHandlerCallback(getPtr());//这里已经不能再发送网络消息了
             }
         }
         return Observer::ALIVE;
@@ -121,8 +122,19 @@ namespace KQEvent{
         return _state;
     }
 
-    void Connection::softClose(std::function<void(Connection::ConnectionPtr)> cb) {
+    void Connection::softClose() {
         _softClose = true;
-        _softCloseCallBack = cb;
+    }
+
+    Connection::Command_t Connection::_readHandler(Subject::SubjectPtr subject){
+        char buf[32768];
+        int n = ::read(getFd(), buf, sizeof(buf));
+        if (n == 0){
+            _closeHandlerCallback(getPtr());
+        }else if (n > 0){
+            _readHandlerCallback(getPtr(), buf, n);
+        }
+
+        return Observer::ALIVE; //出现错误
     }
 }

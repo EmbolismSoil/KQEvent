@@ -12,7 +12,9 @@ namespace KQEvent {
         _eventTaskSubject = Subject::newInstance(_eventfd);
         _timerQueue = TimerQueue::newInstance();
         _eventObserver = Observer::newInstance();
-        _eventObserver->setHandle([this](Subject::SubjectPtr unused){
+        _eventObserver->setHandle([this](Subject::SubjectPtr subject){
+            uint64_t tmp;
+            ::read(subject->getFd(), &tmp, sizeof(tmp));
            if (_taskList.empty())
                return Observer::ALIVE;
             auto pos = _taskList.begin();

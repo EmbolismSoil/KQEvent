@@ -34,37 +34,25 @@ namespace  KQEvent{
     }
 
     void TCPServer::onNewConnection(TCPServer::ConnectionPtr conn) {
-        auto tmp = std::bind(&TCPServer::onReadHandler, this, std::placeholders::_1);
+        auto tmp = std::bind(&TCPServer::onReadHandler, this,
+                             std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
         conn->attachReadHandler(tmp);
         conn->attachExceptHandler(_connHandlerWrap(_connExceptHandler));
         conn->setConnected();
+        auto closeHandler = std::bind(&TCPServer::connCloseHandler,
+                                      this, std::placeholders::_1);
+        conn->attachCloseHandler(closeHandler);
         _connectionPool.push_back(conn);
         _loop->registerSubject(conn->getSubject());
         _connNewHandler(conn);
     }
 
-    Observer::Command_t TCPServer::onReadHandler(TCPServer::ConnectionPtr conn) {
-        char buf[32768];
-        int n = ::read(conn->getFd(), buf, sizeof(buf));
-        if (n == 0){
-            _closeConnection(conn);
-            return Observer::ALIVE;
-        }
+    void TCPServer::onReadHandler(TCPServer::ConnectionPtr conn,
+                                                char *buf, size_t n){
         _connReadHandler(conn, buf, n);
-
-        if (conn->getStatus() ==
-                Connection::Disconnecting){
-            //conn->setDisconnected();
-           // _closeConnection(conn);
-            conn->softClose([this](TCPServer::ConnectionPtr c){
-                _closeConnection(c);
-            });
-        }
-        return Observer::ALIVE;
     }
 
     void TCPServer::_closeConnection(TCPServer::ConnectionPtr conn) {
-        _connCloseHandler(conn);
         auto pos = std::find(_connectionPool.begin(),
                              _connectionPool.end(), conn);
         if (pos == _connectionPool.end()){
@@ -72,6 +60,11 @@ namespace  KQEvent{
             return;
         }
         //连接的生命周期结束
+        _connCloseHandler(conn);
         _connectionPool.erase(pos);
+    }
+
+    void TCPServer::connCloseHandler(TCPServer::ConnectionPtr conn) {
+        _closeConnection(conn);
     }
 }

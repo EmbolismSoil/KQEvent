@@ -33,19 +33,6 @@ public:
  void runTest() { suite_KQEventTest.testTimerQueue(); }
 } testDescription_suite_KQEventTest_testTimerQueue;
 
-#include "/home/lee/github/KQEvent/UnitTest/TestConnection.h"
-
-static TestConnection suite_TestConnection;
-
-static CxxTest::List Tests_TestConnection = { 0, 0 };
-CxxTest::StaticSuiteDescription suiteDescription_TestConnection( "/home/lee/github/KQEvent/UnitTest/TestConnection.h", 25, "TestConnection", suite_TestConnection, Tests_TestConnection );
-
-static class TestDescription_suite_TestConnection_testConnect : public CxxTest::RealTestDescription {
-public:
- TestDescription_suite_TestConnection_testConnect() : CxxTest::RealTestDescription( Tests_TestConnection, suiteDescription_TestConnection, 36, "testConnect" ) {}
- void runTest() { suite_TestConnection.testConnect(); }
-} testDescription_suite_TestConnection_testConnect;
-
 #include "/home/lee/github/KQEvent/UnitTest/TestTimerTaskQueue.h"
 
 static TestTimerTaskQueue suite_TestTimerTaskQueue;
@@ -58,25 +45,6 @@ public:
  TestDescription_suite_TestTimerTaskQueue_testTimerTaskQueue() : CxxTest::RealTestDescription( Tests_TestTimerTaskQueue, suiteDescription_TestTimerTaskQueue, 16, "testTimerTaskQueue" ) {}
  void runTest() { suite_TestTimerTaskQueue.testTimerTaskQueue(); }
 } testDescription_suite_TestTimerTaskQueue_testTimerTaskQueue;
-
-#include "/home/lee/github/KQEvent/UnitTest/TestAcceptor.h"
-
-static TestAcceptor suite_TestAcceptor;
-
-static CxxTest::List Tests_TestAcceptor = { 0, 0 };
-CxxTest::StaticSuiteDescription suiteDescription_TestAcceptor( "/home/lee/github/KQEvent/UnitTest/TestAcceptor.h", 22, "TestAcceptor", suite_TestAcceptor, Tests_TestAcceptor );
-
-static class TestDescription_suite_TestAcceptor_TestServer : public CxxTest::RealTestDescription {
-public:
- TestDescription_suite_TestAcceptor_TestServer() : CxxTest::RealTestDescription( Tests_TestAcceptor, suiteDescription_TestAcceptor, 24, "TestServer" ) {}
- void runTest() { suite_TestAcceptor.TestServer(); }
-} testDescription_suite_TestAcceptor_TestServer;
-
-static class TestDescription_suite_TestAcceptor_TestClient : public CxxTest::RealTestDescription {
-public:
- TestDescription_suite_TestAcceptor_TestClient() : CxxTest::RealTestDescription( Tests_TestAcceptor, suiteDescription_TestAcceptor, 62, "TestClient" ) {}
- void runTest() { suite_TestAcceptor.TestClient(); }
-} testDescription_suite_TestAcceptor_TestClient;
 
 #include "/home/lee/github/KQEvent/UnitTest/TestTCPServer.h"
 

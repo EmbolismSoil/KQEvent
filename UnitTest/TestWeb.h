@@ -10,6 +10,7 @@
 #include <iostream>
 #include "TCPServer.h"
 #include "Connector.h"
+#include "../includes/net/Connector.h"
 
 using namespace KQEvent;
 using ConnectionPtr = TCPServer::ConnectionPtr;
@@ -40,7 +41,7 @@ public:
                             "</body>\n"
                             "</html>";
             conn->sendMessage(msg, sizeof(msg));
-            conn->setDisconnecting();
+            conn->softClose();
         });
 
         server->setConnectionCloseHandler([](ConnectionPtr conn){
@@ -56,30 +57,35 @@ public:
     void TestClient(void){
         Connection::ConnectionPtr keep;
         auto loop = EventLoop::newInstance();
-        auto connector = Connector::newInstance("127.0.0.1:10000");
-        connector->setSucessHandler([&loop, &keep](Connection::ConnectionPtr conn){
+        auto contor = Connector::newInstance(loop, "127.0.0.1:12000");
+        contor->setSucessHandler([&loop, &keep](Connection::ConnectionPtr conn){
             keep = conn;
-            char msg[] = "this is KQEventClient\n";
-            conn->sendMessage(msg, sizeof(msg));
-            conn->attachReadHandler([](Connection::ConnectionPtr c){
-                char msg[] = "this is KQEventClient\n";
-                c->sendMessage(msg, sizeof(msg));
-
-                char buf[32768];
-                int n = ::read(c->getFd(), buf, sizeof(buf));
+            conn->setConnected();
+            std::cout << "\nconnect to " << conn->getPeerAddr()->toString() << "..Ok" << std::endl;
+            conn->attachReadHandler([](Connection::ConnectionPtr c, char *buf, int n){
                 buf[n] = '\0';
                 std::cout << buf << std::endl;
-               return Observer::ALIVE;
+                char msg[] = "from Client\n";
+                c->sendMessage(msg, sizeof(msg));
             });
-            conn->setConnected();
+            conn->attachCloseHandler([&keep](Connection::ConnectionPtr c){
+                std::cout << "disconnect from " << c->getHostAddr()->toString()
+                          << " to " << c->getPeerAddr()->toString() << std::endl;
+                keep.reset();
+            });
+
             loop->registerSubject(conn->getSubject());
         });
 
-        connector->setErrorHandler([&connector](Socket::SocketPtr sock, int err){
-            perror("connection error");
-            connector.reset();
+        contor->setErrorHandler([&loop, &contor](Socket::SocketPtr socket, int err){
+           perror("Connector : ");
+            static int retryCount = 0;
+            if (++retryCount == 3){
+                std::cout << "connect to server failed \n eixt now\n" << std::endl;
+                exit(0);
+            }
+            return Connector::RETRY;
         });
-        loop->registerSubject(connector->getSubject());
         loop->loop();
     }
 };
