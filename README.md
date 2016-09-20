@@ -133,6 +133,7 @@ void TestClient(void){
 - 向用户提供高效的零拷贝的工具集
 
 ###正在进行的工作
+- 对SIGPIPE信号的处理进行设计
 - Buffer的设计
 - Connection发送消息封装成消息包
 - 线程池

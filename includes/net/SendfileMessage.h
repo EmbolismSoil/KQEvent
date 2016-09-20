@@ -12,6 +12,7 @@ namespace KQEvent{
     public:
         using SendfileMessagePtr = std::shared_ptr<SendfileMessage>;
 
+        virtual ~SendfileMessage();
         virtual statusE send(int d) override ;
         virtual int getErrorCode() override ;
 

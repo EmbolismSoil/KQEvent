@@ -5,6 +5,7 @@
 #include "SendfileMessage.h"
 #include <sys/stat.h>
 #include <sys/sendfile.h>
+#include <unistd.h>
 
 namespace  KQEvent{
 
@@ -35,4 +36,9 @@ namespace  KQEvent{
     int SendfileMessage::getErrorCode() {
         return _errorCode;
     }
+
+    SendfileMessage::~SendfileMessage() {
+        ::close(_fd);
+    }
+
 }

@@ -68,11 +68,12 @@ namespace KQEvent {
             return Observer::ALIVE;
         }
 
-        auto msg = _messages.begin();
-        int status = (*msg)->send(getFd());
+        auto msgPos = _messages.begin();
+        auto msg = *msgPos;
+        int status = msg->send(getFd());
 
         if (status != AbstractMessage::CONTINUE){
-            _messages.erase(msg);
+            _messages.erase(msgPos);
         }
 
         if (_messages.empty()){

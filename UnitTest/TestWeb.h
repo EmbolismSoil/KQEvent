@@ -19,7 +19,7 @@ using ConnectionPtr = TCPServer::ConnectionPtr;
 class TestWeb : public CxxTest::TestSuite {
 public:
     void TestServer(void) {
-        auto server = TCPServer::newInstance("127.0.0.1:12000");
+        auto server = TCPServer::newInstance("127.0.0.1:10000");
         server->setConnectionNewHandler([](ConnectionPtr conn) {
             std::cout << "new connection from "
                       << conn->getPeerAddr()->toString()
