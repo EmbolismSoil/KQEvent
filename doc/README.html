@@ -1,0 +1,105 @@
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<div class="figure">
+<img src="doc/KQLogoLong.png" />
+
+</div>
+<h1 id="kqevent">KQEvent</h1>
+<p><img src="https://img.shields.io/badge/version-v1.0-blue.svg" /> <img src="https://img.shields.io/badge/build-passing-brightgreen.svg" /> <img src="https://img.shields.io/badge/dowload-32k-brightgreen.svg" alt="https://github.com/EmbolismSoil/KQEvent/archive/master.zip" /></p>
+<p>KQEvent是一个LINUX下的Reactor网络库,使用<code>C++11</code>实现。意图展示一个基本的异步非阻塞网络库的实现，最终会在此基础上实现一个<code>Http Server</code>和一个<code>RPC</code>框架。 KQEvent的设计目标是：<strong>方便使用</strong></p>
+<h3 id="编译">编译</h3>
+<pre class="shell"><code>./build.sh</code></pre>
+<p>编译之后会看到<code>build</code>目录下面有<code>samples</code>文件夹，里面是一些示例。</p>
+<h3 id="示例">示例:</h3>
+<h4 id="tcpserver示例">TCPServer示例</h4>
+<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="dt">void</span> TestServer(<span class="dt">void</span>){
+    <span class="kw">auto</span> server = TCPServer::newInstance(<span class="st">&quot;127.0.0.1:12000&quot;</span>);
+    server-&gt;setConnectionNewHandler([](ConnectionPtr conn){
+        std::cout &lt;&lt; <span class="st">&quot;new connection from &quot;</span>
+                  &lt;&lt; conn-&gt;getPeerAddr()-&gt;toString()
+                  &lt;&lt; <span class="st">&quot; to &quot;</span> &lt;&lt; conn-&gt;getHostAddr()-&gt;toString()
+                  &lt;&lt; std::endl;
+    });
+
+    server-&gt;setConnectionReadHandler([](ConnectionPtr conn, <span class="dt">char</span> *buf, size_t len){
+        <span class="dt">char</span> msg[] =
+                <span class="st">&quot;HTTP/1.1 200 OK</span><span class="ch">\n</span><span class="st">&quot;</span>
+                        <span class="st">&quot;Server: GitHub.com</span><span class="ch">\n</span><span class="st">&quot;</span>
+                        <span class="st">&quot;Date: Mon, 19 Sep 2016 05:06:46 GMT</span><span class="ch">\n</span><span class="st">&quot;</span>
+                        <span class="st">&quot;Content-Type: text/html; charset=utf-8</span><span class="ch">\n</span><span class="st">&quot;</span>
+                        <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>
+                        <span class="st">&quot;&lt;html&gt;</span><span class="ch">\n</span><span class="st">&quot;</span>
+                        <span class="st">&quot;&lt;body&gt;</span><span class="ch">\n</span><span class="st">&quot;</span>
+                        <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>
+                        <span class="st">&quot;&lt;h1&gt;KQEvent&lt;/h1&gt;&quot;</span>
+                        <span class="st">&quot;&lt;a href=</span><span class="ch">\&quot;</span><span class="st">http://github.com/EmbolismSoil/KQEvent</span><span class="ch">\&quot;</span><span class="st">&gt;</span><span class="ch">\n</span><span class="st">&quot;</span>
+                        <span class="st">&quot;View source&lt;/a&gt;</span><span class="ch">\n</span><span class="st">&quot;</span>
+                        <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>
+                        <span class="st">&quot;&lt;/body&gt;</span><span class="ch">\n</span><span class="st">&quot;</span>
+                        <span class="st">&quot;&lt;/html&gt;&quot;</span>;
+        conn-&gt;sendMessage(msg, <span class="kw">sizeof</span>(msg));
+        conn-&gt;softClose();
+    });
+
+    server-&gt;setConnectionCloseHandler([](ConnectionPtr conn){
+        std::cout &lt;&lt; <span class="st">&quot; disconnect from &quot;</span>
+                  &lt;&lt; conn-&gt;getPeerAddr()-&gt;toString()
+                  &lt;&lt; <span class="st">&quot; to &quot;</span> &lt;&lt; conn-&gt;getHostAddr()-&gt;toString()
+                  &lt;&lt; std::endl;
+    });
+
+    server-&gt;run();
+}</code></pre></div>
+<p>运行<code>simpleServer</code>,打开浏览器输入地址<code>127.0.0.1:12000</code>你会看到： <img src="doc/TCPServer_sample.png" /></p>
+<h4 id="tcpclient示例">TCPClient示例</h4>
+<div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="dt">void</span> TestClient(<span class="dt">void</span>){
+    std::string serverAddr(<span class="st">&quot;127.0.0.1:12000&quot;</span>);
+    <span class="kw">auto</span> client = TCPClient::newInstance(serverAddr);
+
+    client-&gt;onConnected([](TCPClient::ConnectionPtr conn){
+        std::cout &lt;&lt; <span class="st">&quot;connect from &quot;</span> &lt;&lt; conn-&gt;getHostAddr()-&gt;toString()
+                  &lt;&lt; <span class="st">&quot; to &quot;</span> &lt;&lt; conn-&gt;getPeerAddr()-&gt;toString()
+                  &lt;&lt; <span class="st">&quot;...OK&quot;</span> &lt;&lt; std::endl;
+    });
+
+    client-&gt;onRead([&amp;client](<span class="dt">char</span> *buf, size_t n){
+        buf[n] = <span class="st">&#39;</span><span class="ch">\0</span><span class="st">&#39;</span>;
+        std::cout &lt;&lt; buf &lt;&lt; std::endl;
+        <span class="dt">char</span> msg[] = <span class="st">&quot;message from Client</span><span class="ch">\n</span><span class="st">&quot;</span>;
+        client-&gt;sendMsg(msg, <span class="kw">sizeof</span>(msg));
+    });
+
+    client-&gt;onClose([](TCPClient::ConnectionPtr conn){
+        std::cout &lt;&lt; <span class="st">&quot;disconnect from &quot;</span> &lt;&lt; conn-&gt;getHostAddr()-&gt;toString()
+                  &lt;&lt; <span class="st">&quot; to &quot;</span> &lt;&lt; conn-&gt;getPeerAddr()-&gt;toString()
+                  &lt;&lt; <span class="st">&quot;...OK&quot;</span> &lt;&lt; std::endl;
+        ::exit(<span class="dv">0</span>);
+    });
+
+    client-&gt;run();
+}</code></pre></div>
+<p>打开终端使用<code>nc -l -n 127.0.0.1 -p 12000</code>监听端口， 运行<code>TCPClient</code>， 连接成功后随意输入字符串，你可以看到： <img src="doc/simpleClient_OK.png" /></p>
+<p>在<code>nc</code>所在的终端随意输入字符串，比如输入<code>test</code>你会看到： <img src="doc/simpleClient_nc.png" /></p>
+<div class="figure">
+<img src="doc/simpleClient_client.png" />
+
+</div>
+<h3 id="将会实现的特性">将会实现的特性</h3>
+<ul>
+<li>用户可以从内存池中分配内存，内存池跟踪内存的使用情况，跟踪内存生命周期，提供丰富的调试信息，必要时自动回收。降低用户内存管理的难度。</li>
+<li>实现性能统计，可以在调试模式自动导出统计数据的图表形式。</li>
+<li>基于无锁结构设计的高性能线程池</li>
+<li>向用户提供高效的零拷贝的工具集</li>
+</ul>
+<h3 id="正在进行的工作">正在进行的工作</h3>
+<ul>
+<li>细化connection的结构，跟踪连接的生命周期，处理连接异常</li>
+<li>connection关闭连接的时候提供强制关闭接口，让用户决定是否立即关闭</li>
+<li>connection可以在析构的时候关闭连接</li>
+<li>精确定时器，时区转换</li>
+<li>线程池</li>
+<li>Acceptor</li>
+</ul>
+<h2 id="license">License</h2>
+<p>GPLv2</p>
