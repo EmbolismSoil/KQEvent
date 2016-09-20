@@ -55,6 +55,7 @@ void TestServer(void){
 }
 ```
 运行`simpleServer`,打开浏览器输入地址`127.0.0.1:12000`你会看到：
+
 ![](doc/TCPServer_sample.png)
 
 #### TCPClient示例
@@ -87,9 +88,11 @@ void TestClient(void){
 }
 ```
 打开终端使用`nc -l -n 127.0.0.1 -p 12000`监听端口， 运行`TCPClient`， 连接成功后随意输入字符串，你可以看到：
+
 ![](doc/simpleClient_OK.png)
 
 在`nc`所在的终端随意输入字符串，比如输入`test`你会看到：
+
 ![](doc/simpleClient_nc.png)
 
 ![](doc/simpleClient_client.png)
