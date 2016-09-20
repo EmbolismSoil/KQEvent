@@ -135,9 +135,7 @@ void TestClient(void){
 ###正在进行的工作
 - Buffer的设计
 - Connection发送消息封装成消息包
-- 精确定时器，时区转换
 - 线程池
-- Acceptor
 
 ## License
 GPLv2
