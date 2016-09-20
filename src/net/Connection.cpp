@@ -3,7 +3,10 @@
 //
 
 #include "Connection.h"
-#include <unistd.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/sendfile.h>
+
 
 namespace KQEvent{
 
@@ -63,10 +66,16 @@ namespace KQEvent{
     }
 
     Observer::Command_t Connection::_writeHandler(Subject::SubjectPtr subject){
+        //优先发送消息，但是如果在sendfile尚未完成时，是不能发送消息的。
         int n = 0;
         auto cnt = 0;
         auto buf = getBuffer();
         auto size = getBufferSize();
+
+        if (_isSendfile){
+            __doSendfile();
+            return Observer::ALIVE;
+        }
 
         while(size && (n = ::write(getFd(), &buf[cnt], size)) > 0){
             size -= n;
@@ -75,14 +84,20 @@ namespace KQEvent{
 
         setBufferSize(size);
 
-        if (size <= 0){//已经发送完成，不对写事件感兴趣了。
-            _subject->setWriteEvent(false);
-            if (_softClose){ //是否需要关闭？
-                setDisconnected();
-                _socket.reset();//socket生命周期结束
-                _closeHandlerCallback(getPtr());//这里已经不能再发送网络消息了
+        if (size <= 0){
+            if (_sendfileQueue.empty()){//已经发送完成，不对写事件感兴趣了。
+                _subject->setWriteEvent(false);
+                if (_softClose){ //是否需要关闭？
+                    setDisconnected();
+                    _socket.reset();//socket生命周期结束
+                    _closeHandlerCallback(getPtr());//这里已经不能再发送网络消息了
+                }
+            }else{
+                _isSendfile = true;
+                __doSendfile();
             }
         }
+
         return Observer::ALIVE;
     }
 
@@ -145,5 +160,46 @@ namespace KQEvent{
     Connection::_exceptHandler(Subject::SubjectPtr) {
         _exceptCallback(getPtr());
         return Observer::ALIVE;
+    }
+
+    bool Connection::sendFile(const std::string &path) {
+        int fd = ::open(path.c_str(), O_RDONLY);
+        if (fd < 0)
+            return false;
+
+        struct stat statbuff;
+        if(::fstat(fd, &statbuff) < 0){
+            return false;
+        }
+        sendFileDesc desc = {.fd = fd, .size = statbuff.st_size};
+        _sendfileQueue.push_back(desc);
+        _subject->setWriteEvent(true);
+        return true;
+    }
+
+    void Connection::__doSendfile() {
+        _isSendfile = true;
+        auto pos = _sendfileQueue.begin();
+        int n = 0;
+        while((n = ::sendfile(getFd(), pos->fd, NULL, pos->size)) > 0){
+            pos->size -= n;
+        }
+
+        if (n == EAGAIN || n == 0) {
+            //正常结束
+            if (pos->size <= 0){
+                _isSendfile = false;
+                _sendfileQueue.erase(pos);
+            }
+            return;
+        }
+
+        if (n < 0){
+            //不正常结束
+            _exceptCallback(getPtr());
+            _isSendfile = false;
+            _sendfileQueue.erase(pos);
+            return;
+        }
     }
 }

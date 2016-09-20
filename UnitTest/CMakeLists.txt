@@ -16,5 +16,5 @@ SET(SOURCE_LIST ${RUNNER} ../src/common/KQEventCommonException.cpp ../includes/c
         ../includes/net/TCPServer.h TestWeb.h )
 INCLUDE_DIRECTORIES(../includes/base ../includes/net ../includes/common /home/lee/github/cxxtest)
 # 测试用
-#ADD_EXECUTABLE(KQEventTestSuit ${SOURCE_LIST})
-#TARGET_LINK_LIBRARIES(KQEventTestSuit net base)
+ADD_EXECUTABLE(KQEventTestSuit ${SOURCE_LIST})
+TARGET_LINK_LIBRARIES(KQEventTestSuit net base)

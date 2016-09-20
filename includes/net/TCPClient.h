@@ -46,21 +46,17 @@ namespace KQEvent{
         void onClose(CloseHandle_t handle){
             _onCloseCallback = handle;
         }
-
-        void onExcept(ExceptHandle_t handle){
+        //已建立连接出现异常
+        void onConnectionExcept(ExceptHandle_t handle){
             _onExceptCallback = handle;
         }
-
-        void onError(ErrorHandle_t handle){
+        //连接时出错
+        void onConnectError(ErrorHandle_t handle){
             _onConnectErrorCallBack = handle;
         }
 
         void setMaxRetry(int n){
             _maxRetry = n;
-        }
-
-        void onConnectError(ErrorHandle_t handle){
-            _onConnectErrorCallBack = handle;
         }
 
         bool sendMsg(char *msg, size_t len);

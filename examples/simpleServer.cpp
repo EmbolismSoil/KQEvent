@@ -32,7 +32,8 @@ void TestServer(void){
                         "\n"
                         "</body>\n"
                         "</html>";
-        conn->sendMessage(msg, sizeof(msg));
+        //conn->sendMessage(msg, sizeof(msg));
+        conn->sendFile("/home/lee/test.cpp");
         conn->softClose();
     });
 

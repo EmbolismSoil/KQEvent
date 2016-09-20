@@ -11,6 +11,7 @@
 #include "TCPInfo.h"
 #include "../base/Observer.h"
 #include "Socket.h"
+#include <list>
 
 namespace KQEvent {
     class Connection : public std::enable_shared_from_this<Connection> {
@@ -95,6 +96,8 @@ namespace KQEvent {
         //等待缓冲区内数据发送完毕再关闭连接
         void softClose();
 
+        bool sendFile(std::string const&path);
+
     private:
         explicit Connection(Socket::SocketPtr socket, IPAddress::IPAddressPtr peer, void *context = nullptr);
 
@@ -134,6 +137,15 @@ namespace KQEvent {
 
         void *_context; //fixme : Context class;
 
+        struct sendFileDesc{
+            int fd;
+            __off_t size;
+        };
+
+        std::list<sendFileDesc> _sendfileQueue;
+        bool _isSendfile;
+
+        void __doSendfile();
     };
 }
 
