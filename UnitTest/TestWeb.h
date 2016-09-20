@@ -36,6 +36,7 @@ public:
                     "<html>\n"
                             "<body>\n"
                             "\n"
+                            "<h1>KQEvent</h1>"
                             "<a href=\"http://github.com/EmbolismSoil/KQEvent\">\n"
                             "View source</a>\n"
                             "\n"

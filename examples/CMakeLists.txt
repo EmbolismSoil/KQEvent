@@ -1,0 +1,7 @@
+SET(SERVER_SOURCE_LIST simpleServer.cpp)
+SET(CLIENT_SOURCE_LIST simpleClient.cpp)
+INCLUDE_DIRECTORIES(../includes/base ../includes/net ../includes/common)
+ADD_EXECUTABLE(simpleServer ${SERVER_SOURCE_LIST})
+ADD_EXECUTABLE(simpleClient ${CLIENT_SOURCE_LIST})
+TARGET_LINK_LIBRARIES(simpleServer net base)
+TARGET_LINK_LIBRARIES(simpleClient net base)

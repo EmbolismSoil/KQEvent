@@ -11,6 +11,7 @@
 #include "Socket.h"
 #include <list>
 #include "IPAddress.h"
+#include <string>
 
 namespace KQEvent{
     class TCPServer {

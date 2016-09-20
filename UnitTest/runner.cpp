@@ -64,11 +64,11 @@ public:
 static TestWeb suite_TestWeb;
 
 static CxxTest::List Tests_TestWeb = { 0, 0 };
-CxxTest::StaticSuiteDescription suiteDescription_TestWeb( "/home/lee/github/KQEvent/UnitTest/TestWeb.h", 19, "TestWeb", suite_TestWeb, Tests_TestWeb );
+CxxTest::StaticSuiteDescription suiteDescription_TestWeb( "/home/lee/github/KQEvent/UnitTest/TestWeb.h", 18, "TestWeb", suite_TestWeb, Tests_TestWeb );
 
 static class TestDescription_suite_TestWeb_TestServer : public CxxTest::RealTestDescription {
 public:
- TestDescription_suite_TestWeb_TestServer() : CxxTest::RealTestDescription( Tests_TestWeb, suiteDescription_TestWeb, 21, "TestServer" ) {}
+ TestDescription_suite_TestWeb_TestServer() : CxxTest::RealTestDescription( Tests_TestWeb, suiteDescription_TestWeb, 20, "TestServer" ) {}
  void runTest() { suite_TestWeb.TestServer(); }
 } testDescription_suite_TestWeb_TestServer;
 
