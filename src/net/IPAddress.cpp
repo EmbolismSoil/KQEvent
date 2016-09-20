@@ -15,7 +15,7 @@ namespace KQEvent {
         this->_address.sin_family = AF_INET;
         char buf[50];
         auto ret = inet_ntop(AF_INET, (const void *) (&_address.sin_addr), buf, sizeof(buf));
-        if (ret != NULL){
+        if (ret != NULL) {
             this->_addressStr = std::string(ret);
             buf[0] = ':';
             sprintf(buf + 1, "%u", port);

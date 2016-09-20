@@ -19,17 +19,20 @@ namespace KQEvent {
     public:
         using Handle_t = std::function<void(Connection::ConnectionPtr)>;
         using AbstractAcceptorPtr = std::shared_ptr<AbstractAcceptor>;
-        virtual ~AbstractAcceptor(){};
+
+        virtual ~AbstractAcceptor() {};
 
         //禁止拷贝
-        AbstractAcceptor(AbstractAcceptor const&) = delete;
-        AbstractAcceptor const&operator=(AbstractAcceptor const&) = delete;
+        AbstractAcceptor(AbstractAcceptor const &) = delete;
+
+        AbstractAcceptor const &operator=(AbstractAcceptor const &) = delete;
 
         void setOnConnectHandle(Handle_t const &);
+
         Subject::SubjectPtr const &getSubject();
 
-        template <typename ..._Args>
-                static AbstractAcceptorPtr newInstance(_Args&& ...args){
+        template<typename ..._Args>
+        static AbstractAcceptorPtr newInstance(_Args &&...args) {
             auto aNew = new AbstractAcceptor(std::forward<_Args>(args)...);
             return AbstractAcceptorPtr(aNew);
         }
@@ -39,6 +42,7 @@ namespace KQEvent {
 
     private:
         void handleReadEvent();
+
         Socket::SocketPtr _socket;
         Subject::SubjectPtr _subject;
         Handle_t _onConnect;

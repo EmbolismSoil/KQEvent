@@ -21,7 +21,7 @@ namespace KQEvent {
         using Handle_t = std::function<Command_t(ConnectionPtr)>;
         using ReadHandle_t = std::function<void(ConnectionPtr, char *, size_t)>;
         using CloseHandle_t = std::function<void(ConnectionPtr)>;
-        using ExceptHandle_t = CloseHandle_t ;
+        using ExceptHandle_t = CloseHandle_t;
         /*当Acceptor新建一个连接的时候，设置为connecting状态。而后Acceptor会将该连接对象
          *交给TCPServer,当TCPServer设置好connection的状态之后(例如设置上下文，设置回调等等)
          *就可以开始将connection放入事件循环中使用，但在此之前需要将connection的状态设置为connected
@@ -35,7 +35,9 @@ namespace KQEvent {
          * 注意： 关闭连接不意味着connection的生命周期结束，至于connection生命周期何时结束，资源何时
          * 被回收，取决于connection的持有者 -- 如TCPServer
          * */
-        typedef enum{Connecting, Connected, Disconnecting, Disconnected}StateE;
+        typedef enum {
+            Connecting, Connected, Disconnecting, Disconnected
+        } StateE;
 
         Connection(Connection const &) = delete;
 
@@ -58,7 +60,7 @@ namespace KQEvent {
 
         void attachExceptHandler(ExceptHandle_t handle);
 
-        void attachCloseHandler(CloseHandle_t handler){
+        void attachCloseHandler(CloseHandle_t handler) {
             _closeHandlerCallback = handler;
         }
 
@@ -81,28 +83,31 @@ namespace KQEvent {
         int getFd() { return _sockfd; }
 
         size_t getBufferSize() { return _bufSize; }
-        void setBufferSize(size_t size){_bufSize = size;}
+
+        void setBufferSize(size_t size) { _bufSize = size; }
 
         char const *getBuffer() { return _buf; }
 
-        void *getContext(){return _context;}
+        void *getContext() { return _context; }
 
-        void setContext(void *context){_context = context;}
+        void setContext(void *context) { _context = context; }
 
-        IPAddress::IPAddressPtr getHostAddr(){return _hostAddress;}
+        IPAddress::IPAddressPtr getHostAddr() { return _hostAddress; }
 
-        IPAddress::IPAddressPtr getPeerAddr(){return _peerAddress;}
+        IPAddress::IPAddressPtr getPeerAddr() { return _peerAddress; }
 
         //等待缓冲区内数据发送完毕再关闭连接
         void softClose();
 
-        bool sendFile(std::string const&path);
+        bool sendFile(std::string const &path);
 
     private:
         explicit Connection(Socket::SocketPtr socket, IPAddress::IPAddressPtr peer, void *context = nullptr);
 
         Command_t _writeHandler(Subject::SubjectPtr);
+
         Command_t _readHandler(Subject::SubjectPtr);
+
         Command_t _exceptHandler(Subject::SubjectPtr);
 
         int _sockfd;
@@ -137,7 +142,7 @@ namespace KQEvent {
 
         void *_context; //fixme : Context class;
 
-        struct sendFileDesc{
+        struct sendFileDesc {
             int fd;
             __off_t size;
         };

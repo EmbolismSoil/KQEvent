@@ -4,7 +4,7 @@
 
 #include "TCPServer.h"
 
-namespace  KQEvent{
+namespace KQEvent {
 
     TCPServer::TCPServer(std::string const &ip, int backlog) {
         _address = IPAddress::fromIPAddress(ip);
@@ -18,19 +18,19 @@ namespace  KQEvent{
         _loop = EventLoop::newInstance();
         _loop->registerSubject(_acceptor->getSubject());
 
-        auto defHandler = [](ConnectionPtr unused){};
+        auto defHandler = [](ConnectionPtr unused) {};
         _connNewHandler = defHandler;
         _connExceptHandler = defHandler;
         _connCloseHandler = defHandler;
-        _connReadHandler = [](ConnectionPtr conn, char *buf, size_t len){};
+        _connReadHandler = [](ConnectionPtr conn, char *buf, size_t len) {};
     }
 
     Connection::Handle_t TCPServer::_connHandlerWrap(TCPServer::Handle_t handle) {
-        auto tmp = [handle](ConnectionPtr conn){
+        auto tmp = [handle](ConnectionPtr conn) {
             handle(conn);
             return Observer::ALIVE;
         };
-        return  tmp;
+        return tmp;
     }
 
     void TCPServer::onNewConnection(TCPServer::ConnectionPtr conn) {
@@ -48,14 +48,14 @@ namespace  KQEvent{
     }
 
     void TCPServer::onReadHandler(TCPServer::ConnectionPtr conn,
-                                                char *buf, size_t n){
+                                  char *buf, size_t n) {
         _connReadHandler(conn, buf, n);
     }
 
     void TCPServer::_closeConnection(TCPServer::ConnectionPtr conn) {
         auto pos = std::find(_connectionPool.begin(),
                              _connectionPool.end(), conn);
-        if (pos == _connectionPool.end()){
+        if (pos == _connectionPool.end()) {
             //处理故障，打印log。目前log和全局故障尚未完成，只能简单退出
             return;
         }

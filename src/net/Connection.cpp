@@ -8,17 +8,16 @@
 #include <sys/sendfile.h>
 
 
-namespace KQEvent{
+namespace KQEvent {
 
     Connection::Connection(Socket::SocketPtr socket, IPAddress::IPAddressPtr peer, void *contex) :
-        _sockfd(socket->getFd()),
-        _peerAddress(peer),
-        _subject(Subject::newInstance(socket->getFd())),
-        _state(Connection::Disconnected),
-        _softClose(false),
-        _bufSize(0),
-        _context(contex)
-    {
+            _sockfd(socket->getFd()),
+            _peerAddress(peer),
+            _subject(Subject::newInstance(socket->getFd())),
+            _state(Connection::Disconnected),
+            _softClose(false),
+            _bufSize(0),
+            _context(contex) {
         _buf = new char[32768];
         _writeObserver = Observer::newInstance();
         _readObserver = Observer::newInstance();
@@ -52,8 +51,7 @@ namespace KQEvent{
 
     Observer::Command_t
     Connection::_handleWrapper(Connection::Handle_t handle,
-                               Subject::SubjectPtr subject)
-    {
+                               Subject::SubjectPtr subject) {
         return handle(getPtr());
     }
 
@@ -65,34 +63,34 @@ namespace KQEvent{
         _exceptCallback = handle;
     }
 
-    Observer::Command_t Connection::_writeHandler(Subject::SubjectPtr subject){
+    Observer::Command_t Connection::_writeHandler(Subject::SubjectPtr subject) {
         //优先发送消息，但是如果在sendfile尚未完成时，是不能发送消息的。
         int n = 0;
         auto cnt = 0;
         auto buf = getBuffer();
         auto size = getBufferSize();
 
-        if (_isSendfile){
+        if (_isSendfile) {
             __doSendfile();
             return Observer::ALIVE;
         }
 
-        while(size && (n = ::write(getFd(), &buf[cnt], size)) > 0){
+        while (size && (n = ::write(getFd(), &buf[cnt], size)) > 0) {
             size -= n;
             cnt += n;
         }
 
         setBufferSize(size);
 
-        if (size <= 0){
-            if (_sendfileQueue.empty()){//已经发送完成，不对写事件感兴趣了。
+        if (size <= 0) {
+            if (_sendfileQueue.empty()) {//已经发送完成，不对写事件感兴趣了。
                 _subject->setWriteEvent(false);
-                if (_softClose){ //是否需要关闭？
+                if (_softClose) { //是否需要关闭？
                     setDisconnected();
                     _socket.reset();//socket生命周期结束
                     _closeHandlerCallback(getPtr());//这里已经不能再发送网络消息了
                 }
-            }else{
+            } else {
                 _isSendfile = true;
                 __doSendfile();
             }
@@ -144,12 +142,12 @@ namespace KQEvent{
         _softClose = true;
     }
 
-    Connection::Command_t Connection::_readHandler(Subject::SubjectPtr subject){
+    Connection::Command_t Connection::_readHandler(Subject::SubjectPtr subject) {
         char buf[32768];
         int n = ::read(getFd(), buf, sizeof(buf));
-        if (n == 0){
+        if (n == 0) {
             _closeHandlerCallback(getPtr());
-        }else if (n > 0){
+        } else if (n > 0) {
             _readHandlerCallback(getPtr(), buf, n);
         }
 
@@ -168,7 +166,7 @@ namespace KQEvent{
             return false;
 
         struct stat statbuff;
-        if(::fstat(fd, &statbuff) < 0){
+        if (::fstat(fd, &statbuff) < 0) {
             return false;
         }
         sendFileDesc desc = {.fd = fd, .size = statbuff.st_size};
@@ -181,20 +179,20 @@ namespace KQEvent{
         _isSendfile = true;
         auto pos = _sendfileQueue.begin();
         int n = 0;
-        while((n = ::sendfile(getFd(), pos->fd, NULL, pos->size)) > 0){
+        while ((n = ::sendfile(getFd(), pos->fd, NULL, pos->size)) > 0) {
             pos->size -= n;
         }
 
         if (n == EAGAIN || n == 0) {
             //正常结束
-            if (pos->size <= 0){
+            if (pos->size <= 0) {
                 _isSendfile = false;
                 _sendfileQueue.erase(pos);
             }
             return;
         }
 
-        if (n < 0){
+        if (n < 0) {
             //不正常结束
             _exceptCallback(getPtr());
             _isSendfile = false;

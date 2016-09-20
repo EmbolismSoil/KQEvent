@@ -9,7 +9,7 @@
 #include <map>
 #include <chrono>
 
-namespace KQEvent{
+namespace KQEvent {
     class Timer {
         /*
          *  @ 当定时器周期为0时表示该定时器只触发一次
@@ -18,6 +18,7 @@ namespace KQEvent{
         Timer(Timer const &) = delete;
 
         Timer const &operator=(Timer const &) = delete;
+
         using Clock = std::chrono::high_resolution_clock;
         using TimePoint = Clock::time_point;
         using Milliseconds = std::chrono::milliseconds;
@@ -38,12 +39,15 @@ namespace KQEvent{
 
         virtual void handle();
 
-        Milliseconds const& getPeriod();
-        TimePoint const& getTimeoutPoint();
+        Milliseconds const &getPeriod();
+
+        TimePoint const &getTimeoutPoint();
 
     private:
         explicit Timer(TimePoint timeout, Milliseconds period, Handle_t handle);
+
         explicit Timer(Handle_t handle);
+
         TimePoint _timeout;
         Milliseconds _period;
         Handle_t _handle;

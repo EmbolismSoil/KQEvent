@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <unistd.h>
 
-namespace KQEvent{
+namespace KQEvent {
 
     void TimerQueue::addTimer(Timer::TimerPtr timer) {
         _timers[timer] = __fakeValue;
@@ -19,7 +19,7 @@ namespace KQEvent{
     }
 
     void TimerQueue::handleTimeout() {
-        if(_timers.empty()){
+        if (_timers.empty()) {
             uint64_t exp;
             ssize_t s = read(_timefd, &exp, sizeof(uint64_t));
             return;
@@ -29,7 +29,7 @@ namespace KQEvent{
         auto pos = _timers.begin();
         std::vector<Timer::TimerPtr> ret;
 
-        for ( ; pos != _timers.end(); ++pos){
+        for (; pos != _timers.end(); ++pos) {
             if (pos->first->getTimeoutPoint() > now)
                 break;
             ret.push_back(pos->first);
@@ -40,12 +40,12 @@ namespace KQEvent{
          * 这里要分开为两次迭代操作，防止handle执行时间太长造成定时不准
          * 这里要从定时器先超时的开始执行
          * */
-        for (auto pos = ret.rbegin(); pos != ret.rend(); ++pos){
+        for (auto pos = ret.rbegin(); pos != ret.rend(); ++pos) {
             (*pos)->handle();
         }
 
-        for (auto &item : ret){
-            if (item->getPeriod() > Timer::Milliseconds(0)){
+        for (auto &item : ret) {
+            if (item->getPeriod() > Timer::Milliseconds(0)) {
                 auto now = Timer::Clock::now();
                 item->setTimoutAt(now + item->getPeriod());
                 _timers[item] = __fakeValue;
@@ -56,14 +56,14 @@ namespace KQEvent{
         _updateTimeoutPoint();
     }
 
-    TimerQueue::TimerQueue() throw(KQEventCommonException){
+    TimerQueue::TimerQueue() throw(KQEventCommonException) {
         _timefd = timerfd_create(CLOCK_REALTIME, 0);
         if (_timefd < 0)
             throw KQEventCommonException("failed in  TimerQueue::TimerQueue()");
 
         _subject = Subject::newInstance(_timefd);
         _observer = Observer::newInstance();
-        _observer->setHandle([this](Subject::SubjectPtr subject){
+        _observer->setHandle([this](Subject::SubjectPtr subject) {
             handleTimeout();
             return Observer::ALIVE;
         });
@@ -81,11 +81,11 @@ namespace KQEvent{
 
         auto timer = _timers.begin()->first;
         auto timePoint = timer->getTimeoutPoint().time_since_epoch();
-        auto ms = std::chrono::duration_cast<Timer::Milliseconds >(timePoint).count();
+        auto ms = std::chrono::duration_cast<Timer::Milliseconds>(timePoint).count();
 
         ::itimerspec time = {
-                .it_interval = { 0, 0},
-                .it_value = { ms / 1000, (ms % 1000) * 1000000}
+                .it_interval = {0, 0},
+                .it_value = {ms / 1000, (ms % 1000) * 1000000}
         };
 
         ::timerfd_settime(_timefd, TFD_TIMER_ABSTIME, &time, NULL);

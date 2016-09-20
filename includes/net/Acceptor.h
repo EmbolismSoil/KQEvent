@@ -11,18 +11,19 @@ namespace KQEvent {
 
         Acceptor() = delete;
 
-        template <typename ..._Args>
-        static AcceptorPtr newInstance(_Args...&& args) {
+        template<typename ..._Args>
+        static AcceptorPtr newInstance(_Args... &&args) {
             auto aNew = new Acceptor(std::forward<_Args>(args)...);
             return AcceptorPtr(aNew);
         }
-        
+
         AcceptorPtr getPtr() { return shared_from_this(); }
 
         Connection::ConnectionPtr acceptHandle() override;
-    
+
     private:
         Acceptor(Socket::SocketPtr socket, IPAddressPtr address);
+
         Socket::SocketPtr _socket;
         IPAddressPtr _address;
     };

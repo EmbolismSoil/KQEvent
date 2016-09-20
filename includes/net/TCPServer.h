@@ -13,52 +13,56 @@
 #include "IPAddress.h"
 #include <string>
 
-namespace KQEvent{
+namespace KQEvent {
     class TCPServer {
     public:
         using TCPServerPtr = std::shared_ptr<TCPServer>;
         using ConnectionPtr = Connection::ConnectionPtr;
         using AcceptorPtr = AbstractAcceptor::AbstractAcceptorPtr;
-        using EventLoopPtr = EventLoop::EventLoopPtr ;
-        using SocketPtr = Socket::SocketPtr ;
-        using ConnectionsPool = std::list<ConnectionPtr >;
-        using IPAddressPtr = IPAddress::IPAddressPtr ;
-        using Handle_t = AbstractAcceptor::Handle_t ;
+        using EventLoopPtr = EventLoop::EventLoopPtr;
+        using SocketPtr = Socket::SocketPtr;
+        using ConnectionsPool = std::list<ConnectionPtr>;
+        using IPAddressPtr = IPAddress::IPAddressPtr;
+        using Handle_t = AbstractAcceptor::Handle_t;
         using ReadHandle_t = std::function<void(ConnectionPtr, char *, size_t)>;
 
         TCPServer(TCPServer const &) = delete;
+
         TCPServer const &operator=(TCPServer const &) = delete;
 
-        template <typename ..._Args>
-        static TCPServerPtr newInstance(_Args&& ...args){
+        template<typename ..._Args>
+        static TCPServerPtr newInstance(_Args &&...args) {
             auto aNew = new TCPServer(std::forward<_Args>(args)...);
             return TCPServerPtr(aNew);
         }
 
-        void setConnectionNewHandler(Handle_t handle){
+        void setConnectionNewHandler(Handle_t handle) {
             _connNewHandler = handle;
         }
 
-        void setConnectionReadHandler(ReadHandle_t handle){
+        void setConnectionReadHandler(ReadHandle_t handle) {
             _connReadHandler = handle;
         }
 
-        void setConnectionExceptHandler(Handle_t handle){
+        void setConnectionExceptHandler(Handle_t handle) {
             _connExceptHandler = handle;
         }
 
-        void setConnectionCloseHandler(Handle_t handle){
+        void setConnectionCloseHandler(Handle_t handle) {
             _connCloseHandler = handle;
         }
 
-        void run(){
+        void run() {
             _loop->loop();
         }
 
         void softClose();
+
     private:
         void onNewConnection(ConnectionPtr conn);
+
         void connCloseHandler(ConnectionPtr conn);
+
         void onReadHandler(ConnectionPtr conn, char *buf, size_t n);
 
         Connection::Handle_t _connHandlerWrap(Handle_t handle);
@@ -70,7 +74,7 @@ namespace KQEvent{
         Handle_t _connCloseHandler;
 
         IPAddressPtr _address;
-        SocketPtr  _socket;
+        SocketPtr _socket;
         AcceptorPtr _acceptor;
         EventLoopPtr _loop;
 
@@ -79,7 +83,6 @@ namespace KQEvent{
         void _closeConnection(TCPServer::ConnectionPtr conn);
     };
 }
-
 
 
 #endif //KQEVENT_TCPSERVER_H

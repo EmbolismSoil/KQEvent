@@ -5,18 +5,17 @@
 #include "AbstractAcceptor.h"
 #include <iostream>
 
-namespace KQEvent{
+namespace KQEvent {
 
-    void AbstractAcceptor::setOnConnectHandle(const AbstractAcceptor::Handle_t &handle){
+    void AbstractAcceptor::setOnConnectHandle(const AbstractAcceptor::Handle_t &handle) {
         _onConnect = handle;
     }
 
-    AbstractAcceptor::AbstractAcceptor(Socket::SocketPtr socket):
-        _socket(socket)
-    {
+    AbstractAcceptor::AbstractAcceptor(Socket::SocketPtr socket) :
+            _socket(socket) {
         _subject = Subject::newInstance(_socket->getFd());
         _observer = Observer::newInstance();
-        _observer->setHandle([this](Subject::SubjectPtr unused){
+        _observer->setHandle([this](Subject::SubjectPtr unused) {
             handleReadEvent();
             return Observer::ALIVE;
         });
@@ -36,7 +35,7 @@ namespace KQEvent{
         _onConnect(connection);
     }
 
-    Subject::SubjectPtr const&AbstractAcceptor::getSubject() {
+    Subject::SubjectPtr const &AbstractAcceptor::getSubject() {
         return _subject;
     }
 }

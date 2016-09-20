@@ -17,8 +17,9 @@ namespace KQEvent {
     public:
         using PollerPtr = std::shared_ptr<Poller>;
         using Handle_t =  std::function<void(PollerPtr)>;
-        template <typename  ..._Args>
-        static PollerPtr newInstance(_Args&& ...args){
+
+        template<typename  ..._Args>
+        static PollerPtr newInstance(_Args &&...args) {
             auto aNew = new Poller(std::forward<_Args>(args)...);
             return PollerPtr(aNew);
         }
@@ -41,6 +42,7 @@ namespace KQEvent {
 
     private:
         explicit Poller(Handle_t hanle, int timeout = 60000);
+
         void checkNewSubject();
 
         bool _exit;

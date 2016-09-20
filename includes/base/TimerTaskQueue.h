@@ -36,11 +36,12 @@ namespace KQEvent {
         virtual void runTaskEvery(Task const &task, Timer::Milliseconds period);
 
         Subject::SubjectPtr const &getTimerQueueSubect();
+
         Subject::SubjectPtr const &getEventfdSubject();
 
     protected:
         explicit TimerTaskQueue();
-       // TimerTaskQueue(EventLoop::EventLoopPtr loop);
+        // TimerTaskQueue(EventLoop::EventLoopPtr loop);
 
     private:
         Subject::SubjectPtr _eventTaskSubject;

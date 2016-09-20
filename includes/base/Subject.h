@@ -9,7 +9,7 @@
 namespace KQEvent {
     class Subject : public std::enable_shared_from_this<Subject> {
     public:
-        using ObserverList_t =  std::vector<Observer::ObserverWeakPtr >;
+        using ObserverList_t =  std::vector<Observer::ObserverWeakPtr>;
         struct EventType {
             bool READ = false;
             bool WRITE = false;

@@ -9,6 +9,7 @@
 
 namespace KQEvent {
     class Subject;
+
     class Observer : public std::enable_shared_from_this<Observer> {
     public:
         typedef enum {
@@ -43,29 +44,32 @@ namespace KQEvent {
 
         Handle_t const &getHandle() { return _handle; }
 
-        virtual Command_t update(std::shared_ptr<Subject>&& subject) {
+        virtual Command_t update(std::shared_ptr<Subject> &&subject) {
             return _handle(std::move(subject));
         }
 
-        ObserverPtr getPtr(void){
+        ObserverPtr getPtr(void) {
             return this->shared_from_this();
         }
 
         //for log
         //virtual void onAttach(void) {}
         //virtual void onDetach(void) {}
-        void setOnAttachHandle(Handle_t handle){
+        void setOnAttachHandle(Handle_t handle) {
             _onAttach = handle;
         }
-        void setOnDetachHandle(Handle_t handle){
+
+        void setOnDetachHandle(Handle_t handle) {
             _onDetach = handle;
         }
-        Handle_t const &getOnAttachHandle(void){return _onAttach;}
-        Handle_t const &getOnDetachHandle(void){return _onDetach;}
+
+        Handle_t const &getOnAttachHandle(void) { return _onAttach; }
+
+        Handle_t const &getOnDetachHandle(void) { return _onDetach; }
 
     private:
-        explicit Observer(){
-            auto handle = [](std::shared_ptr<Subject>){return ALIVE;};
+        explicit Observer() {
+            auto handle = [](std::shared_ptr<Subject>) { return ALIVE; };
             _onAttach = handle;
             _onDetach = handle;
         }

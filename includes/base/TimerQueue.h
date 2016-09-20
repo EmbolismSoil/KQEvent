@@ -13,7 +13,7 @@
 #include "Subject.h"
 #include "Observer.h"
 
-namespace KQEvent{
+namespace KQEvent {
     class TimerQueue {
         /*
          * 利用map构建红黑树，在每次超时事件选出超时时间点离
@@ -24,11 +24,13 @@ namespace KQEvent{
         using TimerQueueWeakPtr = std::weak_ptr<TimerQueue>;
 
         TimerQueue(TimerQueue const &) = delete;
+
         TimerQueue const &operator=(TimerQueue const &) = delete;
+
         virtual ~TimerQueue();
 
-        template <typename ..._Args>
-        static TimerQueuePtr newInstance(_Args&& ...args){
+        template<typename ..._Args>
+        static TimerQueuePtr newInstance(_Args &&...args) {
             auto aNew = new TimerQueue(std::forward<_Args>(args)...);
             return TimerQueuePtr(aNew);
         }
@@ -41,7 +43,7 @@ namespace KQEvent{
 
         int const getTimerfd();
 
-        Subject::SubjectPtr const &getSubject(){
+        Subject::SubjectPtr const &getSubject() {
             return _subject;
         }
 
@@ -51,9 +53,10 @@ namespace KQEvent{
     private:
         using __fakeType = bool;
         __fakeType const __fakeValue = false;
-        class _cmpTimer{
+
+        class _cmpTimer {
         public:
-            bool operator()(Timer::TimerPtr x, Timer::TimerPtr y){
+            bool operator()(Timer::TimerPtr x, Timer::TimerPtr y) {
                 return x->getTimeoutPoint() < y->getTimeoutPoint();
             }
         };

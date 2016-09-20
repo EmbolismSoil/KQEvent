@@ -8,7 +8,7 @@
 
 namespace KQEvent {
 
-    void EventLoop::registerSubject(Subject::SubjectPtr const& subject) {
+    void EventLoop::registerSubject(Subject::SubjectPtr const &subject) {
         assertOwner();
         _poller->addToPoll(subject);
     }
@@ -28,15 +28,15 @@ namespace KQEvent {
             _tid(syscall(SYS_gettid)),
             _looping(false)
     {
-        _poller = Poller::newInstance([](Poller::PollerPtr p){});
+        _poller = Poller::newInstance([](Poller::PollerPtr p) {});
         _timerTaskQueue = TimerTaskQueue::newInstance();
         registerSubject(_timerTaskQueue->getTimerQueueSubect());
         registerSubject(_timerTaskQueue->getEventfdSubject());
     }
 
 
-    void EventLoop::assertOwner() throw(KQEventCommonException){
-        if ( _tid != syscall(SYS_gettid)){
+    void EventLoop::assertOwner() throw(KQEventCommonException) {
+        if (_tid != syscall(SYS_gettid)) {
             throw KQEventCommonException(
                     "Loop can just running in "
                             "the thread which is the owner of it"

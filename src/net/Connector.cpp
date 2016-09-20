@@ -4,7 +4,7 @@
 
 #include "Connector.h"
 
-namespace KQEvent{
+namespace KQEvent {
 
     void Connector::setSucessHandler(Connector::SuccessHandle_t handler) {
         _onConnectedHanle = handler;
@@ -17,41 +17,40 @@ namespace KQEvent{
     Observer::Command_t Connector::_handleWrite(Connector::SubjectPtr sub) {
         //查看是错误还是建立成功
         int err = _socket->getSocketError();
-        if (err == EINPROGRESS){
+        if (err == EINPROGRESS) {
             return Observer::ALIVE;
-        }else if (err == 0){
+        } else if (err == 0) {
             auto peer = _socket->getPeerAddr();
             //connection会对socket注册事件监听，这样connector对socket的事件监听会被覆盖掉
             auto conn = Connection::newInstance(_socket, peer);
             _onConnectedHanle(conn);
             _socket.reset();
             _isConnected = true;
-        }else{
+        } else {
             //Connector出错的时候不会主动进行重试，因为要不要重试
             //是用户决定的,如果用户不想继续重试了，可以在_onError里面
             //结束Connector的生命周期。
-            if(_onError(_socket, err) == RETRY) {
+            if (_onError(_socket, err) == RETRY) {
                 __retry();
             }
         }
 
-        return  Observer::ALIVE;
+        return Observer::ALIVE;
     }
 
     Connector::Connector(EventLoopPtr loop,
-                         std::string const& serverAddr,
-                         std::string const& localAddr,
-                         int maxRetry):
+                         std::string const &serverAddr,
+                         std::string const &localAddr,
+                         int maxRetry) :
             _loop(loop),
             _isConnected(false),
             _retryCount(0),
-            _maxRetry(maxRetry)
-    {
+            _maxRetry(maxRetry) {
         _socket = Socket::newInstance();
         _serverAddr = IPAddress::fromIPAddress(serverAddr);
-        if (localAddr.empty()){
+        if (localAddr.empty()) {
             _localAddr = IPAddress::addrAny();
-        }else{
+        } else {
             _localAddr = IPAddress::fromIPAddress(localAddr);
         }
         _socket->bind(_localAddr);
@@ -61,7 +60,7 @@ namespace KQEvent{
         _writeObserver->setHandle(tmp);
         _writeSubject->attachWriteObserver(_writeObserver);
         _socket->connect(_serverAddr);
-        auto defaultErrorHandler = [](Socket::SocketPtr, int){
+        auto defaultErrorHandler = [](Socket::SocketPtr, int) {
             //打印log
             return RETRY;
         };
@@ -70,7 +69,7 @@ namespace KQEvent{
     }
 
     void Connector::connect() {
-        if(!_socket){
+        if (!_socket) {
             _socket = Socket::newInstance();
         }
 
@@ -87,7 +86,7 @@ namespace KQEvent{
         _writeSubject->attachWriteObserver(_writeObserver);
         auto delayUint = Timer::Milliseconds(10000);
         auto taskQueue = _loop->getTimerTaskQueue();
-        auto retryHandle = [this](){
+        auto retryHandle = [this]() {
             _loop->registerSubject(_writeSubject);
             _socket->connect(_serverAddr);
         };

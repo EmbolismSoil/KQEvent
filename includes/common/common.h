@@ -8,10 +8,13 @@
 #include <string>
 #include <string.h>
 
-namespace KQEvent{
-    size_t  const __ERROR_STR_LEN = 128;
-    typedef enum{ERROR, OK}Status_t;
-    inline std::string errno2String(int err){
+namespace KQEvent {
+    size_t const __ERROR_STR_LEN = 128;
+    typedef enum {
+        ERROR, OK
+    } Status_t;
+
+    inline std::string errno2String(int err) {
         char buf[__ERROR_STR_LEN] = {0};
         strerror_r(err, buf, sizeof(buf));
         return std::string(buf);

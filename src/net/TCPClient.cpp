@@ -5,28 +5,27 @@
 #include "TCPClient.h"
 #include <iostream>
 
-namespace KQEvent{
+namespace KQEvent {
 
     TCPClient::TCPClient(std::string const &serverAddr,
-                         const std::string &localAddr):
-            _maxRetry(5)
-    {
+                         const std::string &localAddr) :
+            _maxRetry(5) {
         _connection.reset();
         _loop = EventLoop::newInstance();
         _connector = Connector::newInstance(_loop, serverAddr, localAddr);
 
-        auto defaultHandler = [](TCPClient::ConnectionPtr  conn){};
-        auto defaultReadHandler = [](char*, size_t){};
-        auto defaultCloseHandler = [](TCPClient::ConnectionPtr){};
+        auto defaultHandler = [](TCPClient::ConnectionPtr conn) {};
+        auto defaultReadHandler = [](char *, size_t) {};
+        auto defaultCloseHandler = [](TCPClient::ConnectionPtr) {};
 
-        auto defaultErrorHandler = [this](SocketPtr, int){
+        auto defaultErrorHandler = [this](SocketPtr, int) {
             static int retryCnt = 0;
             if (++retryCnt == _maxRetry)
                 exit(0);
             return Connector::RETRY;
         };
 
-        auto defaultExceptHandler = [](TCPClient::ConnectionPtr conn){
+        auto defaultExceptHandler = [](TCPClient::ConnectionPtr conn) {
             auto info = TCPInfo::fromTCPSocketFd(conn->getFd());
             exit(0);
         };
@@ -51,8 +50,8 @@ namespace KQEvent{
         //attach
         auto closeHandler = std::bind(&TCPClient::__onClose,
                                       this, std::placeholders::_1);
-        auto readHandler = std::bind(&TCPClient::__onRead, this,std::placeholders::_1,
-                                            std::placeholders::_2, std::placeholders::_3);
+        auto readHandler = std::bind(&TCPClient::__onRead, this, std::placeholders::_1,
+                                     std::placeholders::_2, std::placeholders::_3);
         auto exceptHandler = std::bind(&TCPClient::__onExcept,
                                        this, std::placeholders::_1);
 
@@ -71,7 +70,7 @@ namespace KQEvent{
     }
 
     bool TCPClient::sendMsg(char *msg, size_t len) {
-        if (!_connection){
+        if (!_connection) {
             return false;
         }
         _connection->sendMessage(msg, len);
