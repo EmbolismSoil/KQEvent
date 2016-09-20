@@ -21,17 +21,8 @@ void TestServer(void){
                 "HTTP/1.1 200 OK\n"
                         "Server: GitHub.com\n"
                         "Date: Mon, 19 Sep 2016 05:06:46 GMT\n"
-                        "Content-Type: text/html; charset=utf-8\n"
-                        "\n"
-                        "<html>\n"
-                        "<body>\n"
-                        "\n"
-                        "<h1>KQEvent</h1>"
-                        "<a href=\"http://github.com/EmbolismSoil/KQEvent\">\n"
-                        "View source</a>\n"
-                        "\n"
-                        "</body>\n"
-                        "</html>";
+                        "charset=utf-8\n"
+                        "\n";
         //conn->sendMessage(msg, sizeof(msg));
         conn->sendFile("doc/simpleServer.cpp");
         conn->softClose();
