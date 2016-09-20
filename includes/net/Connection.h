@@ -12,6 +12,7 @@
 #include "../base/Observer.h"
 #include "Socket.h"
 #include <list>
+#include "AbstractMessage.h"
 
 namespace KQEvent {
     class Connection : public std::enable_shared_from_this<Connection> {
@@ -22,6 +23,7 @@ namespace KQEvent {
         using ReadHandle_t = std::function<void(ConnectionPtr, char *, size_t)>;
         using CloseHandle_t = std::function<void(ConnectionPtr)>;
         using ExceptHandle_t = CloseHandle_t;
+        using MessagePtr = AbstractMessage::AbstractMessagePtr;
         /*当Acceptor新建一个连接的时候，设置为connecting状态。而后Acceptor会将该连接对象
          *交给TCPServer,当TCPServer设置好connection的状态之后(例如设置上下文，设置回调等等)
          *就可以开始将connection放入事件循环中使用，但在此之前需要将connection的状态设置为connected
@@ -43,8 +45,6 @@ namespace KQEvent {
 
         Connection const &operator=(Connection const &) = delete;
 
-        virtual ~Connection();//需要管理连接的生命周期
-
         template<typename ..._Args>
         static ConnectionPtr newInstance(_Args &&...args) {
             auto aNew = new Connection(std::forward<_Args>(args)...);
@@ -64,7 +64,9 @@ namespace KQEvent {
             _closeHandlerCallback = handler;
         }
 
-        size_t sendMessage(char const *buf, size_t len);
+        void sendMessage(char const *buf, size_t len);
+        void sendMessage(std::string&& msg);
+        void sendMessage(std::string const& msg);
 
         Subject::SubjectPtr const &getSubject() {
             return _subject;
@@ -81,12 +83,6 @@ namespace KQEvent {
         StateE getStatus();
 
         int getFd() { return _sockfd; }
-
-        size_t getBufferSize() { return _bufSize; }
-
-        void setBufferSize(size_t size) { _bufSize = size; }
-
-        char const *getBuffer() { return _buf; }
 
         void *getContext() { return _context; }
 
@@ -136,21 +132,9 @@ namespace KQEvent {
 
         bool _softClose;
 
-        char *_buf;      //fixme : Buffer class;
-
-        size_t _bufSize;
-
         void *_context; //fixme : Context class;
 
-        struct sendFileDesc {
-            int fd;
-            __off_t size;
-        };
-
-        std::list<sendFileDesc> _sendfileQueue;
-        bool _isSendfile;
-
-        void __doSendfile();
+        std::list<MessagePtr> _messages;
     };
 }
 

@@ -13,7 +13,7 @@ SET(SOURCE_LIST ${RUNNER} ../src/common/KQEventCommonException.cpp ../includes/c
         ../includes/common/common.h TestSuit.h ../includes/net/Connection.h
         ../includes/net/AbstractAcceptor.h TestTimerTaskQueue.h
         ../includes/base/TimerTaskQueue.h ../includes/net/AbstractAcceptor.h
-        ../includes/net/TCPServer.h TestWeb.h )
+        ../includes/net/TCPServer.h TestWeb.h ../src/net/AbstractMessage.cpp ../includes/net/AbstractMessage.h ../src/net/IOMessage.cpp ../includes/net/IOMessage.h)
 INCLUDE_DIRECTORIES(../includes/base ../includes/net ../includes/common /home/lee/github/cxxtest)
 # 测试用
 ADD_EXECUTABLE(KQEventTestSuit ${SOURCE_LIST})

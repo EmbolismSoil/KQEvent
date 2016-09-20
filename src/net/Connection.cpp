@@ -6,7 +6,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <sys/sendfile.h>
-
+#include "IOMessage.h"
+#include "SendfileMessage.h"
 
 namespace KQEvent {
 
@@ -16,9 +17,7 @@ namespace KQEvent {
             _subject(Subject::newInstance(socket->getFd())),
             _state(Connection::Disconnected),
             _softClose(false),
-            _bufSize(0),
             _context(contex) {
-        _buf = new char[32768];
         _writeObserver = Observer::newInstance();
         _readObserver = Observer::newInstance();
         _exceptObserver = Observer::newInstance();
@@ -64,58 +63,35 @@ namespace KQEvent {
     }
 
     Observer::Command_t Connection::_writeHandler(Subject::SubjectPtr subject) {
-        //优先发送消息，但是如果在sendfile尚未完成时，是不能发送消息的。
-        int n = 0;
-        auto cnt = 0;
-        auto buf = getBuffer();
-        auto size = getBufferSize();
-
-        if (_isSendfile) {
-            __doSendfile();
+        if (_messages.empty()){
+            subject->setWriteEvent(false);
             return Observer::ALIVE;
         }
 
-        while (size && (n = ::write(getFd(), &buf[cnt], size)) > 0) {
-            size -= n;
-            cnt += n;
+        auto msg = _messages.begin();
+        int status = (*msg)->send(getFd());
+
+        if (status != AbstractMessage::CONTINUE){
+            _messages.erase(msg);
         }
 
-        setBufferSize(size);
-
-        if (size <= 0) {
-            if (_sendfileQueue.empty()) {//已经发送完成，不对写事件感兴趣了。
-                _subject->setWriteEvent(false);
-                if (_softClose) { //是否需要关闭？
-                    setDisconnected();
-                    _socket.reset();//socket生命周期结束
-                    _closeHandlerCallback(getPtr());//这里已经不能再发送网络消息了
-                }
-            } else {
-                _isSendfile = true;
-                __doSendfile();
+        if (_messages.empty()){
+            subject->setWriteEvent(false);
+            if (_softClose){
+                setDisconnected();
+                _socket.reset();
+                _closeHandlerCallback(getPtr());
             }
         }
 
         return Observer::ALIVE;
     }
 
-    size_t Connection::sendMessage(char const *buf, size_t len) {
-        if (_bufSize > 32760)
-            return 0;
-        int size = 32760 - _bufSize;
-        size = size > len ? len : size;
-        int cnt = 0;
-        for (; cnt < size; ++cnt)
-            _buf[_bufSize + cnt] = buf[cnt];
-        _bufSize += cnt;
-        if (_bufSize > 0)
-            _subject->setWriteEvent(true);
-        return cnt;
-    }
-
-    Connection::~Connection() {
-        delete[] _buf;
-        //这里不用关闭fd,而是由socket作为一个RAII类关闭连接
+    void Connection::sendMessage(char const *buf, size_t len) {
+        auto msg = IOMessage::newInstance(buf, len);
+        _messages.push_back(msg);
+        _subject->setWriteEvent(true);
+        //如果不在事件循环中则需要唤醒
     }
 
     void Connection::setConnected() {
@@ -165,39 +141,23 @@ namespace KQEvent {
         if (fd < 0)
             return false;
 
-        struct stat statbuff;
-        if (::fstat(fd, &statbuff) < 0) {
-            return false;
-        }
-        sendFileDesc desc = {.fd = fd, .size = statbuff.st_size};
-        _sendfileQueue.push_back(desc);
+        auto sendfileMsg = SendfileMessage::newInstance(fd);
+        _messages.push_back(sendfileMsg);
         _subject->setWriteEvent(true);
+
         return true;
     }
 
-    void Connection::__doSendfile() {
-        _isSendfile = true;
-        auto pos = _sendfileQueue.begin();
-        int n = 0;
-        while ((n = ::sendfile(getFd(), pos->fd, NULL, pos->size)) > 0) {
-            pos->size -= n;
-        }
-
-        if (n == EAGAIN || n == 0) {
-            //正常结束
-            if (pos->size <= 0) {
-                _isSendfile = false;
-                _sendfileQueue.erase(pos);
-            }
-            return;
-        }
-
-        if (n < 0) {
-            //不正常结束
-            _exceptCallback(getPtr());
-            _isSendfile = false;
-            _sendfileQueue.erase(pos);
-            return;
-        }
+    void Connection::sendMessage(std::string &&msg) {
+        auto m = IOMessage::newInstance(msg);
+        _messages.push_back(m);
+        _subject->setWriteEvent(true);
     }
+
+    void Connection::sendMessage(std::string const &msg) {
+        auto m = IOMessage::newInstance(msg);
+        _messages.push_back(m);
+        _subject->setWriteEvent(true);
+    }
+
 }

@@ -15,30 +15,29 @@
 
 using namespace KQEvent;
 using ConnectionPtr = TCPServer::ConnectionPtr;
-class TestWeb : public CxxTest::TestSuite{
+
+class TestWeb : public CxxTest::TestSuite {
 public:
-    void TestServer(void){
-        auto server = TCPServer::newInstance("127.0.0.1:13000");
-        server->setConnectionNewHandler([](ConnectionPtr conn){
+    void TestServer(void) {
+        auto server = TCPServer::newInstance("127.0.0.1:12000");
+        server->setConnectionNewHandler([](ConnectionPtr conn) {
             std::cout << "new connection from "
                       << conn->getPeerAddr()->toString()
                       << " to " << conn->getHostAddr()->toString()
                       << std::endl;
         });
 
-        server->setConnectionReadHandler([](ConnectionPtr conn, char *buf, size_t len){
-            char msg[] =
-                    "HTTP/1.1 200 OK\n"
-                    "Server: GitHub.com\n"
-                    "Date: Mon, 19 Sep 2016 05:06:46 GMT\n"
-                    "Content-Type: text/html; charset=utf-8\n"
-                    "\n";
-            conn->sendMessage(msg, sizeof(msg));
+        server->setConnectionReadHandler([](ConnectionPtr conn, char *buf, size_t len) { ;
+            conn->sendMessage("HTTP/1.1 200 OK\n"
+                                      "Server: GitHub.com\n"
+                                      "Date: Mon, 19 Sep 2016 05:06:46 GMT\n"
+                                      "Content-Type: text/html; charset=utf-8\n"
+                                      "\n");
             conn->sendFile("/home/lee/test.cpp");
             conn->softClose();
         });
 
-        server->setConnectionCloseHandler([](ConnectionPtr conn){
+        server->setConnectionCloseHandler([](ConnectionPtr conn) {
             std::cout << " disconnect from "
                       << conn->getPeerAddr()->toString()
                       << " to " << conn->getHostAddr()->toString()
@@ -48,22 +47,22 @@ public:
         server->run();
     }
 
-    void TestClient(void){
+    void TestClient(void) {
         auto client = TCPClient::newInstance("127.0.0.1:12000");
-        client->onConnected([](TCPClient::ConnectionPtr conn){
+        client->onConnected([](TCPClient::ConnectionPtr conn) {
             std::cout << "connect from " << conn->getHostAddr()->toString()
                       << " to " << conn->getPeerAddr()->toString()
                       << "...OK" << std::endl;
         });
 
-        client->onRead([&client](char *buf, size_t n){
+        client->onRead([&client](char *buf, size_t n) {
             buf[n] = '\0';
             std::cout << buf << std::endl;
             char msg[] = "message from Client\n";
             client->sendMsg(msg, sizeof(msg));
         });
 
-        client->onClose([](TCPClient::ConnectionPtr conn){
+        client->onClose([](TCPClient::ConnectionPtr conn) {
             std::cout << "disconnect from " << conn->getHostAddr()->toString()
                       << " to " << conn->getPeerAddr()->toString()
                       << "...OK" << std::endl;
