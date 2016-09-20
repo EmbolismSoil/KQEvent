@@ -5,4 +5,4 @@ if [ ! -d ./build ];then
     mkdir build
 fi
 
-cd build && cmake .. && make && cp examples/simpleClient ../ && cp examples/simpleServer ../
+cd build && cmake .. && make && cp examples/simpleClient ../ && cp examples/simpleServer ../ && cp examples/simpleSendfile ../

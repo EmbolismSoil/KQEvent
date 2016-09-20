@@ -58,6 +58,35 @@ void TestServer(void){
 
 ![](doc/TCPServer_sample.png)
 
+#### TCPServre Sendfile示例
+你可以利用sendfile直接发送文件，以避免用户空间和内核空间之间的过多拷贝
+```cpp
+    auto server = TCPServer::newInstance("127.0.0.1:12000");
+    server->setConnectionNewHandler([](ConnectionPtr conn){
+        std::cout << "new connection from "
+                  << conn->getPeerAddr()->toString()
+                  << " to " << conn->getHostAddr()->toString()
+                  << std::endl;
+    });
+
+    server->setConnectionReadHandler([](ConnectionPtr conn, char *buf, size_t len){
+        conn->sendFile("doc/simpleServer.cpp");
+        conn->softClose();
+    });
+
+    server->setConnectionCloseHandler([](ConnectionPtr conn){
+        std::cout << " disconnect from "
+                  << conn->getPeerAddr()->toString()
+                  << " to " << conn->getHostAddr()->toString()
+                  << std::endl;
+    });
+
+    server->run();
+```
+用浏览器打开地址`127.0.0.1:12000`你可以看到：
+
+![](doc/TCPServer_Sendfile.png)
+
 #### TCPClient示例
 ```cpp
 void TestClient(void){
