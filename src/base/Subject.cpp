@@ -1,33 +1,31 @@
 #include "Subject.h"
 
 namespace KQEvent {
-    Subject::Subject(int fd)
-            : _fd(fd) {
-
+    Subject::Subject(int fd) : _fd(fd)
+    {
     }
 
-    void Subject::notifyReadObserver() {
+    void Subject::notifyReadObserver()
+    {
         if (_readObserver.empty()) {
             //没有人对读事件感兴趣了，所以就屏蔽读事件，poller会用到这个标志
             setReadEvent(false);
-            return;
         }
 
-        for (auto Opos = _readObserver.begin();
-             Opos != _readObserver.end();) {
-            auto tmp = Opos;
-            auto observer = Opos->lock();
+        for (auto iter = _readObserver.begin(); iter != _readObserver.end();) {
+            auto observer = iter->lock();
 
             if (!observer) {//观察者对象生命周期结束
-                Opos = _readObserver.erase(Opos);
+                iter = _readObserver.erase(iter);
                 continue;
             }
 
             auto handler = observer->getHandle();
-            if (handler(getPtr()) == Observer::DELETE)//debug
-                Opos = _readObserver.erase(tmp);
-            else
-                ++Opos;
+            if (handler(getPtr()) == Observer::DELETE) {//debug
+                iter = _readObserver.erase(iter);
+            } else {
+                ++iter;
+            }
         }
     }
 
