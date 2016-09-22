@@ -19,7 +19,7 @@ using ConnectionPtr = TCPServer::ConnectionPtr;
 class TestWeb : public CxxTest::TestSuite {
 public:
     void TestServer(void) {
-        auto server = TCPServer::newInstance("127.0.0.1:10000");
+        auto server = TCPServer::newInstance("127.0.0.1:15000");
         server->setConnectionNewHandler([](ConnectionPtr conn) {
             std::cout << "new connection from "
                       << conn->getPeerAddr()->toString()
@@ -28,13 +28,20 @@ public:
         });
 
         server->setConnectionReadHandler([](ConnectionPtr conn, char *buf, size_t len) { ;
-            conn->sendMessage("HTTP/1.1 200 OK\n"
-                                      "Server: GitHub.com\n"
-                                      "Date: Mon, 19 Sep 2016 05:06:46 GMT\n"
-                                      "Content-Type: text/html; charset=utf-8\n"
-                                      "\n");
-            conn->sendFile("/home/lee/test.cpp");
-            conn->softClose();
+            conn->sendMessage("HTTP/1.1 200 OK\r\n"
+                                      "Server: GitHub.com\r\n"
+                                      "Date: Mon, 19 Sep 2016 05:06:46 GMT\r\n"
+                                      "Content-Type: text/html; charset=utf-8\r\n"
+                                      "Transfer-Encoding: chunked\r\n"
+                                      "\r\n");
+
+            conn->sendMessage("C\r\n");
+            conn->sendMessage("Test Chunked\r\n");
+
+            conn->sendMessage("0\r\n");
+            conn->sendMessage("\r\n");
+            //conn->sendFile("/home/lee/test.cpp");
+            //conn->softClose();
         });
 
         server->setConnectionCloseHandler([](ConnectionPtr conn) {

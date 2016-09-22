@@ -74,7 +74,7 @@ public:
 
 static class TestDescription_suite_TestWeb_TestClient : public CxxTest::RealTestDescription {
 public:
- TestDescription_suite_TestWeb_TestClient() : CxxTest::RealTestDescription( Tests_TestWeb, suiteDescription_TestWeb, 50, "TestClient" ) {}
+ TestDescription_suite_TestWeb_TestClient() : CxxTest::RealTestDescription( Tests_TestWeb, suiteDescription_TestWeb, 58, "TestClient" ) {}
  void runTest() { suite_TestWeb.TestClient(); }
 } testDescription_suite_TestWeb_TestClient;
 
