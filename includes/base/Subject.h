@@ -56,6 +56,8 @@ namespace KQEvent {
         Subject const &operator=(Subject const &) = delete;
         explicit Subject(int fd);
 
+        inline void notifyObserver(ObserverList_t& observers);
+
     private:
         ObserverList_t _readObserver;
         ObserverList_t _writeObserver;

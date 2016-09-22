@@ -5,28 +5,39 @@ namespace KQEvent {
     {
     }
 
-    void Subject::notifyReadObserver()
+    inline void Subject::notifyObserver(ObserverList_t& observers)
     {
-        if (_readObserver.empty()) {
-            //没有人对读事件感兴趣了，所以就屏蔽读事件，poller会用到这个标志
-            setReadEvent(false);
-        }
+        // if (_readObserver.empty()) {
+            // //没有人对读事件感兴趣了，所以就屏蔽读事件，poller会用到这个标志
+            // setReadEvent(false);
+        // }
 
-        for (auto iter = _readObserver.begin(); iter != _readObserver.end();) {
+        for (auto iter = observers.begin(); iter != observers.end();) {
             auto observer = iter->lock();
 
             if (!observer) {//观察者对象生命周期结束
-                iter = _readObserver.erase(iter);
+                iter = observers.erase(iter);
                 continue;
             }
 
             auto handle = observer->getHandle();
             if (handle(getPtr()) == Observer::DELETE) {//debug
-                iter = _readObserver.erase(iter);
+                iter = observers.erase(iter);
             } else {
                 ++iter;
             }
         }
+    }
+
+    void Subject::notifyReadObserver()
+    {
+        if (_readObserver.empty()) {
+            //没有人对读事件感兴趣了，所以就屏蔽读事件，poller会用到这个标志
+            setReadEvent(false);
+        } else {
+            notifyObserver(_readObserver);
+        }
+
     }
 
     void Subject::notifyWriteObserver()
@@ -34,24 +45,10 @@ namespace KQEvent {
         if (_writeObserver.empty()) {
             //没人对写事件感兴趣了，所以就屏蔽这个事件,poller会用到这个标志
             setWriteEvent(false);
-            // return;
+        } else {
+            notifyObserver(_writeObserver);
         }
 
-        for (auto iter = _writeObserver.begin(); iter != _writeObserver.end();) {
-            auto observer = iter->lock();
-
-            if (!observer) {
-                iter = _writeObserver.erase(iter);
-                continue;
-            }
-
-            auto handle = observer->getHandle();
-            if (handle(getPtr()) == Observer::DELETE) {
-                iter = _writeObserver.erase(iter);
-            } else {
-                ++iter;
-            }
-        }
     }
 
     void Subject::notifyExceptObserver()
@@ -59,21 +56,10 @@ namespace KQEvent {
         if (_exceptObserver.empty()) {
             //没人对异常事件感兴趣了，所以就屏蔽这个事件,poller会用到这个标志
             setExceptEvent(false);
-            // return;
+        } else {
+            notifyObserver(_exceptObserver);
         }
-        for (auto iter = _exceptObserver.begin(); iter != _exceptObserver.end();) {
-            auto observer = iter->lock();
-            if (!observer) {
-                iter = _exceptObserver.erase(iter);
-                continue;
-            }
-            auto handle = observer->getHandle();
-            if (handle(getPtr()) == Observer::DELETE) {
-                iter = _exceptObserver.erase(iter);
-            } else {
-                ++iter;
-            }
-        }
+
     }
 
     void Subject::attachReadObserver(Observer::ObserverWeakPtr observer)
