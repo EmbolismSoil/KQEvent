@@ -20,8 +20,8 @@ namespace KQEvent {
                 continue;
             }
 
-            auto handler = observer->getHandle();
-            if (handler(getPtr()) == Observer::DELETE) {//debug
+            auto handle = observer->getHandle();
+            if (handle(getPtr()) == Observer::DELETE) {//debug
                 iter = _readObserver.erase(iter);
             } else {
                 ++iter;
@@ -29,77 +29,80 @@ namespace KQEvent {
         }
     }
 
-    void Subject::notifyWriteObserver() {
+    void Subject::notifyWriteObserver()
+    {
         if (_writeObserver.empty()) {
             //没人对写事件感兴趣了，所以就屏蔽这个事件,poller会用到这个标志
             setWriteEvent(false);
-            return;
+            // return;
         }
 
-        for (auto pos = _writeObserver.begin();
-             pos != _writeObserver.end();) {
-            auto tmp = pos;
-            auto observer = pos->lock();
+        for (auto iter = _writeObserver.begin(); iter != _writeObserver.end();) {
+            auto observer = iter->lock();
 
             if (!observer) {
-                pos = _writeObserver.erase(pos);
+                iter = _writeObserver.erase(iter);
                 continue;
             }
 
-            auto handler = observer->getHandle();
-            if (handler(getPtr()) == Observer::DELETE) {
-                pos = _writeObserver.erase(tmp);
+            auto handle = observer->getHandle();
+            if (handle(getPtr()) == Observer::DELETE) {
+                iter = _writeObserver.erase(iter);
             } else {
-                ++pos;
+                ++iter;
             }
         }
     }
 
-    void Subject::notifyExceptObserver() {
+    void Subject::notifyExceptObserver()
+    {
         if (_exceptObserver.empty()) {
             //没人对异常事件感兴趣了，所以就屏蔽这个事件,poller会用到这个标志
             setExceptEvent(false);
-            return;
+            // return;
         }
-        for (auto pos = _exceptObserver.begin();
-             pos != _exceptObserver.end();) {
-            auto tmp = pos;
-            auto observer = pos->lock();
+        for (auto iter = _exceptObserver.begin(); iter != _exceptObserver.end();) {
+            auto observer = iter->lock();
             if (!observer) {
-                pos = _exceptObserver.erase(pos);
+                iter = _exceptObserver.erase(iter);
                 continue;
             }
-            auto handler = observer->getHandle();
-            if (handler(getPtr()) == Observer::DELETE) {
-                pos = _exceptObserver.erase(tmp);
+            auto handle = observer->getHandle();
+            if (handle(getPtr()) == Observer::DELETE) {
+                iter = _exceptObserver.erase(iter);
             } else {
-                ++pos;
+                ++iter;
             }
         }
     }
 
-    void Subject::attachReadObserver(Observer::ObserverWeakPtr observer) {
+    void Subject::attachReadObserver(Observer::ObserverWeakPtr observer)
+    {
         auto obj = observer.lock();
-        if (!obj)
+        if (!obj) {
             return;
+        }
 
         auto handle = obj->getOnAttachHandle();
         handle(getPtr());
-        if (!getEventMask().READ)
+        if (!getEventMask().READ) {
             setReadEvent(true);
-        _readObserver.push_back(obj);
+        }
+        _readObserver.push_back(obj); // ? observer
     }
 
-    void Subject::attachWriteObserver(Observer::ObserverWeakPtr observer) {
+    void Subject::attachWriteObserver(Observer::ObserverWeakPtr observer)
+    {
         auto obj = observer.lock();
-
-        if (!obj)
+        if (!obj) {
             return;
+        }
 
         auto handle = obj->getOnAttachHandle();
         handle(getPtr());
-        if (!getEventMask().WRITE)
+        if (!getEventMask().WRITE) {
             setWriteEvent(true);
+        }
         _writeObserver.push_back(obj);
     }
 

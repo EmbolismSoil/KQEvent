@@ -25,10 +25,7 @@ namespace KQEvent {
             return SubjectPtr(aNew);
         }
 
-        SubjectPtr getPtr(void)
-        {
-            return shared_from_this();
-        }
+        SubjectPtr getPtr(void) { return shared_from_this(); }
 
         virtual void notifyReadObserver();
         virtual void notifyWriteObserver();
