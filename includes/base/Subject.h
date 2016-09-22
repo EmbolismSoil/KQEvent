@@ -25,10 +25,7 @@ namespace KQEvent {
             return SubjectPtr(aNew);
         }
 
-        SubjectPtr getPtr(void)
-        {
-            return shared_from_this();
-        }
+        SubjectPtr getPtr(void) { return shared_from_this(); }
 
         virtual void notifyReadObserver();
         virtual void notifyWriteObserver();
@@ -58,6 +55,8 @@ namespace KQEvent {
         Subject(Subject const &) = delete;
         Subject const &operator=(Subject const &) = delete;
         explicit Subject(int fd);
+
+        inline void notifyObserver(ObserverList_t& observers);
 
     private:
         ObserverList_t _readObserver;

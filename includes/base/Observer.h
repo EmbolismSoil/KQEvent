@@ -38,10 +38,6 @@ namespace KQEvent {
             return Observer::ObserverPtr(aNew);
         }
 
-        void setHandle(Handle_t const &handle) { _handle = handle; }
-
-        Handle_t const &getHandle() { return _handle; }
-
         virtual Command_t update(std::shared_ptr<Subject> &&subject)
         {
             return _handle(std::move(subject));
@@ -55,9 +51,12 @@ namespace KQEvent {
         //for log
         //virtual void onAttach(void) {}
         //virtual void onDetach(void) {}
+        // TODO: 疑问 setHandle 区别于 AttachHandle & DetachHandle?
+        void setHandle(Handle_t const &handle) { _handle = handle; }
         void setOnAttachHandle(Handle_t handle) { _onAttach = handle; }
         void setOnDetachHandle(Handle_t handle) { _onDetach = handle; }
 
+        Handle_t const &getHandle() { return _handle; }
         Handle_t const &getOnAttachHandle(void) { return _onAttach; }
         Handle_t const &getOnDetachHandle(void) { return _onDetach; }
 
