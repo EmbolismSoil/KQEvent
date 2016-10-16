@@ -24,12 +24,7 @@ namespace KQEvent {
             return EventLoopPtr(aNew);
         }
 
-        EventLoop(EventLoop const &) = delete;
-
-        EventLoop const &operator=(EventLoop const &) = delete;
-
         void registerSubject(Subject::SubjectPtr const &);
-
         void unregisterSubject(int fd);
 
         virtual void loop();
@@ -37,10 +32,11 @@ namespace KQEvent {
         void exit() { _poller->exit(); }
 
         EventLoopPtr getPtr() { return shared_from_this(); }
-
         TimerTaskQueuePtr getTimerTaskQueue() { return _timerTaskQueue; }
 
     private:
+        EventLoop(EventLoop const &) = delete;
+        EventLoop const &operator=(EventLoop const &) = delete;
         explicit EventLoop();
 
         void assertOwner() throw(KQEventCommonException);

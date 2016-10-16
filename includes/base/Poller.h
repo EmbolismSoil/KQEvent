@@ -24,23 +24,18 @@ namespace KQEvent {
             return PollerPtr(aNew);
         }
 
-        Poller(Poller const &) = delete;
-
-        Poller const &operator=(Poller const &) = delete;
-
         virtual void addToPoll(Subject::SubjectPtr const &subject);
-
         virtual void removeFromPoll(int fd);
 
         virtual void poll();
-
         PollerPtr getPtr();
 
         void exit();
-
         void setTimeout(int timeout);
 
     private:
+        Poller(Poller const &) = delete;
+        Poller const &operator=(Poller const &) = delete;
         explicit Poller(Handle_t hanle, int timeout = 60000);
 
         void checkNewSubject();

@@ -1,3 +1,5 @@
 .idea/*
 *.py
 *.pyc
+**/*.un~
+build/

@@ -1,107 +1,94 @@
 #include "Subject.h"
 
 namespace KQEvent {
-    Subject::Subject(int fd)
-            : _fd(fd) {
-
+    Subject::Subject(int fd) : _fd(fd)
+    {
     }
 
-    void Subject::notifyReadObserver() {
+    inline void Subject::notifyObserver(ObserverList_t& observers)
+    {
+        // if (_readObserver.empty()) {
+            // //没有人对读事件感兴趣了，所以就屏蔽读事件，poller会用到这个标志
+            // setReadEvent(false);
+        // }
+
+        for (auto iter = observers.begin(); iter != observers.end();) {
+            auto observer = iter->lock();
+
+            if (!observer) {//观察者对象生命周期结束
+                iter = observers.erase(iter);
+                continue;
+            }
+
+            auto handle = observer->getHandle();
+            if (handle(getPtr()) == Observer::DELETE) {//debug
+                iter = observers.erase(iter);
+            } else {
+                ++iter;
+            }
+        }
+    }
+
+    void Subject::notifyReadObserver()
+    {
         if (_readObserver.empty()) {
             //没有人对读事件感兴趣了，所以就屏蔽读事件，poller会用到这个标志
             setReadEvent(false);
-            return;
+        } else {
+            notifyObserver(_readObserver);
         }
 
-        for (auto Opos = _readObserver.begin();
-             Opos != _readObserver.end();) {
-            auto tmp = Opos;
-            auto observer = Opos->lock();
-
-            if (!observer) {//观察者对象生命周期结束
-                Opos = _readObserver.erase(Opos);
-                continue;
-            }
-
-            auto handler = observer->getHandle();
-            if (handler(getPtr()) == Observer::DELETE)//debug
-                Opos = _readObserver.erase(tmp);
-            else
-                ++Opos;
-        }
     }
 
-    void Subject::notifyWriteObserver() {
+    void Subject::notifyWriteObserver()
+    {
         if (_writeObserver.empty()) {
             //没人对写事件感兴趣了，所以就屏蔽这个事件,poller会用到这个标志
             setWriteEvent(false);
-            return;
+        } else {
+            notifyObserver(_writeObserver);
         }
 
-        for (auto pos = _writeObserver.begin();
-             pos != _writeObserver.end();) {
-            auto tmp = pos;
-            auto observer = pos->lock();
-
-            if (!observer) {
-                pos = _writeObserver.erase(pos);
-                continue;
-            }
-
-            auto handler = observer->getHandle();
-            if (handler(getPtr()) == Observer::DELETE) {
-                pos = _writeObserver.erase(tmp);
-            } else {
-                ++pos;
-            }
-        }
     }
 
-    void Subject::notifyExceptObserver() {
+    void Subject::notifyExceptObserver()
+    {
         if (_exceptObserver.empty()) {
             //没人对异常事件感兴趣了，所以就屏蔽这个事件,poller会用到这个标志
             setExceptEvent(false);
-            return;
+        } else {
+            notifyObserver(_exceptObserver);
         }
-        for (auto pos = _exceptObserver.begin();
-             pos != _exceptObserver.end();) {
-            auto tmp = pos;
-            auto observer = pos->lock();
-            if (!observer) {
-                pos = _exceptObserver.erase(pos);
-                continue;
-            }
-            auto handler = observer->getHandle();
-            if (handler(getPtr()) == Observer::DELETE) {
-                pos = _exceptObserver.erase(tmp);
-            } else {
-                ++pos;
-            }
-        }
+
     }
 
-    void Subject::attachReadObserver(Observer::ObserverWeakPtr observer) {
+    void Subject::attachReadObserver(Observer::ObserverWeakPtr observer)
+    {
         auto obj = observer.lock();
-        if (!obj)
+        if (!obj) {
             return;
+        }
 
         auto handle = obj->getOnAttachHandle();
         handle(getPtr());
-        if (!getEventMask().READ)
+        if (!getEventMask().READ) {
             setReadEvent(true);
-        _readObserver.push_back(obj);
+        }
+        _readObserver.push_back(obj); // ? observer
     }
 
-    void Subject::attachWriteObserver(Observer::ObserverWeakPtr observer) {
+    void Subject::attachWriteObserver(Observer::ObserverWeakPtr observer)
+    {
         auto obj = observer.lock();
-
-        if (!obj)
+        if (!obj) {
             return;
+        }
 
         auto handle = obj->getOnAttachHandle();
         handle(getPtr());
-        if (!getEventMask().WRITE)
+        if (!getEventMask().WRITE) {
             setWriteEvent(true);
+        }
         _writeObserver.push_back(obj);
     }
 

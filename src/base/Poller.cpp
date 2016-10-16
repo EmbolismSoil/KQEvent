@@ -7,7 +7,8 @@
 
 namespace KQEvent {
 
-    void Poller::addToPoll(Subject::SubjectPtr const &subject) {
+    void Poller::addToPoll(Subject::SubjectPtr const &subject)
+    {
         ::pollfd fd;
         fd.fd = 0;
         fd.events = 0;
@@ -36,28 +37,29 @@ namespace KQEvent {
             }
         }
 
-        if (_inHandle)
+        if (_inHandle) {
             _pollfdsHelper.push_back(fd);
-        else
+        } else {
             _pollfds.push_back(fd);
+        }
 
         _subjects[subject->getFd()] = subject;
 
     }
 
-    void Poller::removeFromPoll(int fd) {
-
-        for (auto pos = _pollfds.begin();
-             pos != _pollfds.end(); ++pos) {
-            if (pos->fd == fd) {
-                _pollfds.erase(pos);
+    void Poller::removeFromPoll(int fd)
+    {
+        for (auto iter = _pollfds.begin(); iter != _pollfds.end(); ++iter) {
+            if (iter->fd == fd) {
+                _pollfds.erase(iter);
                 _subjects.erase(fd);
                 break;
             }
         }
     }
 
-    void Poller::poll() {
+    void Poller::poll()
+    {
         _exit = false;
         while (!_exit) {
             checkNewSubject();
@@ -71,8 +73,9 @@ namespace KQEvent {
             auto cnt = _retValue;
             _inHandle = true;
             for (auto pos = _pollfds.begin(); pos != _pollfds.end();) {
-                if (cnt == 0)
+                if (cnt == 0) {
                     break;
+                }
 
                 Subject::SubjectPtr subject = _subjects[pos->fd].lock();
                 if (!subject) {
@@ -83,7 +86,6 @@ namespace KQEvent {
 
                 auto *peek = subject.get();
                 if ((pos->revents & (POLLIN | POLLRDBAND | POLLRDNORM | POLLPRI | POLLHUP))) {
-
                     subject->notifyReadObserver();
                     --cnt;
                 }
@@ -130,11 +132,9 @@ namespace KQEvent {
         _timeout = timeout;
     }
 
-
     Poller::PollerPtr Poller::getPtr() {
         return shared_from_this();
     }
-
 
     Poller::Poller(Poller::Handle_t handle, int timeout) :
             _exit(true),
@@ -142,13 +142,15 @@ namespace KQEvent {
             _timeout(timeout),
             _pollfds(),
             _retValue(0),
-            _handle(handle) {
-
+            _handle(handle)
+    {
     }
 
-    void Poller::checkNewSubject() {
-        if (_pollfdsHelper.empty())
+    void Poller::checkNewSubject()
+    {
+        if (_pollfdsHelper.empty()) {
             return;
+        }
 
         for (auto &item : _pollfdsHelper) {
             _pollfds.push_back(item);
