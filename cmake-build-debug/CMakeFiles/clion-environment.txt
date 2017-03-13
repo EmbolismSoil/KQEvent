@@ -1,0 +1,1 @@
+CMake: 3.6.2@/home/lee/下载/clion-2016.2.3/bin/cmake/bin/cmake

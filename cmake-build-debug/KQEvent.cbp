@@ -1,0 +1,512 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="KQEvent"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\UnitTest\;CMake Files\src\;CMake Files\src\net\;CMake Files\src\base\;CMake Files\examples\;CMake Files\includes\;CMake Files\includes\net\;CMake Files\includes\base\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/lee/github/KQEvent/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/lee/github/KQEvent/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/lee/github/KQEvent/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="KQEventTestSuit">
+				<Option output="/home/lee/github/KQEvent/cmake-build-debug/UnitTest/KQEventTestSuit" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/lee/github/KQEvent/cmake-build-debug/UnitTest"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/lee/github/KQEvent/UnitTest/../includes/base"/>
+					<Add directory="/home/lee/github/KQEvent/UnitTest/../includes/net"/>
+					<Add directory="/home/lee/github/KQEvent/UnitTest/../includes/common"/>
+					<Add directory="/home/lee/github/cxxtest"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/include/c++/4.8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/4.8"/>
+					<Add directory="/usr/include/c++/4.8/backward"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/UnitTest/Makefile&quot;  VERBOSE=1 KQEventTestSuit"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/UnitTest/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/UnitTest/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/UnitTest/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="KQEventTestSuit/fast">
+				<Option output="/home/lee/github/KQEvent/cmake-build-debug/UnitTest/KQEventTestSuit" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/lee/github/KQEvent/cmake-build-debug/UnitTest"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/lee/github/KQEvent/UnitTest/../includes/base"/>
+					<Add directory="/home/lee/github/KQEvent/UnitTest/../includes/net"/>
+					<Add directory="/home/lee/github/KQEvent/UnitTest/../includes/common"/>
+					<Add directory="/home/lee/github/cxxtest"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/include/c++/4.8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/4.8"/>
+					<Add directory="/usr/include/c++/4.8/backward"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/UnitTest/Makefile&quot;  VERBOSE=1 KQEventTestSuit/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/UnitTest/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/UnitTest/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/UnitTest/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="net">
+				<Option output="/home/lee/github/KQEvent/cmake-build-debug/src/net/libnet.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/lee/github/KQEvent/cmake-build-debug/src/net"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/lee/github/KQEvent/src/net/../../includes/net"/>
+					<Add directory="/home/lee/github/KQEvent/src/net/../../includes/common"/>
+					<Add directory="/home/lee/github/KQEvent/src/net/../../includes/base"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/include/c++/4.8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/4.8"/>
+					<Add directory="/usr/include/c++/4.8/backward"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/src/net/Makefile&quot;  VERBOSE=1 net"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/src/net/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/src/net/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/src/net/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="net/fast">
+				<Option output="/home/lee/github/KQEvent/cmake-build-debug/src/net/libnet.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/lee/github/KQEvent/cmake-build-debug/src/net"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/lee/github/KQEvent/src/net/../../includes/net"/>
+					<Add directory="/home/lee/github/KQEvent/src/net/../../includes/common"/>
+					<Add directory="/home/lee/github/KQEvent/src/net/../../includes/base"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/include/c++/4.8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/4.8"/>
+					<Add directory="/usr/include/c++/4.8/backward"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/src/net/Makefile&quot;  VERBOSE=1 net/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/src/net/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/src/net/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/src/net/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="base">
+				<Option output="/home/lee/github/KQEvent/cmake-build-debug/src/base/libbase.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/lee/github/KQEvent/cmake-build-debug/src/base"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/lee/github/KQEvent/src/base/../../includes/base"/>
+					<Add directory="/home/lee/github/KQEvent/src/base/."/>
+					<Add directory="/home/lee/github/KQEvent/src/base/../../includes/common"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/include/c++/4.8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/4.8"/>
+					<Add directory="/usr/include/c++/4.8/backward"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/src/base/Makefile&quot;  VERBOSE=1 base"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/src/base/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/src/base/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/src/base/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="base/fast">
+				<Option output="/home/lee/github/KQEvent/cmake-build-debug/src/base/libbase.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/lee/github/KQEvent/cmake-build-debug/src/base"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/lee/github/KQEvent/src/base/../../includes/base"/>
+					<Add directory="/home/lee/github/KQEvent/src/base/."/>
+					<Add directory="/home/lee/github/KQEvent/src/base/../../includes/common"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/include/c++/4.8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/4.8"/>
+					<Add directory="/usr/include/c++/4.8/backward"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/src/base/Makefile&quot;  VERBOSE=1 base/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/src/base/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/src/base/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/src/base/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="simpleSendfile">
+				<Option output="/home/lee/github/KQEvent/cmake-build-debug/examples/simpleSendfile" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/lee/github/KQEvent/cmake-build-debug/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/lee/github/KQEvent/examples/../includes/base"/>
+					<Add directory="/home/lee/github/KQEvent/examples/../includes/net"/>
+					<Add directory="/home/lee/github/KQEvent/examples/../includes/common"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/include/c++/4.8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/4.8"/>
+					<Add directory="/usr/include/c++/4.8/backward"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 simpleSendfile"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="simpleSendfile/fast">
+				<Option output="/home/lee/github/KQEvent/cmake-build-debug/examples/simpleSendfile" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/lee/github/KQEvent/cmake-build-debug/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/lee/github/KQEvent/examples/../includes/base"/>
+					<Add directory="/home/lee/github/KQEvent/examples/../includes/net"/>
+					<Add directory="/home/lee/github/KQEvent/examples/../includes/common"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/include/c++/4.8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/4.8"/>
+					<Add directory="/usr/include/c++/4.8/backward"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 simpleSendfile/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="simpleClient">
+				<Option output="/home/lee/github/KQEvent/cmake-build-debug/examples/simpleClient" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/lee/github/KQEvent/cmake-build-debug/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/lee/github/KQEvent/examples/../includes/base"/>
+					<Add directory="/home/lee/github/KQEvent/examples/../includes/net"/>
+					<Add directory="/home/lee/github/KQEvent/examples/../includes/common"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/include/c++/4.8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/4.8"/>
+					<Add directory="/usr/include/c++/4.8/backward"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 simpleClient"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="simpleClient/fast">
+				<Option output="/home/lee/github/KQEvent/cmake-build-debug/examples/simpleClient" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/lee/github/KQEvent/cmake-build-debug/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/lee/github/KQEvent/examples/../includes/base"/>
+					<Add directory="/home/lee/github/KQEvent/examples/../includes/net"/>
+					<Add directory="/home/lee/github/KQEvent/examples/../includes/common"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/include/c++/4.8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/4.8"/>
+					<Add directory="/usr/include/c++/4.8/backward"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 simpleClient/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="simpleServer">
+				<Option output="/home/lee/github/KQEvent/cmake-build-debug/examples/simpleServer" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/lee/github/KQEvent/cmake-build-debug/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/lee/github/KQEvent/examples/../includes/base"/>
+					<Add directory="/home/lee/github/KQEvent/examples/../includes/net"/>
+					<Add directory="/home/lee/github/KQEvent/examples/../includes/common"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/include/c++/4.8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/4.8"/>
+					<Add directory="/usr/include/c++/4.8/backward"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 simpleServer"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="simpleServer/fast">
+				<Option output="/home/lee/github/KQEvent/cmake-build-debug/examples/simpleServer" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/lee/github/KQEvent/cmake-build-debug/examples"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/home/lee/github/KQEvent/examples/../includes/base"/>
+					<Add directory="/home/lee/github/KQEvent/examples/../includes/net"/>
+					<Add directory="/home/lee/github/KQEvent/examples/../includes/common"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/usr/include/c++/4.8"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/4.8"/>
+					<Add directory="/usr/include/c++/4.8/backward"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 simpleServer/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/lee/github/KQEvent/cmake-build-debug/examples/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/lee/github/KQEvent/UnitTest/TestSuit.h">
+			<Option target="KQEventTestSuit"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/UnitTest/TestTimerTaskQueue.h">
+			<Option target="KQEventTestSuit"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/UnitTest/TestWeb.h">
+			<Option target="KQEventTestSuit"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/examples/simpleClient.cpp">
+			<Option target="simpleClient"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/examples/simpleSendfile.cpp">
+			<Option target="simpleSendfile"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/examples/simpleServer.cpp">
+			<Option target="simpleServer"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/includes/base/EventLoop.h">
+			<Option target="base"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/includes/base/Poller.h">
+			<Option target="base"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/includes/base/ThreadPool.h">
+			<Option target="base"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/includes/base/Timer.h">
+			<Option target="base"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/includes/base/TimerQueue.h">
+			<Option target="base"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/includes/base/TimerTaskQueue.h">
+			<Option target="KQEventTestSuit"/>
+			<Option target="base"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/includes/common/KQEventCommonException.h">
+			<Option target="KQEventTestSuit"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/includes/common/common.h">
+			<Option target="KQEventTestSuit"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/includes/net/AbstractAcceptor.h">
+			<Option target="KQEventTestSuit"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/includes/net/AbstractMessage.h">
+			<Option target="KQEventTestSuit"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/includes/net/Connection.h">
+			<Option target="KQEventTestSuit"/>
+			<Option target="net"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/includes/net/Connector.h">
+			<Option target="net"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/includes/net/IOMessage.h">
+			<Option target="KQEventTestSuit"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/includes/net/SendfileMessage.h">
+			<Option target="net"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/includes/net/TCPClient.h">
+			<Option target="net"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/includes/net/TCPServer.h">
+			<Option target="KQEventTestSuit"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/src/base/EventLoop.cpp">
+			<Option target="base"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/src/base/Observer.cpp">
+			<Option target="base"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/src/base/Poller.cpp">
+			<Option target="base"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/src/base/Subject.cpp">
+			<Option target="base"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/src/base/ThreadPool.cpp">
+			<Option target="base"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/src/base/Timer.cpp">
+			<Option target="base"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/src/base/TimerQueue.cpp">
+			<Option target="base"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/src/base/TimerTaskQueue.cpp">
+			<Option target="base"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/src/common/KQEventCommonException.cpp">
+			<Option target="KQEventTestSuit"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/src/net/AbstractAcceptor.cpp">
+			<Option target="net"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/src/net/AbstractMessage.cpp">
+			<Option target="KQEventTestSuit"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/src/net/Connection.cpp">
+			<Option target="net"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/src/net/Connector.cpp">
+			<Option target="net"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/src/net/IOMessage.cpp">
+			<Option target="KQEventTestSuit"/>
+			<Option target="net"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/src/net/IPAddress.cpp">
+			<Option target="net"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/src/net/SendfileMessage.cpp">
+			<Option target="net"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/src/net/Socket.cpp">
+			<Option target="net"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/src/net/TCPClient.cpp">
+			<Option target="net"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/src/net/TCPInfo.cpp">
+			<Option target="net"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/src/net/TCPServer.cpp">
+			<Option target="net"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/UnitTest/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\UnitTest\"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/src/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/src/net/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\net\"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/src/base/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\base\"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/examples/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\examples\"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/includes/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\includes\"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/includes/net/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\includes\net\"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/includes/base/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\includes\base\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

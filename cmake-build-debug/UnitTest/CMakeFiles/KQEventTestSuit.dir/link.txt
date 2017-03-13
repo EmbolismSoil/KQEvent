@@ -1,0 +1,1 @@
+clang++    -g -std=c++11 -g   CMakeFiles/KQEventTestSuit.dir/runner.cpp.o CMakeFiles/KQEventTestSuit.dir/__/src/common/KQEventCommonException.cpp.o CMakeFiles/KQEventTestSuit.dir/__/src/net/AbstractMessage.cpp.o CMakeFiles/KQEventTestSuit.dir/__/src/net/IOMessage.cpp.o  -o KQEventTestSuit -rdynamic ../src/net/libnet.a ../src/base/libbase.a 

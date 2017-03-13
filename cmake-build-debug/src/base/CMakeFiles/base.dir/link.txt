@@ -1,0 +1,2 @@
+/usr/bin/ar qc libbase.a  CMakeFiles/base.dir/Observer.cpp.o CMakeFiles/base.dir/Subject.cpp.o CMakeFiles/base.dir/ThreadPool.cpp.o CMakeFiles/base.dir/EventLoop.cpp.o CMakeFiles/base.dir/Poller.cpp.o CMakeFiles/base.dir/Timer.cpp.o CMakeFiles/base.dir/TimerQueue.cpp.o CMakeFiles/base.dir/TimerTaskQueue.cpp.o
+/usr/bin/ranlib libbase.a

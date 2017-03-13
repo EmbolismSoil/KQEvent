@@ -1,0 +1,1 @@
+clang++    -g -std=c++11 -g   CMakeFiles/simpleServer.dir/simpleServer.cpp.o  -o simpleServer -rdynamic ../src/net/libnet.a ../src/base/libbase.a 
