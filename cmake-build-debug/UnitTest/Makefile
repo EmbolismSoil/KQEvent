@@ -125,6 +125,33 @@ KQEventTestSuit/fast:
 	cd /home/lee/github/KQEvent/cmake-build-debug && $(MAKE) -f UnitTest/CMakeFiles/KQEventTestSuit.dir/build.make UnitTest/CMakeFiles/KQEventTestSuit.dir/build
 .PHONY : KQEventTestSuit/fast
 
+__/includes/net/BussinessWorker.o: __/includes/net/BussinessWorker.cpp.o
+
+.PHONY : __/includes/net/BussinessWorker.o
+
+# target to build an object file
+__/includes/net/BussinessWorker.cpp.o:
+	cd /home/lee/github/KQEvent/cmake-build-debug && $(MAKE) -f UnitTest/CMakeFiles/KQEventTestSuit.dir/build.make UnitTest/CMakeFiles/KQEventTestSuit.dir/__/includes/net/BussinessWorker.cpp.o
+.PHONY : __/includes/net/BussinessWorker.cpp.o
+
+__/includes/net/BussinessWorker.i: __/includes/net/BussinessWorker.cpp.i
+
+.PHONY : __/includes/net/BussinessWorker.i
+
+# target to preprocess a source file
+__/includes/net/BussinessWorker.cpp.i:
+	cd /home/lee/github/KQEvent/cmake-build-debug && $(MAKE) -f UnitTest/CMakeFiles/KQEventTestSuit.dir/build.make UnitTest/CMakeFiles/KQEventTestSuit.dir/__/includes/net/BussinessWorker.cpp.i
+.PHONY : __/includes/net/BussinessWorker.cpp.i
+
+__/includes/net/BussinessWorker.s: __/includes/net/BussinessWorker.cpp.s
+
+.PHONY : __/includes/net/BussinessWorker.s
+
+# target to generate assembly for a file
+__/includes/net/BussinessWorker.cpp.s:
+	cd /home/lee/github/KQEvent/cmake-build-debug && $(MAKE) -f UnitTest/CMakeFiles/KQEventTestSuit.dir/build.make UnitTest/CMakeFiles/KQEventTestSuit.dir/__/includes/net/BussinessWorker.cpp.s
+.PHONY : __/includes/net/BussinessWorker.cpp.s
+
 __/src/common/KQEventCommonException.o: __/src/common/KQEventCommonException.cpp.o
 
 .PHONY : __/src/common/KQEventCommonException.o
@@ -242,6 +269,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... KQEventTestSuit"
+	@echo "... __/includes/net/BussinessWorker.o"
+	@echo "... __/includes/net/BussinessWorker.i"
+	@echo "... __/includes/net/BussinessWorker.s"
 	@echo "... __/src/common/KQEventCommonException.o"
 	@echo "... __/src/common/KQEventCommonException.i"
 	@echo "... __/src/common/KQEventCommonException.s"

@@ -401,6 +401,12 @@
 		<Unit filename="/home/lee/github/KQEvent/includes/net/AbstractMessage.h">
 			<Option target="KQEventTestSuit"/>
 		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/includes/net/BussinessWorker.cpp">
+			<Option target="KQEventTestSuit"/>
+		</Unit>
+		<Unit filename="/home/lee/github/KQEvent/includes/net/BussinessWorker.h">
+			<Option target="KQEventTestSuit"/>
+		</Unit>
 		<Unit filename="/home/lee/github/KQEvent/includes/net/Connection.h">
 			<Option target="KQEventTestSuit"/>
 			<Option target="net"/>

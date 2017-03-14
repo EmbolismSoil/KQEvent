@@ -4,6 +4,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/KQEventTestSuit.dir/__/src/common/KQEventCommonException.cpp.o"
   "CMakeFiles/KQEventTestSuit.dir/__/src/net/AbstractMessage.cpp.o"
   "CMakeFiles/KQEventTestSuit.dir/__/src/net/IOMessage.cpp.o"
+  "CMakeFiles/KQEventTestSuit.dir/__/includes/net/BussinessWorker.cpp.o"
   "KQEventTestSuit.pdb"
   "KQEventTestSuit"
 )

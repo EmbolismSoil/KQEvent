@@ -4,6 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
+  "/home/lee/github/KQEvent/includes/net/BussinessWorker.cpp" "/home/lee/github/KQEvent/cmake-build-debug/UnitTest/CMakeFiles/KQEventTestSuit.dir/__/includes/net/BussinessWorker.cpp.o"
   "/home/lee/github/KQEvent/src/common/KQEventCommonException.cpp" "/home/lee/github/KQEvent/cmake-build-debug/UnitTest/CMakeFiles/KQEventTestSuit.dir/__/src/common/KQEventCommonException.cpp.o"
   "/home/lee/github/KQEvent/src/net/AbstractMessage.cpp" "/home/lee/github/KQEvent/cmake-build-debug/UnitTest/CMakeFiles/KQEventTestSuit.dir/__/src/net/AbstractMessage.cpp.o"
   "/home/lee/github/KQEvent/src/net/IOMessage.cpp" "/home/lee/github/KQEvent/cmake-build-debug/UnitTest/CMakeFiles/KQEventTestSuit.dir/__/src/net/IOMessage.cpp.o"

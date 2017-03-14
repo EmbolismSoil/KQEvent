@@ -12,6 +12,7 @@
 #include <list>
 #include "IPAddress.h"
 #include <string>
+#include "BussinessWorker.h"
 
 namespace KQEvent {
     class TCPServer {
@@ -25,6 +26,7 @@ namespace KQEvent {
         using IPAddressPtr = IPAddress::IPAddressPtr;
         using Handle_t = AbstractAcceptor::Handle_t;
         using ReadHandle_t = std::function<void(ConnectionPtr, char *, size_t)>;
+        using BussinessWorkerPtr = BussinessWorker::BussinessWorkerPtr;
 
         TCPServer(TCPServer const &) = delete;
 
@@ -41,15 +43,33 @@ namespace KQEvent {
         }
 
         void setConnectionReadHandler(ReadHandle_t handle) {
-            _connReadHandler = handle;
+            if (_numberOfWorkers > 0){
+                for (auto &worker : _bussinessWorkers){
+                    worker->setConnectionReadHandler(handle);
+                }
+            }else{
+                _connReadHandler = handle;
+            }
         }
 
         void setConnectionExceptHandler(Handle_t handle) {
-            _connExceptHandler = handle;
+            if (_numberOfWorkers > 0){
+                for (auto &worker : _bussinessWorkers){
+                    worker->setConnectionExceptHandler(handle);
+                }
+            }else{
+                _connExceptHandler = handle;
+            }
         }
 
         void setConnectionCloseHandler(Handle_t handle) {
-            _connCloseHandler = handle;
+            if (_numberOfWorkers > 0){
+                for (auto &worker : _bussinessWorkers){
+                    worker->setConnectionCloseHandler(handle);
+                }
+            }else{
+                _connCloseHandler = handle;
+            }
         }
 
         void run() {
@@ -65,6 +85,8 @@ namespace KQEvent {
 
         void onReadHandler(ConnectionPtr conn, char *buf, size_t n);
 
+        void dispatchConntion(ConnectionPtr conn);
+
         Connection::Handle_t _connHandlerWrap(Handle_t handle);
 
         ConnectionsPool _connectionPool;
@@ -77,8 +99,11 @@ namespace KQEvent {
         SocketPtr _socket;
         AcceptorPtr _acceptor;
         EventLoopPtr _loop;
+        std::vector<BussinessWorkerPtr> _bussinessWorkers;
+        int _numberOfWorkers;
+        int _indexOfCurrentWorker;
 
-        explicit TCPServer(std::string const &ip, int backlog = 65535);
+        explicit TCPServer(std::string const &ip, int numberOfWorkers = -1, int backlog = 65535);
 
         void _closeConnection(TCPServer::ConnectionPtr conn);
     };

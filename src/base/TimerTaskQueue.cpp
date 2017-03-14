@@ -14,6 +14,8 @@ namespace KQEvent {
         _eventObserver = Observer::newInstance();
         _eventObserver->setHandle([this](Subject::SubjectPtr subject) {
             uint64_t tmp;
+            std::lock_guard<std::mutex> guard(_taskListMutex);
+
             ::read(subject->getFd(), &tmp, sizeof(tmp));
             if (_taskList.empty())
                 return Observer::ALIVE;
@@ -32,6 +34,7 @@ namespace KQEvent {
     }
 
     void TimerTaskQueue::runTask(const TimerTaskQueue::Task &task) {
+        std::lock_guard<std::mutex> guard(_taskListMutex);
         _taskList.push_back(task);
         uint64_t tmp = 10;
         ::write(_eventfd, &tmp, sizeof(tmp));
@@ -62,6 +65,11 @@ namespace KQEvent {
 
     Subject::SubjectPtr const &TimerTaskQueue::getEventfdSubject() {
         return _eventTaskSubject;
+    }
+
+    void TimerTaskQueue::wakeUp() {
+        uint64_t tmp = 10;
+        ::write(_eventfd, &tmp, sizeof(tmp));
     }
 
 #if 0

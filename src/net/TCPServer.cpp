@@ -3,10 +3,14 @@
 //
 
 #include "TCPServer.h"
+#include <thread>
 
 namespace KQEvent {
 
-    TCPServer::TCPServer(std::string const &ip, int backlog) {
+    TCPServer::TCPServer(std::string const &ip,int numberOfWorkers, int backlog):
+            _numberOfWorkers(numberOfWorkers),
+            _indexOfCurrentWorker(0)
+    {
         _address = IPAddress::fromIPAddress(ip);
         _socket = Socket::newInstance();
         _socket->bind(_address);
@@ -23,6 +27,14 @@ namespace KQEvent {
         _connExceptHandler = defHandler;
         _connCloseHandler = defHandler;
         _connReadHandler = [](ConnectionPtr conn, char *buf, size_t len) {};
+
+        if (_numberOfWorkers == -1){
+            _numberOfWorkers = std::thread::hardware_concurrency();
+            for (int cnt = 0; cnt < _numberOfWorkers; ++cnt){
+                _bussinessWorkers.push_back(BussinessWorker::newInstance());
+            }
+        }
+
     }
 
     Connection::Handle_t TCPServer::_connHandlerWrap(TCPServer::Handle_t handle) {
@@ -34,16 +46,20 @@ namespace KQEvent {
     }
 
     void TCPServer::onNewConnection(TCPServer::ConnectionPtr conn) {
-        auto tmp = std::bind(&TCPServer::onReadHandler, this,
-                             std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
-        conn->attachReadHandler(tmp);
-        conn->attachExceptHandler(_connHandlerWrap(_connExceptHandler));
-        conn->setConnected();
-        auto closeHandler = std::bind(&TCPServer::connCloseHandler,
-                                      this, std::placeholders::_1);
-        conn->attachCloseHandler(closeHandler);
-        _connectionPool.push_back(conn);
-        _loop->registerSubject(conn->getSubject());
+        if (_numberOfWorkers == 0){
+            auto tmp = std::bind(&TCPServer::onReadHandler, this,
+                                 std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+            conn->attachReadHandler(tmp);
+            conn->attachExceptHandler(_connHandlerWrap(_connExceptHandler));
+            conn->setConnected();
+            auto closeHandler = std::bind(&TCPServer::connCloseHandler,
+                                          this, std::placeholders::_1);
+            conn->attachCloseHandler(closeHandler);
+            _connectionPool.push_back(conn);
+            _loop->registerSubject(conn->getSubject());
+        }else{
+            dispatchConntion(conn);
+        }
         _connNewHandler(conn);
     }
 
@@ -66,5 +82,12 @@ namespace KQEvent {
 
     void TCPServer::connCloseHandler(TCPServer::ConnectionPtr conn) {
         _closeConnection(conn);
+    }
+
+    void TCPServer::dispatchConntion(TCPServer::ConnectionPtr conn) {
+        auto worker = _bussinessWorkers[_indexOfCurrentWorker++];
+        _indexOfCurrentWorker %= _numberOfWorkers;
+
+        worker->pushConnection(conn);
     }
 }

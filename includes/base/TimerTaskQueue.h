@@ -7,6 +7,7 @@
 
 #include "TimerQueue.h"
 #include "Subject.h"
+#include <mutex>
 
 namespace KQEvent {
     class TimerTaskQueue {
@@ -35,6 +36,8 @@ namespace KQEvent {
 
         virtual void runTaskEvery(Task const &task, Timer::Milliseconds period);
 
+        virtual void wakeUp();
+
         Subject::SubjectPtr const &getTimerQueueSubect();
 
         Subject::SubjectPtr const &getEventfdSubject();
@@ -49,6 +52,7 @@ namespace KQEvent {
         TimerQueue::TimerQueuePtr _timerQueue;
         TaskList _taskList;
         int _eventfd;
+        std::mutex _taskListMutex;
     };
 }
 #endif //KQEVENT_TIMERTASKQUEUE_H
