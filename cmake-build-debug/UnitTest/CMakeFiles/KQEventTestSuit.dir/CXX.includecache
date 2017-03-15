@@ -94,6 +94,12 @@ exception
 string
 -
 
+../UnitTest/../includes/common/common.h
+string
+-
+string.h
+-
+
 ../UnitTest/../includes/net/AbstractAcceptor.h
 Socket.h
 ../UnitTest/../includes/net/Socket.h
@@ -115,6 +121,8 @@ Connection.h
 ../UnitTest/../includes/net/Connection.h
 AbstractAcceptor.h
 ../UnitTest/../includes/net/AbstractAcceptor.h
+common.h
+../UnitTest/../includes/net/common.h
 
 ../UnitTest/../includes/net/Connection.h
 memory
@@ -180,6 +188,8 @@ IPAddress.h
 utility
 -
 unistd.h
+-
+iostream
 -
 
 ../UnitTest/../includes/net/TCPClient.h
@@ -287,6 +297,8 @@ Connector.h
 /home/lee/github/KQEvent/includes/net/Connector.h
 TCPClient.h
 /home/lee/github/KQEvent/UnitTest/TCPClient.h
+signal.h
+-
 
 /home/lee/github/KQEvent/UnitTest/runner.cpp
 cxxtest/TestListener.h
@@ -359,6 +371,8 @@ Connection.h
 /home/lee/github/KQEvent/includes/net/Connection.h
 AbstractAcceptor.h
 /home/lee/github/KQEvent/includes/net/AbstractAcceptor.h
+common.h
+/home/lee/github/KQEvent/includes/net/common.h
 
 /home/lee/github/KQEvent/includes/net/Connection.h
 memory
@@ -420,6 +434,8 @@ IPAddress.h
 utility
 -
 unistd.h
+-
+iostream
 -
 
 /home/lee/github/KQEvent/includes/net/TCPInfo.h

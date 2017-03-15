@@ -59,7 +59,7 @@ include UnitTest/CMakeFiles/KQEventTestSuit.dir/flags.make
 
 ../UnitTest/runner.cpp:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --blue --bold --progress-dir=/home/lee/github/KQEvent/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Generating ../../UnitTest/runner.cpp"
-	cd /home/lee/github/KQEvent/cmake-build-debug/UnitTest && cxxtestgen --error-printer -o /home/lee/github/KQEvent/UnitTest/runner.cpp /home/lee/github/KQEvent/UnitTest/TestSuit.h /home/lee/github/KQEvent/UnitTest/TestConnection.h /home/lee/github/KQEvent/UnitTest/TestTimerTaskQueue.h /home/lee/github/KQEvent/UnitTest/TestTCPServer.h /home/lee/github/KQEvent/UnitTest/TestWeb.h
+	cd /home/lee/github/KQEvent/cmake-build-debug/UnitTest && /home/lee/github/cxxtest/bin/cxxtestgen --error-printer -o /home/lee/github/KQEvent/UnitTest/runner.cpp /home/lee/github/KQEvent/UnitTest/TestSuit.h /home/lee/github/KQEvent/UnitTest/TestConnection.h /home/lee/github/KQEvent/UnitTest/TestTimerTaskQueue.h /home/lee/github/KQEvent/UnitTest/TestTCPServer.h /home/lee/github/KQEvent/UnitTest/TestWeb.h
 
 UnitTest/CMakeFiles/KQEventTestSuit.dir/runner.cpp.o: UnitTest/CMakeFiles/KQEventTestSuit.dir/flags.make
 UnitTest/CMakeFiles/KQEventTestSuit.dir/runner.cpp.o: ../UnitTest/runner.cpp

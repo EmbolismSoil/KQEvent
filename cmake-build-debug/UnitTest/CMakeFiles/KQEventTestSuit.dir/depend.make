@@ -9,6 +9,7 @@ UnitTest/CMakeFiles/KQEventTestSuit.dir/__/includes/net/BussinessWorker.cpp.o: .
 UnitTest/CMakeFiles/KQEventTestSuit.dir/__/includes/net/BussinessWorker.cpp.o: ../UnitTest/../includes/base/TimerQueue.h
 UnitTest/CMakeFiles/KQEventTestSuit.dir/__/includes/net/BussinessWorker.cpp.o: ../UnitTest/../includes/base/TimerTaskQueue.h
 UnitTest/CMakeFiles/KQEventTestSuit.dir/__/includes/net/BussinessWorker.cpp.o: ../UnitTest/../includes/common/KQEventCommonException.h
+UnitTest/CMakeFiles/KQEventTestSuit.dir/__/includes/net/BussinessWorker.cpp.o: ../UnitTest/../includes/common/common.h
 UnitTest/CMakeFiles/KQEventTestSuit.dir/__/includes/net/BussinessWorker.cpp.o: ../includes/base/Observer.h
 UnitTest/CMakeFiles/KQEventTestSuit.dir/__/includes/net/BussinessWorker.cpp.o: ../includes/base/Subject.h
 UnitTest/CMakeFiles/KQEventTestSuit.dir/__/includes/net/BussinessWorker.cpp.o: ../includes/net/AbstractAcceptor.h
@@ -38,6 +39,7 @@ UnitTest/CMakeFiles/KQEventTestSuit.dir/runner.cpp.o: ../UnitTest/../includes/ba
 UnitTest/CMakeFiles/KQEventTestSuit.dir/runner.cpp.o: ../UnitTest/../includes/base/TimerQueue.h
 UnitTest/CMakeFiles/KQEventTestSuit.dir/runner.cpp.o: ../UnitTest/../includes/base/TimerTaskQueue.h
 UnitTest/CMakeFiles/KQEventTestSuit.dir/runner.cpp.o: ../UnitTest/../includes/common/KQEventCommonException.h
+UnitTest/CMakeFiles/KQEventTestSuit.dir/runner.cpp.o: ../UnitTest/../includes/common/common.h
 UnitTest/CMakeFiles/KQEventTestSuit.dir/runner.cpp.o: ../UnitTest/../includes/net/AbstractAcceptor.h
 UnitTest/CMakeFiles/KQEventTestSuit.dir/runner.cpp.o: ../UnitTest/../includes/net/AbstractMessage.h
 UnitTest/CMakeFiles/KQEventTestSuit.dir/runner.cpp.o: ../UnitTest/../includes/net/BussinessWorker.h

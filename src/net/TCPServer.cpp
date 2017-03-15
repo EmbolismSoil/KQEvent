@@ -4,6 +4,7 @@
 
 #include "TCPServer.h"
 #include <thread>
+#include <sstream>
 
 namespace KQEvent {
 
@@ -31,7 +32,9 @@ namespace KQEvent {
         if (_numberOfWorkers == -1){
             _numberOfWorkers = std::thread::hardware_concurrency();
             for (int cnt = 0; cnt < _numberOfWorkers; ++cnt){
-                _bussinessWorkers.push_back(BussinessWorker::newInstance());
+                std::stringstream s;
+                s << "Thread_" << cnt;
+                _bussinessWorkers.push_back(BussinessWorker::newInstance(s.str()));
             }
         }
 
@@ -46,6 +49,8 @@ namespace KQEvent {
     }
 
     void TCPServer::onNewConnection(TCPServer::ConnectionPtr conn) {
+        _connNewHandler(conn);
+
         if (_numberOfWorkers == 0){
             auto tmp = std::bind(&TCPServer::onReadHandler, this,
                                  std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
@@ -60,7 +65,6 @@ namespace KQEvent {
         }else{
             dispatchConntion(conn);
         }
-        _connNewHandler(conn);
     }
 
     void TCPServer::onReadHandler(TCPServer::ConnectionPtr conn,
@@ -84,7 +88,7 @@ namespace KQEvent {
         _closeConnection(conn);
     }
 
-    void TCPServer::dispatchConntion(TCPServer::ConnectionPtr conn) {
+    void TCPServer::dispatchConntion(TCPServer::ConnectionPtr& conn) {
         auto worker = _bussinessWorkers[_indexOfCurrentWorker++];
         _indexOfCurrentWorker %= _numberOfWorkers;
 

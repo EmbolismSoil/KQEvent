@@ -6,7 +6,7 @@ SET(TEST_SUIT ${PROJECT_SOURCE_DIR}/UnitTest/TestSuit.h
         ${PROJECT_SOURCE_DIR}/UnitTest/TestWeb.h)
 
 ADD_CUSTOM_COMMAND(OUTPUT ${RUNNER}
-        COMMAND cxxtestgen --error-printer -o ${RUNNER} ${TEST_SUIT}
+        COMMAND /home/lee/github/cxxtest/bin/cxxtestgen --error-printer -o ${RUNNER} ${TEST_SUIT}
         )
 
 SET(SOURCE_LIST ${RUNNER} ../src/common/KQEventCommonException.cpp ../includes/common/KQEventCommonException.h

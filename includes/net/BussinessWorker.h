@@ -9,6 +9,7 @@
 #include "list"
 #include "Connection.h"
 #include "AbstractAcceptor.h"
+#include "common.h"
 
 namespace KQEvent{
     class BussinessWorker {
@@ -18,12 +19,12 @@ namespace KQEvent{
         using ReadHandle_t = std::function<void(ConnectionPtr, char *, size_t)>;
         using Handle_t = AbstractAcceptor::Handle_t;
 
-        void pushConnection(Connection::ConnectionPtr conn) noexcept;
+        void pushConnection(Connection::ConnectionPtr& conn) noexcept;
         void runTask(TimerTaskQueue::Task task) noexcept;
 
         template <class ...Args>
         static BussinessWorkerPtr newInstance(Args&&... args){
-            auto ptr = new BussinessWorker(std::forward(args)...);
+            auto ptr = new BussinessWorker(std::forward<Args>(args)...);
             return BussinessWorkerPtr(ptr);
         }
 
@@ -39,8 +40,15 @@ namespace KQEvent{
             _onExceptionHandler = handle;
         }
 
+        void printConnectionPool(void){
+            std::cout<< "======" << _name << " Connections Pool" << "======" << std::endl;
+            for (auto &conn : _connectionPool){
+                std::cout << "connected to " << conn->getPeerAddr()->toString() << std::endl;
+            }
+        }
+
     private:
-        BussinessWorker();
+        BussinessWorker(std::string const& name);
         BussinessWorker(BussinessWorker const&) = delete;
         BussinessWorker const&operator=(BussinessWorker const&) = delete;
         using ConnectionPool_t = std::list<Connection::ConnectionPtr>;
@@ -51,6 +59,7 @@ namespace KQEvent{
         ReadHandle_t _onReadHandler;
         Handle_t _onCloseHandler;
         Handle_t _onExceptionHandler;
+        std::string _name;
 
 
         std::shared_ptr<std::thread> _thread;

@@ -8,6 +8,7 @@
 #include "IPAddress.h"
 #include <utility>
 #include <unistd.h>
+#include <iostream>
 
 namespace KQEvent {
     class Socket : public std::enable_shared_from_this<Socket> {
@@ -21,6 +22,8 @@ namespace KQEvent {
 
         virtual ~Socket() {
             // if(!_isClose)
+            std::cout << "close socket , fd =  " << _fd << std::endl;
+            ::shutdown(_fd, SHUT_RDWR);
             ::close(_fd);
         }
 

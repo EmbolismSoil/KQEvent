@@ -20,6 +20,7 @@ namespace KQEvent {
         return std::string(buf);
     }
 
+#define LOG(str) std::cout << str << std::endl
 }
 
 #endif //KQEVENT_COMMON_H

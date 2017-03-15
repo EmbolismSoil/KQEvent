@@ -83,7 +83,6 @@ namespace KQEvent {
             subject->setWriteEvent(false);
             if (_softClose){
                 setDisconnected();
-                _socket.reset();
                 _closeHandlerCallback(getPtr());
             }
         }

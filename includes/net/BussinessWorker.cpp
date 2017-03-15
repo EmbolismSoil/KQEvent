@@ -10,7 +10,7 @@ namespace KQEvent{
         taskQueue->runTask(task);
     }
 
-    void BussinessWorker::pushConnection(Connection::ConnectionPtr conn) noexcept {
+    void BussinessWorker::pushConnection(Connection::ConnectionPtr& conn) noexcept {
         runTask([conn, this](){
             conn->attachReadHandler(_onReadHandler);
             conn->attachExceptHandler(_onExceptionHandler);
@@ -33,7 +33,9 @@ namespace KQEvent{
         });
     }
 
-    BussinessWorker::BussinessWorker() {
+    BussinessWorker::BussinessWorker(std::string const& name):
+        _name(name)
+    {
         _onReadHandler = [](ConnectionPtr, char *, size_t){};
         _onCloseHandler = [](ConnectionPtr){};
         _onExceptionHandler = [](ConnectionPtr){};

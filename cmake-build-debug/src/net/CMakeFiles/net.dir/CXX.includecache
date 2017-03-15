@@ -121,6 +121,8 @@ Connection.h
 ../src/net/../../includes/net/Connection.h
 AbstractAcceptor.h
 ../src/net/../../includes/net/AbstractAcceptor.h
+common.h
+../src/net/../../includes/net/common.h
 
 ../src/net/../../includes/net/Connection.h
 memory
@@ -190,6 +192,8 @@ IPAddress.h
 utility
 -
 unistd.h
+-
+iostream
 -
 
 ../src/net/../../includes/net/TCPClient.h
@@ -316,5 +320,7 @@ common.h
 TCPServer.h
 /home/lee/github/KQEvent/src/net/TCPServer.h
 thread
+-
+sstream
 -
 

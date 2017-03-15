@@ -12,14 +12,22 @@
 #include "Connector.h"
 #include "../includes/net/Connector.h"
 #include "TCPClient.h"
+#include <signal.h>
 
 using namespace KQEvent;
 using ConnectionPtr = TCPServer::ConnectionPtr;
 
 class TestWeb : public CxxTest::TestSuite {
 public:
+    static TCPServer::TCPServerPtr server;
+
+    static void user1_handler(int sig){
+        server->printConnections();
+    }
+
     void TestServer(void) {
-        auto server = TCPServer::newInstance("127.0.0.1:13000");
+        signal(SIGUSR1, user1_handler);
+        server = TCPServer::newInstance("127.0.0.1:15000");
         server->setConnectionNewHandler([](ConnectionPtr conn) {
             std::cout << "new connection from "
                       << conn->getPeerAddr()->toString()
@@ -31,14 +39,15 @@ public:
             conn->sendMessage("HTTP/1.1 200 OK\n"
                                       "Server: GitHub.com\n"
                                       "Date: Mon, 19 Sep 2016 05:06:46 GMT\n"
-                                      "Content-Type: text/html; charset=utf-8\n"
+                                      "Content-Type: text/html\n"
+                                      "charset=utf-8\n"
                                       "\n");
-            conn->sendFile("/home/lee/test.cpp");
+            std::cout << "write to peer : " << conn->getPeerAddr()->toString() << std::endl;
             conn->softClose();
         });
 
         server->setConnectionCloseHandler([](ConnectionPtr conn) {
-            std::cout << " disconnect from "
+            std::cout << "disconnect from "
                       << conn->getPeerAddr()->toString()
                       << " to " << conn->getHostAddr()->toString()
                       << std::endl;
@@ -73,4 +82,5 @@ public:
     }
 };
 
+TCPServer::TCPServerPtr TestWeb::server;
 #endif //KQEVENT_TESTWEB_H

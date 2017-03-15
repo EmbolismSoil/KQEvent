@@ -76,6 +76,12 @@ namespace KQEvent {
             _loop->loop();
         }
 
+        void printConnections(void){
+            for (auto worker : _bussinessWorkers){
+                worker->printConnectionPool();
+            }
+        }
+
         void softClose();
 
     private:
@@ -85,7 +91,7 @@ namespace KQEvent {
 
         void onReadHandler(ConnectionPtr conn, char *buf, size_t n);
 
-        void dispatchConntion(ConnectionPtr conn);
+        void dispatchConntion(ConnectionPtr& conn);
 
         Connection::Handle_t _connHandlerWrap(Handle_t handle);
 

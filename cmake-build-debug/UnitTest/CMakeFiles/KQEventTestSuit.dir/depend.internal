@@ -10,6 +10,7 @@ UnitTest/CMakeFiles/KQEventTestSuit.dir/__/includes/net/BussinessWorker.cpp.o
  ../UnitTest/../includes/base/TimerQueue.h
  ../UnitTest/../includes/base/TimerTaskQueue.h
  ../UnitTest/../includes/common/KQEventCommonException.h
+ ../UnitTest/../includes/common/common.h
  /home/lee/github/KQEvent/includes/base/Observer.h
  /home/lee/github/KQEvent/includes/base/Subject.h
  /home/lee/github/KQEvent/includes/net/AbstractAcceptor.h
@@ -39,6 +40,7 @@ UnitTest/CMakeFiles/KQEventTestSuit.dir/runner.cpp.o
  ../UnitTest/../includes/base/TimerQueue.h
  ../UnitTest/../includes/base/TimerTaskQueue.h
  ../UnitTest/../includes/common/KQEventCommonException.h
+ ../UnitTest/../includes/common/common.h
  ../UnitTest/../includes/net/AbstractAcceptor.h
  ../UnitTest/../includes/net/AbstractMessage.h
  ../UnitTest/../includes/net/BussinessWorker.h

@@ -4,6 +4,7 @@
 
 #include "Poller.h"
 #include <iterator>
+#include <iostream>
 
 namespace KQEvent {
 
