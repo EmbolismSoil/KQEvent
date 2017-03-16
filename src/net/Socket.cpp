@@ -1,7 +1,6 @@
 #include "Socket.h"
 #include "KQEventCommonException.h"
 #include <string.h>
-#include <linux/tcp.h>
 #include "common.h"
 #include <fcntl.h>
 #include <chrono>
@@ -16,6 +15,8 @@ namespace KQEvent {
         }
         int flag = ::fcntl(_fd, F_GETFL, 0);
         ::fcntl(_fd, F_SETFL, flag | O_NONBLOCK);
+
+        _tid = std::this_thread::get_id();
     }
 
     Socket::Socket() : Socket(AF_INET, SOCK_STREAM) {
@@ -26,6 +27,8 @@ namespace KQEvent {
             _fd(fd) {
         int flag = ::fcntl(_fd, F_GETFL, 0);
         ::fcntl(_fd, F_SETFL, flag | O_NONBLOCK);
+
+        _tid = std::this_thread::get_id();
     }
 
     int Socket::setNoDelay(bool on) {

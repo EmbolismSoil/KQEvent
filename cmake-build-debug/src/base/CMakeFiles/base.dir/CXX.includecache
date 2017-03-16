@@ -45,6 +45,8 @@ Subject.h
 ../src/base/../../includes/base/Subject.h
 map
 -
+mutex
+-
 
 ../src/base/../../includes/base/Subject.h
 Observer.h

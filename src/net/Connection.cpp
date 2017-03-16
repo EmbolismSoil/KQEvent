@@ -63,6 +63,7 @@ namespace KQEvent {
     }
 
     Observer::Command_t Connection::_writeHandler(Subject::SubjectPtr subject) {
+
         if (_messages.empty()){
             subject->setWriteEvent(false);
             return Observer::ALIVE;
@@ -122,6 +123,7 @@ namespace KQEvent {
     }
 
     Connection::Command_t Connection::_readHandler(Subject::SubjectPtr subject) {
+
         char buf[32768];
         int n = ::read(getFd(), buf, sizeof(buf));
         if (n == 0) {
@@ -135,6 +137,7 @@ namespace KQEvent {
 
     Connection::Command_t
     Connection::_exceptHandler(Subject::SubjectPtr) {
+
         _exceptCallback(getPtr());
         return Observer::ALIVE;
     }

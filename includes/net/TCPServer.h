@@ -91,7 +91,7 @@ namespace KQEvent {
 
         void onReadHandler(ConnectionPtr conn, char *buf, size_t n);
 
-        void dispatchConntion(ConnectionPtr& conn);
+        void dispatchConntion(ConnectionPtr conn);
 
         Connection::Handle_t _connHandlerWrap(Handle_t handle);
 

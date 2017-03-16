@@ -64,62 +64,74 @@ namespace KQEvent {
             checkNewSubject();
             _retValue = ::poll(&*_pollfds.begin(), _pollfds.size(), _timeout);
 
-            if (_retValue <= 0) {//timeout or error
-                _handle(getPtr());
-                continue;
-            }
-
-            auto cnt = _retValue;
-            _inHandle = true;
-            for (auto pos = _pollfds.begin(); pos != _pollfds.end();) {
-                if (cnt == 0)
-                    break;
-
-                Subject::SubjectPtr subject = _subjects[pos->fd].lock();
-                if (!subject) {
-                    _subjects.erase(pos->fd);
-                    pos = _pollfds.erase(pos);
+            {
+                std::lock_guard<std::mutex> guard(_mutex);
+                if (_retValue <= 0) {//timeout or error
+                    _handle(getPtr());
                     continue;
                 }
 
-                auto *peek = subject.get();
-                if ((pos->revents & (POLLIN | POLLRDBAND | POLLRDNORM | POLLPRI | POLLHUP))) {
+                auto cnt = _retValue;
+                _inHandle = true;
+                for (auto pos = _pollfds.begin(); pos != _pollfds.end();) {
+                    if (cnt == 0)
+                        break;
 
-                    subject->notifyReadObserver();
-                    --cnt;
-                }
+                    Subject::SubjectPtr subject = _subjects[pos->fd].lock();
+                    if (!subject) {
+                        _subjects.erase(pos->fd);
+                        pos = _pollfds.erase(pos);
+                        continue;
+                    }
 
-                if ((pos->revents & (POLLOUT | POLLWRBAND | POLLWRNORM))) {
-                    subject->notifyWriteObserver();
-                    --cnt;
-                }
+                    auto *peek = subject.get();
+                    if ((pos->revents & (POLLIN | POLLRDBAND | POLLRDNORM | POLLPRI | POLLHUP))) {
 
-                if ((pos->revents & (POLLERR | POLLNVAL))) {
-                    subject->notifyExceptObserver();
-                    --cnt;
-                }
+                        subject->notifyReadObserver();
+                        --cnt;
+                    }
 
-                if (!subject->getEventMask().READ) {
-                    pos->events &= ~(POLLIN | POLLRDBAND | POLLRDNORM | POLLPRI | POLLHUP);
-                } else {
-                    pos->events |= (POLLIN | POLLRDBAND | POLLRDNORM | POLLPRI | POLLHUP);
-                }
+                    if ((pos->revents & (POLLOUT | POLLWRBAND | POLLWRNORM))) {
+                        subject->notifyWriteObserver();
+                        --cnt;
+                    }
 
-                if (!subject->getEventMask().WRITE) {
-                    pos->events &= ~(POLLOUT | POLLWRBAND | POLLWRNORM);
-                } else {
-                    pos->events |= (POLLOUT | POLLWRBAND | POLLWRNORM);
-                }
+                    if ((pos->revents & (POLLERR | POLLNVAL))) {
+                        subject->notifyExceptObserver();
+                        --cnt;
+                    }
 
-                if (!subject->getEventMask().EXCEPT) {
-                    pos->events &= ~((POLLERR | POLLNVAL));
-                } else {
-                    pos->events |= ((POLLERR | POLLNVAL));
+                    if (!subject->getEventMask().READ) {
+                        pos->events &= ~(POLLIN | POLLRDBAND | POLLRDNORM | POLLPRI | POLLHUP);
+                    } else {
+                        pos->events |= (POLLIN | POLLRDBAND | POLLRDNORM | POLLPRI | POLLHUP);
+                    }
+
+                    if (!subject->getEventMask().WRITE) {
+                        pos->events &= ~(POLLOUT | POLLWRBAND | POLLWRNORM);
+                    } else {
+                        pos->events |= (POLLOUT | POLLWRBAND | POLLWRNORM);
+                    }
+
+                    if (!subject->getEventMask().EXCEPT) {
+                        pos->events &= ~((POLLERR | POLLNVAL));
+                    } else {
+                        pos->events |= ((POLLERR | POLLNVAL));
+                    }
+
+                    subject.reset();
+
+                    Subject::SubjectPtr tmp = _subjects[pos->fd].lock();
+                    if (!tmp) {
+                        _subjects.erase(pos->fd);
+                        pos = _pollfds.erase(pos);
+                        continue;
+                    }
+
+                    ++pos;
                 }
-                ++pos;
             }
             _inHandle = false;
-            //}
         }
     }
 

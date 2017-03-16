@@ -30,9 +30,15 @@ namespace KQEvent {
         auto connfd = _socket->accept4(peerAddr);
         if (connfd < 0)
             return;
-        auto socket = Socket::newInstance(connfd);
-        auto connection = Connection::newInstance(socket, peerAddr);
-        _onConnect(connection);
+
+        Socket::SocketPtr socket = Socket::newInstance(connfd);
+        auto connection = Connection::newInstance(std::move(socket), peerAddr);
+
+        {
+            _onConnect(std::move(connection));
+        }
+
+        return;
     }
 
     Subject::SubjectPtr const &AbstractAcceptor::getSubject() {

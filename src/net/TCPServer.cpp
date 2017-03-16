@@ -29,12 +29,16 @@ namespace KQEvent {
         _connCloseHandler = defHandler;
         _connReadHandler = [](ConnectionPtr conn, char *buf, size_t len) {};
 
+        std::cout << "main thread id = " << std::this_thread::get_id() << std::endl;
+
         if (_numberOfWorkers == -1){
             _numberOfWorkers = std::thread::hardware_concurrency();
             for (int cnt = 0; cnt < _numberOfWorkers; ++cnt){
                 std::stringstream s;
                 s << "Thread_" << cnt;
-                _bussinessWorkers.push_back(BussinessWorker::newInstance(s.str()));
+                auto worker = BussinessWorker::newInstance(s.str());
+                _bussinessWorkers.push_back(worker);
+                std::cout << s.str() << " id = " << worker->getId() << std::endl;
             }
         }
 
@@ -50,7 +54,6 @@ namespace KQEvent {
 
     void TCPServer::onNewConnection(TCPServer::ConnectionPtr conn) {
         _connNewHandler(conn);
-
         if (_numberOfWorkers == 0){
             auto tmp = std::bind(&TCPServer::onReadHandler, this,
                                  std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
@@ -63,7 +66,7 @@ namespace KQEvent {
             _connectionPool.push_back(conn);
             _loop->registerSubject(conn->getSubject());
         }else{
-            dispatchConntion(conn);
+            dispatchConntion(std::move(conn));
         }
     }
 
@@ -88,10 +91,12 @@ namespace KQEvent {
         _closeConnection(conn);
     }
 
-    void TCPServer::dispatchConntion(TCPServer::ConnectionPtr& conn) {
+    void TCPServer::dispatchConntion(TCPServer::ConnectionPtr conn) {
         auto worker = _bussinessWorkers[_indexOfCurrentWorker++];
         _indexOfCurrentWorker %= _numberOfWorkers;
-
-        worker->pushConnection(conn);
+        {
+            std::lock_guard<std::mutex> guard(worker->getLoopMutex());
+            worker->pushConnection(std::move(conn));
+        }
     }
 }

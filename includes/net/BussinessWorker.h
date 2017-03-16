@@ -19,7 +19,7 @@ namespace KQEvent{
         using ReadHandle_t = std::function<void(ConnectionPtr, char *, size_t)>;
         using Handle_t = AbstractAcceptor::Handle_t;
 
-        void pushConnection(Connection::ConnectionPtr& conn) noexcept;
+        void pushConnection(Connection::ConnectionPtr conn) noexcept;
         void runTask(TimerTaskQueue::Task task) noexcept;
 
         template <class ...Args>
@@ -45,6 +45,13 @@ namespace KQEvent{
             for (auto &conn : _connectionPool){
                 std::cout << "connected to " << conn->getPeerAddr()->toString() << std::endl;
             }
+        }
+
+        std::mutex& getLoopMutex(){return _loop->getPollMutex();}
+
+        std::string const &getName(){return _name;}
+        std::thread::id getId(){
+            return _thread->get_id();
         }
 
     private:

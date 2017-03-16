@@ -13,6 +13,7 @@
 #include "Socket.h"
 #include <list>
 #include "AbstractMessage.h"
+#include <mutex>
 
 namespace KQEvent {
     class Connection : public std::enable_shared_from_this<Connection> {
@@ -97,6 +98,8 @@ namespace KQEvent {
 
         bool sendFile(std::string const &path);
 
+        std::mutex& getMutex(){return _mtx;}
+
     private:
         explicit Connection(Socket::SocketPtr socket, IPAddress::IPAddressPtr peer, void *context = nullptr);
 
@@ -135,6 +138,8 @@ namespace KQEvent {
         void *_context; //fixme : Context class;
 
         std::list<MessagePtr> _messages;
+
+        std::mutex _mtx;
     };
 }
 

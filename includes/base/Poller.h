@@ -11,6 +11,7 @@
 #include <vector>
 #include "Subject.h"
 #include <map>
+#include <mutex>
 
 namespace KQEvent {
     class Poller : public std::enable_shared_from_this<Poller> {
@@ -40,6 +41,8 @@ namespace KQEvent {
 
         void setTimeout(int timeout);
 
+        std::mutex& getMutex(){return _mutex;}
+
     private:
         explicit Poller(Handle_t hanle, int timeout = 60000);
 
@@ -53,6 +56,8 @@ namespace KQEvent {
         std::map<int, Subject::SubjectWeakPtr> _subjects;
         int _retValue;
         Handle_t _handle; //处理非正常poll返回
+
+        std::mutex _mutex;
     };
 }
 

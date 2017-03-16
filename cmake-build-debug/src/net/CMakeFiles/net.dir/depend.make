@@ -55,6 +55,7 @@ src/net/CMakeFiles/net.dir/Socket.cpp.o: ../src/net/../../includes/common/KQEven
 src/net/CMakeFiles/net.dir/Socket.cpp.o: ../src/net/../../includes/common/common.h
 src/net/CMakeFiles/net.dir/Socket.cpp.o: ../src/net/../../includes/net/IPAddress.h
 src/net/CMakeFiles/net.dir/Socket.cpp.o: ../src/net/../../includes/net/Socket.h
+src/net/CMakeFiles/net.dir/Socket.cpp.o: ../src/net/../../includes/net/TCPInfo.h
 src/net/CMakeFiles/net.dir/Socket.cpp.o: ../src/net/Socket.cpp
 
 src/net/CMakeFiles/net.dir/TCPClient.cpp.o: ../src/net/../../includes/base/EventLoop.h

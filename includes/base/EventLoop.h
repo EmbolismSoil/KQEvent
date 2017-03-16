@@ -40,6 +40,8 @@ namespace KQEvent {
 
         TimerTaskQueuePtr getTimerTaskQueue() { return _timerTaskQueue; }
 
+        std::mutex& getPollMutex(){return _poller->getMutex();}
+
     private:
         explicit EventLoop();
 

@@ -9,6 +9,8 @@
 #include <utility>
 #include <unistd.h>
 #include <iostream>
+#include "TCPInfo.h"
+#include <thread>
 
 namespace KQEvent {
     class Socket : public std::enable_shared_from_this<Socket> {
@@ -22,9 +24,22 @@ namespace KQEvent {
 
         virtual ~Socket() {
             // if(!_isClose)
-            std::cout << "close socket , fd =  " << _fd << std::endl;
-            ::shutdown(_fd, SHUT_RDWR);
-            ::close(_fd);
+            std::cout << "close socket , fd =  " << _fd  << ", peer = "
+                      << getPeerAddr()->toString() << std::endl;
+
+            int ret = ::close(_fd);
+
+            if (_tid == std::this_thread::get_id()){
+                std::cout << "error " << std::endl;
+            }
+
+            if (ret == 0){
+                std::cout << "close socket sccuessfully in thread : " << std::this_thread::get_id() << std::endl;
+            }else{
+                __setErrorString(errno);
+                std::cout << "close socket failed : " << getError2String() << std::endl;
+            }
+
         }
 
         template<typename  ..._Args>
@@ -82,6 +97,8 @@ namespace KQEvent {
 
         std::string _messageError;
         int _fd;
+
+        std::thread::id _tid;
         //IPAddress::IPAddressPtr _address;
     };
 }

@@ -352,6 +352,9 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/home/lee/github/KQEvent/UnitTest/TestPoll.h">
+			<Option target="KQEventTestSuit"/>
+		</Unit>
 		<Unit filename="/home/lee/github/KQEvent/UnitTest/TestSuit.h">
 			<Option target="KQEventTestSuit"/>
 		</Unit>

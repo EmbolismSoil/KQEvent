@@ -45,6 +45,8 @@ Subject.h
 ../UnitTest/../includes/base/Subject.h
 map
 -
+mutex
+-
 
 ../UnitTest/../includes/base/Subject.h
 Observer.h
@@ -141,6 +143,8 @@ list
 -
 AbstractMessage.h
 ../UnitTest/../includes/net/AbstractMessage.h
+mutex
+-
 
 ../UnitTest/../includes/net/Connector.h
 memory
@@ -191,6 +195,10 @@ unistd.h
 -
 iostream
 -
+TCPInfo.h
+../UnitTest/../includes/net/TCPInfo.h
+thread
+-
 
 ../UnitTest/../includes/net/TCPClient.h
 memory
@@ -235,6 +243,26 @@ string
 -
 BussinessWorker.h
 ../UnitTest/../includes/net/BussinessWorker.h
+
+/home/lee/github/KQEvent/UnitTest/TestPoll.h
+cxxtest/TestSuite.h
+/home/lee/github/KQEvent/UnitTest/cxxtest/TestSuite.h
+thread
+-
+bits/socket.h
+-
+sys/socket.h
+-
+netinet/in.h
+-
+arpa/inet.h
+-
+poll.h
+-
+unistd.h
+-
+Socket.h
+/home/lee/github/KQEvent/UnitTest/Socket.h
 
 /home/lee/github/KQEvent/UnitTest/TestSuit.h
 cxxtest/TestSuite.h
@@ -321,6 +349,8 @@ cxxtest/ErrorPrinter.h
 -
 /home/lee/github/KQEvent/UnitTest/TestWeb.h
 -
+/home/lee/github/KQEvent/UnitTest/TestPoll.h
+-
 cxxtest/Root.cpp
 -
 
@@ -391,6 +421,8 @@ list
 -
 AbstractMessage.h
 /home/lee/github/KQEvent/includes/net/AbstractMessage.h
+mutex
+-
 
 /home/lee/github/KQEvent/includes/net/Connector.h
 memory
@@ -436,6 +468,10 @@ utility
 unistd.h
 -
 iostream
+-
+TCPInfo.h
+/home/lee/github/KQEvent/includes/net/TCPInfo.h
+thread
 -
 
 /home/lee/github/KQEvent/includes/net/TCPInfo.h

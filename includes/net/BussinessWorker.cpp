@@ -10,21 +10,23 @@ namespace KQEvent{
         taskQueue->runTask(task);
     }
 
-    void BussinessWorker::pushConnection(Connection::ConnectionPtr& conn) noexcept {
+    void BussinessWorker::pushConnection(Connection::ConnectionPtr conn) noexcept {
         runTask([conn, this](){
             conn->attachReadHandler(_onReadHandler);
             conn->attachExceptHandler(_onExceptionHandler);
             conn->attachCloseHandler([this](ConnectionPtr c){
-
                 auto pos = std::find(_connectionPool.begin(),
                                      _connectionPool.end(), c);
                 if (pos == _connectionPool.end()) {
                     //处理故障，打印log。目前log和全局故障尚未完成，只能简单退出
                     return;
                 }
+
                 //连接的生命周期结束
                 _onCloseHandler(c);
-                _connectionPool.erase(pos);
+                {
+                    _connectionPool.erase(pos);
+                }
             });
 
             _connectionPool.push_back(conn);

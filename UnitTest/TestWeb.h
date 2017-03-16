@@ -27,7 +27,7 @@ public:
 
     void TestServer(void) {
         signal(SIGUSR1, user1_handler);
-        server = TCPServer::newInstance("127.0.0.1:15000");
+        server = TCPServer::newInstance("127.0.0.1:18000");
         server->setConnectionNewHandler([](ConnectionPtr conn) {
             std::cout << "new connection from "
                       << conn->getPeerAddr()->toString()
