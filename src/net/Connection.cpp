@@ -130,7 +130,12 @@ namespace KQEvent {
         } else if (n > 0) {
             _readHandlerCallback(getPtr(), buf, n);
         }
-
+        
+        /*
+            这里需要处理ECONNECTIONREST的错误，这个错误
+            是由于读时对方已经关闭连接造成的，此时读取socket
+            会返回ECONNECTIONREST错误
+        */
         return Observer::ALIVE; //出现错误
     }
 
