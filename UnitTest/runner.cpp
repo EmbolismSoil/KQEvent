@@ -20,7 +20,7 @@ int main( int argc, char *argv[] ) {
     return status;
 }
 bool suite_KQEventTest_init = false;
-#include "/home/lee/github/KQEvent/UnitTest/TestSuit.h"
+#include "TestSuit.h"
 
 static KQEventTest suite_KQEventTest;
 
@@ -33,7 +33,7 @@ public:
  void runTest() { suite_KQEventTest.testTimerQueue(); }
 } testDescription_suite_KQEventTest_testTimerQueue;
 
-#include "/home/lee/github/KQEvent/UnitTest/TestTimerTaskQueue.h"
+#include "TestTimerTaskQueue.h"
 
 static TestTimerTaskQueue suite_TestTimerTaskQueue;
 
@@ -46,7 +46,7 @@ public:
  void runTest() { suite_TestTimerTaskQueue.testTimerTaskQueue(); }
 } testDescription_suite_TestTimerTaskQueue_testTimerTaskQueue;
 
-#include "/home/lee/github/KQEvent/UnitTest/TestTCPServer.h"
+#include "TestTCPServer.h"
 
 static TestTCPServer suite_TestTCPServer;
 
@@ -59,7 +59,7 @@ public:
  void runTest() { suite_TestTCPServer.TestServer(); }
 } testDescription_suite_TestTCPServer_TestServer;
 
-#include "/home/lee/github/KQEvent/UnitTest/TestWeb.h"
+#include "TestWeb.h"
 
 static TestWeb suite_TestWeb;
 
