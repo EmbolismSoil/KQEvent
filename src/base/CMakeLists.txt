@@ -6,3 +6,4 @@ SET (SRC_LIST Observer.cpp Subject.cpp ThreadPool.cpp
 
 INCLUDE_DIRECTORIES(../../includes/base ./ ../../includes/common)
 ADD_LIBRARY(base ${SRC_LIST})
+set_property(TARGET base PROPERTY POSITION_INDEPENDENT_CODE ON)

@@ -21,13 +21,13 @@ namespace KQEvent {
         auto defaultErrorHandler = [this](SocketPtr, int) {
             static int retryCnt = 0;
             if (++retryCnt == _maxRetry)
-                exit(0);
+                ::exit(0);
             return Connector::RETRY;
         };
 
         auto defaultExceptHandler = [](TCPClient::ConnectionPtr conn) {
             auto info = TCPInfo::fromTCPSocketFd(conn->getFd());
-            exit(0);
+            ::exit(0);
         };
 
         _onConnectedCallback = defaultHandler;

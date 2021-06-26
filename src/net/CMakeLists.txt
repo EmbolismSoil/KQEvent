@@ -12,3 +12,4 @@ SET (SRC_LIST AbstractAcceptor.cpp Connection.cpp
 
 INCLUDE_DIRECTORIES(../../includes/net ../../includes/common ../../includes/base)
 ADD_LIBRARY(net ${SRC_LIST})
+set_property(TARGET net PROPERTY POSITION_INDEPENDENT_CODE ON)

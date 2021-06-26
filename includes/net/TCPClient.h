@@ -14,7 +14,7 @@ namespace KQEvent {
     class TCPClient {
     public:
         using TCPClientPtr = std::shared_ptr<TCPClient>;
-        using ConnectionPtr = Connection::ConnectionPtr;
+		typedef Connection::ConnectionPtr ConnectionPtr;
         using ConnectorPtr = Connector::ConnectorPtr;
         using IPAddressPtr = IPAddress::IPAddressPtr;
         using EventLoopPtr = EventLoop::EventLoopPtr;
@@ -24,6 +24,7 @@ namespace KQEvent {
         using CloseHandle_t = Connection::CloseHandle_t;
         using ErrorHandle_t = std::function<Connector::optionE(SocketPtr, int)>;
         using ExceptHandle_t = Connection::ExceptHandle_t;
+		using TimerTaskQueuePtr = TimerTaskQueue::TimerTaskQueuePtr;
 
         TCPClient(TCPClient const &) = delete;
 
@@ -66,6 +67,15 @@ namespace KQEvent {
         void run(void) {
             _loop->loop();
         }
+
+		TimerTaskQueuePtr getTimerTaskQueue()
+		{
+			return _loop->getTimerTaskQueue();
+		}
+
+		void exit(){
+			_loop->exit();
+		}
 
     private:
         explicit TCPClient(std::string const &serverAddr,
